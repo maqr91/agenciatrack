@@ -7,28 +7,19 @@
 
   <style>
     :root{
-      --azul:#1e3a8a;
-      --gris:#f1f5f9;
-      --gris2:#e2e8f0;
-      --texto:#0f172a;
-      --amarillo:#fbbf24;
-      --blanco:#ffffff;
+      --azul:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
+      --texto:#0f172a; --amarillo:#fbbf24; --blanco:#ffffff;
     }
     body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
-
     header{ background:var(--azul); color:var(--blanco); padding:18px; display:flex; justify-content:space-between; align-items:center; }
     header h1{ margin:0; font-size:20px; }
-
-    .container{ max-width:800px; margin:20px auto; padding:0 16px; }
-    .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow: 0 4px 16px rgba(2,6,23,0.06); overflow:hidden; }
+    .container{ max-width:900px; margin:20px auto; padding:0 16px; }
+    .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow:0 4px 16px rgba(2,6,23,.06); overflow:hidden; }
     .card-header{ padding:16px; border-bottom:1px solid var(--gris2); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-
     .input{ flex:1 1 260px; display:flex; align-items:center; gap:8px; border:1px solid var(--gris2); border-radius:10px; padding:10px 12px; background:var(--blanco); }
     .input input{ width:100%; border:none; outline:none; font-size:14px; }
-
     .btn{ appearance:none; border:none; background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border-radius:10px; cursor:pointer; }
     .btn:hover{ background:#facc15; }
-
     .status{ padding:14px 16px; font-size:14px; color:#334155; }
     table{ width:100%; border-collapse:collapse; }
     thead{ background:#f8fafc; position:sticky; top:0; z-index:1; }
@@ -68,7 +59,8 @@
   </main>
 
   <script>
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKS7bgz66MT4L_jt8-I1cxgkJaJYwRgYRkQS2IBNvG0O8MJOETF2HBeTEd0VQE4Lu7GsTQBMeahzFB/pub?output=csv';
+    // ✅ URL “Maestro” que pasaste (incluye gid)
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKS7bgz66MT4L_jt8-I1cxgkJaJYwRgYRkQS2IBNvG0O8MJOETF2HBeTEd0VQE4Lu7GsTQBMeahzFB/pub?gid=373377630&single=true&output=csv';
 
     const $ = (id) => document.getElementById(id);
     const exactBtn = $('exactBtn');
@@ -79,6 +71,7 @@
     const tableWrapEl = $('tableWrap');
     const emptyEl = $('empty');
     const statusEl = $('status');
+
     let headers = [];
     let lastSearchCode = '';
 
@@ -107,7 +100,7 @@
       });
       theadEl.appendChild(trHead);
 
-      // Renderizar TODAS las filas que coinciden
+      // Todas las filas coincidentes
       data.forEach(row => {
         const tr = document.createElement('tr');
         headers.forEach(h => {
@@ -132,7 +125,10 @@
       }
 
       setStatus('Buscando...');
+
+      // Anti-caché para traer la versión más reciente
       const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+
       Papa.parse(url, {
         download: true,
         header: true,
@@ -141,11 +137,11 @@
           const rows = res.data || [];
           headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
 
-          // 📌 Buscar por índice de columna 1 (columna 2 de la hoja)
+          // 📌 Buscar por índice: columna 2 (índice 1)
           const result = rows.filter(r => {
-            const values = Object.values(r);
-            const trackingValue = values[1]; // segunda columna
-            return String(trackingValue ?? '').trim().toLowerCase() === code;
+            const vals = Object.values(r);
+            const col2 = vals[1]; // segunda columna
+            return String(col2 ?? '').trim().toLowerCase() === code;
           });
 
           renderTable(result);
@@ -157,16 +153,18 @@
       });
     }
 
+    // Botón de actualización: vuelve a buscar con el mismo código (si existe)
     refreshBtn.addEventListener('click', () => {
       if (lastSearchCode) {
         searchTracking();
       } else {
+        // Si no hay código cargado, solo limpia estado
         setStatus('🔄 Datos actualizados');
       }
     });
 
     exactBtn.addEventListener('click', searchTracking);
-    exactSearchEl.addEventListener('keydown', (e) => { if(e.key==='Enter') searchTracking(); });
+    exactSearchEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') searchTracking(); });
   </script>
 </body>
 </html>
