@@ -141,9 +141,12 @@
           const rows = res.data || [];
           headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
 
-          // ✅ Buscar en columna 2 (índice 1)
-          const columnHeader = headers[1];
-          const result = rows.filter(r => String(r[columnHeader] ?? '').trim().toLowerCase() === code);
+          // 📌 Buscar por índice de columna 1 (columna 2 de la hoja)
+          const result = rows.filter(r => {
+            const values = Object.values(r);
+            const trackingValue = values[1]; // segunda columna
+            return String(trackingValue ?? '').trim().toLowerCase() === code;
+          });
 
           renderTable(result);
           setStatus(result.length ? `✅ ${result.length} resultado(s) encontrado(s)` : '❌ No se encontró información', !!result.length);
