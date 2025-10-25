@@ -80,6 +80,7 @@
     const emptyEl = $('empty');
     const statusEl = $('status');
     let headers = [];
+    let lastSearchCode = '';
 
     function setStatus(msg, ok=false){
       statusEl.textContent = msg;
@@ -96,6 +97,8 @@
         return;
       }
       emptyEl.style.display = 'none';
+
+      // Encabezados
       const trHead = document.createElement('tr');
       headers.forEach(h => {
         const th = document.createElement('th');
@@ -103,18 +106,24 @@
         trHead.appendChild(th);
       });
       theadEl.appendChild(trHead);
-      const tr = document.createElement('tr');
-      headers.forEach(h => {
-        const td = document.createElement('td');
-        td.textContent = data[0][h] ?? '';
-        tr.appendChild(td);
+
+      // 🔁 Renderiza TODAS las filas que coinciden
+      data.forEach(row => {
+        const tr = document.createElement('tr');
+        headers.forEach(h => {
+          const td = document.createElement('td');
+          td.textContent = row[h] ?? '';
+          tr.appendChild(td);
+        });
+        tbodyEl.appendChild(tr);
       });
-      tbodyEl.appendChild(tr);
+
       tableWrapEl.style.display = 'block';
     }
 
     function searchTracking(){
       const code = exactSearchEl.value.trim().toLowerCase();
+      lastSearchCode = code;
       if (!code){
         setStatus('Por favor ingrese un número de rastreo');
         tableWrapEl.style.display = 'none';
@@ -135,7 +144,7 @@
             headers.some(h => String(r[h] ?? '').toLowerCase() === code)
           );
           renderTable(result);
-          setStatus(result.length ? '✅ Resultado encontrado' : '❌ No se encontró información', !!result.length);
+          setStatus(result.length ? `✅ ${result.length} resultado(s) encontrado(s)` : '❌ No se encontró información', !!result.length);
         },
         error: () => {
           setStatus('Error al cargar la hoja.');
@@ -145,8 +154,7 @@
 
     // 🆕 Botón de actualización automática
     refreshBtn.addEventListener('click', () => {
-      const current = exactSearchEl.value.trim();
-      if (current) {
+      if (lastSearchCode) {
         searchTracking();
       } else {
         setStatus('🔄 Datos actualizados');
