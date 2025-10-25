@@ -141,9 +141,9 @@
           const rows = res.data || [];
           headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
           
-          // 👇 Filtrar solo por la PRIMERA COLUMNA (tracking)
-          const firstHeader = headers[0];
-          const result = rows.filter(r => String(r[firstHeader] ?? '').toLowerCase() === code);
+          // 📌 Buscar en la COLUMNA 2 (index 1 porque empieza en 0)
+          const secondHeader = headers[1];
+          const result = rows.filter(r => String(r[secondHeader] ?? '').toLowerCase() === code);
 
           renderTable(result);
           setStatus(result.length ? `✅ ${result.length} resultado(s) encontrado(s)` : '❌ No se encontró información', !!result.length);
@@ -158,12 +158,4 @@
       if (lastSearchCode) {
         searchTracking();
       } else {
-        setStatus('🔄 Datos actualizados');
-      }
-    });
-
-    exactBtn.addEventListener('click', searchTracking);
-    exactSearchEl.addEventListener('keydown', (e) => { if(e.key==='Enter') searchTracking(); });
-  </script>
-</body>
-</html>
+        setSta
