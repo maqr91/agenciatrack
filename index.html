@@ -107,7 +107,7 @@
       });
       theadEl.appendChild(trHead);
 
-      // 🔁 Renderiza TODAS las filas que coinciden
+      // Renderizar todas las filas que coinciden
       data.forEach(row => {
         const tr = document.createElement('tr');
         headers.forEach(h => {
@@ -140,9 +140,11 @@
         complete: (res) => {
           const rows = res.data || [];
           headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
-          const result = rows.filter(r =>
-            headers.some(h => String(r[h] ?? '').toLowerCase() === code)
-          );
+          
+          // 👇 Filtrar solo por la PRIMERA COLUMNA (tracking)
+          const firstHeader = headers[0];
+          const result = rows.filter(r => String(r[firstHeader] ?? '').toLowerCase() === code);
+
           renderTable(result);
           setStatus(result.length ? `✅ ${result.length} resultado(s) encontrado(s)` : '❌ No se encontró información', !!result.length);
         },
@@ -152,7 +154,6 @@
       });
     }
 
-    // 🆕 Botón de actualización automática
     refreshBtn.addEventListener('click', () => {
       if (lastSearchCode) {
         searchTracking();
