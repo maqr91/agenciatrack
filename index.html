@@ -3,17 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rastreo | MIR</title>
-
+  <title>MIR | Rastreo de Envíos</title>
   <style>
     :root{
       --azul:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
       --texto:#0f172a; --amarillo:#fbbf24; --blanco:#ffffff;
     }
     body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
+
+    /* HERO: Nombre de la empresa */
+    .hero {
+      background: var(--blanco);
+      padding: 30px 16px 20px;
+      text-align: center;
+    }
+    .hero h1 {
+      margin: 0;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 0.5px;
+      font-size: clamp(32px, 6vw, 58px);
+      background: linear-gradient(90deg, #fbbf24, #38bdf8, #a78bfa, #f472b6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    }
+
     header{ background:var(--azul); color:var(--blanco); padding:18px; display:flex; justify-content:space-between; align-items:center; }
-    header h1{ margin:0; font-size:20px; }
-    .container{ max-width:900px; margin:20px auto; padding:0 16px; }
+    header h2{ margin:0; font-size:20px; }
+    .container{ max-width:1100px; margin:20px auto; padding:0 16px; }
     .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow:0 4px 16px rgba(2,6,23,.06); overflow:hidden; }
     .card-header{ padding:16px; border-bottom:1px solid var(--gris2); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .input{ flex:1 1 260px; display:flex; align-items:center; gap:8px; border:1px solid var(--gris2); border-radius:10px; padding:10px 12px; background:var(--blanco); }
@@ -23,62 +42,100 @@
     .status{ padding:14px 16px; font-size:14px; color:#334155; }
     table{ width:100%; border-collapse:collapse; }
     thead{ background:#f8fafc; position:sticky; top:0; z-index:1; }
-    th, td{ padding:10px 12px; border-bottom:1px solid var(--gris2); text-align:left; font-size:14px; }
+    th,td{ padding:10px 12px; border-bottom:1px solid var(--gris2); text-align:left; font-size:14px; }
     tbody tr:hover{ background:#f9fafb; }
     .table-wrap{ overflow:auto; max-height:70vh; }
     .empty{ padding:28px; text-align:center; color:#64748b; }
+    .meta{ font-size:12px; color:#475569; margin-left:auto; }
   </style>
-
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
+  <section class="hero">
+    <h1>MAURA MULTISERVICES, INC</h1>
+  </section>
+
   <header>
-    <h1>MIR | Rastreo de Envíos</h1>
-    <button id="refreshBtn" class="btn" style="background:#38bdf8;">🔄 Actualizar datos</button>
+    <h2>Rastreo de Envíos</h2>
+    <button id="reloadBtn" class="btn" style="background:#38bdf8;">🔄 Actualizar</button>
   </header>
 
   <main class="container">
     <section class="card">
       <div class="card-header">
-        <div class="input" style="flex:1 1 200px;">
+        <div class="input">
           <input id="exactSearch" placeholder="Código exacto de rastreo" />
         </div>
         <button id="exactBtn" class="btn">Buscar</button>
+        <div id="meta" class="meta"></div>
       </div>
 
-      <div id="status" class="status"></div>
-
+      <div id="status" class="status">Cargando datos…</div>
       <div class="table-wrap" id="tableWrap" style="display:none;">
         <table>
           <thead id="thead"></thead>
           <tbody id="tbody"></tbody>
         </table>
-        <div id="empty" class="empty" style="display:none;">No se encontró información para ese número de rastreo.</div>
+        <div id="empty" class="empty" style="display:none;">Sin resultados para tu búsqueda.</div>
       </div>
     </section>
   </main>
 
   <script>
-    // ✅ URL “Maestro” que pasaste (incluye gid)
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKS7bgz66MT4L_jt8-I1cxgkJaJYwRgYRkQS2IBNvG0O8MJOETF2HBeTEd0VQE4Lu7GsTQBMeahzFB/pub?gid=373377630&single=true&output=csv';
+    // 🔗 Pega aquí tus URLs publicadas en CSV (por ejemplo Marítimo y Aéreo)
+    const SHEET_SOURCES = [
+      { name: 'Maritimo', url: 'URL_HOJA_1_CSV' },
+      { name: 'Aereo',    url: 'URL_HOJA_2_CSV' }
+    ];
 
-    const $ = (id) => document.getElementById(id);
-    const exactBtn = $('exactBtn');
-    const refreshBtn = $('refreshBtn');
-    const exactSearchEl = $('exactSearch');
-    const theadEl = $('thead');
-    const tbodyEl = $('tbody');
-    const tableWrapEl = $('tableWrap');
-    const emptyEl = $('empty');
-    const statusEl = $('status');
+    const $ = id => document.getElementById(id);
+    const statusEl = $('status'), theadEl = $('thead'), tbodyEl = $('tbody'),
+          tableWrapEl = $('tableWrap'), emptyEl = $('empty'), metaEl = $('meta');
+    const reloadBtn = $('reloadBtn'), exactBtn = $('exactBtn'), exactSearchEl = $('exactSearch');
 
-    let headers = [];
-    let lastSearchCode = '';
+    let globalHeaders = [];
+    let mergedRows = [];
 
     function setStatus(msg, ok=false){
       statusEl.textContent = msg;
       statusEl.style.display = msg ? 'block' : 'none';
       statusEl.style.color = ok ? '#166534' : '#334155';
+    }
+
+    function fetchSheet({name, url}, bust=false){
+      const csvUrl = bust ? (url + (url.includes('?') ? '&' : '?') + 't=' + Date.now()) : url;
+      return new Promise((resolve, reject) => {
+        Papa.parse(csvUrl, {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete: (res) => {
+            const headers = res.meta?.fields || (res.data[0] ? Object.keys(res.data[0]) : []);
+            const col2Header = headers[1] || null;
+            const rows = res.data || [];
+            resolve({ name, headers, col2Header, rows });
+          },
+          error: reject
+        });
+      });
+    }
+
+    function buildGlobalHeaders(summaries){
+      const set = new Set();
+      summaries.forEach(s => s.headers.forEach(h => { if (!set.has(h)) set.add(h); }));
+      globalHeaders = Array.from(set);
+    }
+
+    function normalizeRows(summaries){
+      mergedRows = [];
+      summaries.forEach(({name, headers, col2Header, rows}) => {
+        rows.forEach(obj => {
+          const display = {};
+          globalHeaders.forEach(h => display[h] = obj[h] ?? '');
+          const col2Value = col2Header ? String(obj[col2Header] ?? '').trim().toLowerCase() : '';
+          mergedRows.push({ display, col2Key: col2Value, source: name });
+        });
+      });
     }
 
     function renderTable(data){
@@ -87,84 +144,68 @@
       if (!data || !data.length){
         tableWrapEl.style.display = 'block';
         emptyEl.style.display = 'block';
+        metaEl.textContent = '';
         return;
       }
       emptyEl.style.display = 'none';
 
-      // Encabezados
       const trHead = document.createElement('tr');
-      headers.forEach(h => {
+      globalHeaders.forEach(h => {
         const th = document.createElement('th');
         th.textContent = h;
         trHead.appendChild(th);
       });
       theadEl.appendChild(trHead);
 
-      // Todas las filas coincidentes
+      const frag = document.createDocumentFragment();
       data.forEach(row => {
         const tr = document.createElement('tr');
-        headers.forEach(h => {
+        globalHeaders.forEach(h => {
           const td = document.createElement('td');
-          td.textContent = row[h] ?? '';
+          td.textContent = row.display[h] ?? '';
           tr.appendChild(td);
         });
-        tbodyEl.appendChild(tr);
+        frag.appendChild(tr);
       });
+      tbodyEl.appendChild(frag);
 
       tableWrapEl.style.display = 'block';
+      metaEl.textContent = `Mostrando ${data.length} coincidencia(s) de ${mergedRows.length} registros combinados`;
     }
 
-    function searchTracking(){
+    function doExactSearch(){
       const code = exactSearchEl.value.trim().toLowerCase();
-      lastSearchCode = code;
-      if (!code){
-        setStatus('Por favor ingrese un número de rastreo');
+      if (!code){ renderTable([]); setStatus(''); return; }
+      const result = mergedRows.filter(r => r.col2Key === code);
+      renderTable(result);
+      setStatus(result.length ? '✅ Resultado(s) encontrado(s)' : '❌ No se encontró información', !!result.length);
+    }
+
+    async function loadData(bust=false){
+      try{
+        setStatus('Cargando datos…');
         tableWrapEl.style.display = 'none';
         emptyEl.style.display = 'none';
-        return;
+        metaEl.textContent = '';
+
+        const summaries = await Promise.all(SHEET_SOURCES.map(src => fetchSheet(src, bust)));
+        buildGlobalHeaders(summaries);
+        normalizeRows(summaries);
+
+        setStatus('Datos cargados ✅', true);
+        if (exactSearchEl.value.trim()) doExactSearch();
+        else renderTable([]);
+      }catch(e){
+        console.error(e);
+        setStatus('❌ Error al cargar las hojas. Revisa las URLs publicadas en CSV.');
       }
-
-      setStatus('Buscando...');
-
-      // Anti-caché para traer la versión más reciente
-      const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
-
-      Papa.parse(url, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (res) => {
-          const rows = res.data || [];
-          headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
-
-          // 📌 Buscar por índice: columna 2 (índice 1)
-          const result = rows.filter(r => {
-            const vals = Object.values(r);
-            const col2 = vals[1]; // segunda columna
-            return String(col2 ?? '').trim().toLowerCase() === code;
-          });
-
-          renderTable(result);
-          setStatus(result.length ? `✅ ${result.length} resultado(s) encontrado(s)` : '❌ No se encontró información', !!result.length);
-        },
-        error: () => {
-          setStatus('Error al cargar la hoja.');
-        }
-      });
     }
 
-    // Botón de actualización: vuelve a buscar con el mismo código (si existe)
-    refreshBtn.addEventListener('click', () => {
-      if (lastSearchCode) {
-        searchTracking();
-      } else {
-        // Si no hay código cargado, solo limpia estado
-        setStatus('🔄 Datos actualizados');
-      }
-    });
+    exactBtn.addEventListener('click', doExactSearch);
+    exactSearchEl.addEventListener('keydown', e => { if (e.key === 'Enter') doExactSearch(); });
+    reloadBtn.addEventListener('click', () => loadData(true));
 
-    exactBtn.addEventListener('click', searchTracking);
-    exactSearchEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') searchTracking(); });
+    loadData(false);
   </script>
 </body>
 </html>
