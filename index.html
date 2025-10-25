@@ -16,7 +16,7 @@
     }
     body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
 
-    header{ background:var(--azul); color:var(--blanco); padding:18px; }
+    header{ background:var(--azul); color:var(--blanco); padding:18px; display:flex; justify-content:space-between; align-items:center; }
     header h1{ margin:0; font-size:20px; }
 
     .container{ max-width:800px; margin:20px auto; padding:0 16px; }
@@ -43,6 +43,7 @@
 <body>
   <header>
     <h1>MIR | Rastreo de Envíos</h1>
+    <button id="refreshBtn" class="btn" style="background:#38bdf8;">🔄 Actualizar datos</button>
   </header>
 
   <main class="container">
@@ -67,18 +68,17 @@
   </main>
 
   <script>
-    // 📊 URL pública de Google Sheets
     const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKS7bgz66MT4L_jt8-I1cxgkJaJYwRgYRkQS2IBNvG0O8MJOETF2HBeTEd0VQE4Lu7GsTQBMeahzFB/pub?output=csv';
 
     const $ = (id) => document.getElementById(id);
     const exactBtn = $('exactBtn');
+    const refreshBtn = $('refreshBtn');
     const exactSearchEl = $('exactSearch');
     const theadEl = $('thead');
     const tbodyEl = $('tbody');
     const tableWrapEl = $('tableWrap');
     const emptyEl = $('empty');
     const statusEl = $('status');
-
     let headers = [];
 
     function setStatus(msg, ok=false){
@@ -96,8 +96,6 @@
         return;
       }
       emptyEl.style.display = 'none';
-
-      // encabezados
       const trHead = document.createElement('tr');
       headers.forEach(h => {
         const th = document.createElement('th');
@@ -105,8 +103,6 @@
         trHead.appendChild(th);
       });
       theadEl.appendChild(trHead);
-
-      // solo 1 resultado
       const tr = document.createElement('tr');
       headers.forEach(h => {
         const td = document.createElement('td');
@@ -127,7 +123,8 @@
       }
 
       setStatus('Buscando...');
-      Papa.parse(SHEET_CSV_URL, {
+      const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+      Papa.parse(url, {
         download: true,
         header: true,
         skipEmptyLines: true,
@@ -145,6 +142,16 @@
         }
       });
     }
+
+    // 🆕 Botón de actualización automática
+    refreshBtn.addEventListener('click', () => {
+      const current = exactSearchEl.value.trim();
+      if (current) {
+        searchTracking();
+      } else {
+        setStatus('🔄 Datos actualizados');
+      }
+    });
 
     exactBtn.addEventListener('click', searchTracking);
     exactSearchEl.addEventListener('keydown', (e) => { if(e.key==='Enter') searchTracking(); });
