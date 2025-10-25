@@ -14,9 +14,15 @@
       --amarillo:#fbbf24;
       --blanco:#ffffff;
     }
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
 
-    /* Encabezado */
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--texto);
+      background:var(--gris);
+    }
+
+    /* 🧭 Encabezado principal */
     header{
       background:var(--azul);
       color:var(--blanco);
@@ -27,24 +33,74 @@
       flex-wrap:wrap;
       gap:10px;
     }
+
     header h1{
       margin:0;
       font-size:22px;
       font-weight:800;
       text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
+
+    .header-right{
+      display:flex;
+      align-items:center;
+      gap:15px;
+    }
+
+    /* 🇺🇸🇳🇮 banderas */
     .flags{
       display:flex;
       gap:10px;
       align-items:center;
     }
+
     .flags img{
       width:35px;
       height:auto;
       border-radius:4px;
       box-shadow:0 0 4px rgba(0,0,0,0.25);
+      animation: wave 2s ease-in-out infinite;
+      transform-origin: left center;
     }
 
+    @keyframes wave {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(6deg); }
+    }
+
+    /* ✈️📦🚢 íconos */
+    .icons{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .icons svg{
+      width:30px;
+      height:30px;
+      fill:#ffffff;
+      opacity:0.9;
+    }
+
+    /* 🔄 Botón actualizar */
+    .btn-refresh{
+      background:var(--amarillo);
+      color:#111827;
+      padding:10px 14px;
+      font-weight:600;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      transition:background 0.3s ease;
+    }
+    .btn-refresh:hover{
+      background:#facc15;
+    }
+
+    /* 💻 Cuerpo */
     .container{ max-width:800px; margin:20px auto; padding:0 16px; }
     .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow: 0 4px 16px rgba(2,6,23,0.06); overflow:hidden; }
     .card-header{ padding:16px; border-bottom:1px solid var(--gris2); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
@@ -68,10 +124,23 @@
 </head>
 <body>
   <header>
-    <h1>Rastreo Maura Multiservices</h1>
-    <div class="flags">
-      <img src="https://flagcdn.com/us.svg" alt="EEUU">
-      <img src="https://flagcdn.com/ni.svg" alt="Nicaragua">
+    <h1>
+      Rastreo Maura Multiservices
+      <span class="icons">
+        <!-- ✈️ -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 19l7.5-7-7.5-7 1.5-1.5 10 8.5v5l-10 8.5L2.5 19z"/></svg>
+        <!-- 📦 -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l9 4-9 4-9-4 9-4zm9 6v10l-9 4-9-4V8l9 4 9-4z"/></svg>
+        <!-- 🚢 -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M496 448H144c-26.5 0-48-21.5-48-48V160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32v240c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7-14.3-32-32-32H144z"/></svg>
+      </span>
+    </h1>
+    <div class="header-right">
+      <div class="flags">
+        <img src="https://flagcdn.com/us.svg" alt="EEUU">
+        <img src="https://flagcdn.com/ni.svg" alt="Nicaragua">
+      </div>
+      <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
     </div>
   </header>
 
@@ -102,6 +171,7 @@
 
     const $ = (id) => document.getElementById(id);
     const exactBtn = $('exactBtn');
+    const reloadBtn = $('reloadBtn');
     const exactSearchEl = $('exactSearch');
     const theadEl = $('thead');
     const tbodyEl = $('tbody');
@@ -174,8 +244,16 @@
       });
     }
 
+    function reloadData(){
+      exactSearchEl.value = '';
+      tableWrapEl.style.display = 'none';
+      emptyEl.style.display = 'none';
+      setStatus('Datos actualizados ✅', true);
+    }
+
     exactBtn.addEventListener('click', searchTracking);
     exactSearchEl.addEventListener('keydown', (e) => { if(e.key==='Enter') searchTracking(); });
+    reloadBtn.addEventListener('click', reloadData);
   </script>
 </body>
 </html>
