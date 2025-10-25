@@ -67,8 +67,8 @@
   </main>
 
   <script>
-    // 📊 URL pública de Google Sheets
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKS7bgz66MT4L_jt8-I1cxgkJaJYwRgYRkQS2IBNvG0O8MJOETF2HBeTEd0VQE4Lu7GsTQBMeahzFB/pub?output=csv';
+    // 📊 NUEVO URL pública de Google Sheets
+    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfu8VjmNLFRltqxS4QBbakwDOn7jJmJiyDSWwDPtH3ylDxu3gwtgCqHHosqYxnbWntCYg7AZuTd-tk/pub?output=csv';
 
     const $ = (id) => document.getElementById(id);
     const exactBtn = $('exactBtn');
@@ -97,7 +97,6 @@
       }
       emptyEl.style.display = 'none';
 
-      // encabezados
       const trHead = document.createElement('tr');
       headers.forEach(h => {
         const th = document.createElement('th');
@@ -106,7 +105,6 @@
       });
       theadEl.appendChild(trHead);
 
-      // solo 1 resultado
       const tr = document.createElement('tr');
       headers.forEach(h => {
         const td = document.createElement('td');
