@@ -107,7 +107,7 @@
       });
       theadEl.appendChild(trHead);
 
-      // Renderizar todas las filas que coinciden
+      // Renderizar TODAS las filas que coinciden
       data.forEach(row => {
         const tr = document.createElement('tr');
         headers.forEach(h => {
@@ -140,10 +140,10 @@
         complete: (res) => {
           const rows = res.data || [];
           headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
-          
-          // 📌 Buscar en la COLUMNA 2 (index 1 porque empieza en 0)
-          const secondHeader = headers[1];
-          const result = rows.filter(r => String(r[secondHeader] ?? '').toLowerCase() === code);
+
+          // ✅ Buscar en columna 2 (índice 1)
+          const columnHeader = headers[1];
+          const result = rows.filter(r => String(r[columnHeader] ?? '').trim().toLowerCase() === code);
 
           renderTable(result);
           setStatus(result.length ? `✅ ${result.length} resultado(s) encontrado(s)` : '❌ No se encontró información', !!result.length);
@@ -158,4 +158,12 @@
       if (lastSearchCode) {
         searchTracking();
       } else {
-        setSta
+        setStatus('🔄 Datos actualizados');
+      }
+    });
+
+    exactBtn.addEventListener('click', searchTracking);
+    exactSearchEl.addEventListener('keydown', (e) => { if(e.key==='Enter') searchTracking(); });
+  </script>
+</body>
+</html>
