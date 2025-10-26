@@ -12,10 +12,9 @@
     }
     body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
 
-    /* Encabezado */
     header{
       background:var(--azul); color:var(--blanco);
-      padding:18px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+      padding:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
     }
     header h1{ margin:0; font-size:22px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:10px; }
     .icons{ display:flex; gap:10px; align-items:center; }
@@ -51,11 +50,8 @@
     <h1>
       Rastreo Maura Multiservices
       <span class="icons">
-        <!-- ✈️ -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 19l7.5-7-7.5-7 1.5-1.5 10 8.5v5l-10 8.5L2.5 19z"/></svg>
-        <!-- 📦 -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l9 4-9 4-9-4 9-4zm9 6v10l-9 4-9-4V8l9 4 9-4z"/></svg>
-        <!-- 🚢 -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M496 448H144c-26.5 0-48-21.5-48-48V160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32v240c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7-14.3-32-32-32H144z"/></svg>
       </span>
     </h1>
@@ -91,8 +87,14 @@
   </main>
 
   <script>
-    // 📊 URL pública nueva de Google Sheets
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?output=csv';
+    // ✅ URLs de todas tus hojas
+    const SHEETS = [
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1529319333&single=true&output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=767636548&single=true&output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1347378071&single=true&output=csv',
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1131232658&single=true&output=csv'
+    ];
 
     const $ = (id) => document.getElementById(id);
     const exactBtn = $('exactBtn');
@@ -159,24 +161,27 @@
       }
 
       setStatus('Buscando...');
-      const url = SHEET_CSV_URL + (SHEET_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
 
-      Papa.parse(url, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (res) => {
-          const rows = res.data || [];
-          headers = res.meta?.fields || (rows[0] ? Object.keys(rows[0]) : []);
-          const result = rows.filter(r =>
-            headers.some(h => String(r[h] ?? '').trim().toLowerCase() === code)
-          );
-          renderTable(result);
-          setStatus(result.length ? `✅ Se encontraron ${result.length} coincidencias` : '❌ No se encontró información', !!result.length);
-        },
-        error: () => {
-          setStatus('Error al cargar la hoja.');
-        }
+      const promises = SHEETS.map(url => new Promise(resolve => {
+        Papa.parse(url + '&t=' + Date.now(), {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete: (res) => resolve(res.data || []),
+          error: () => resolve([])
+        });
+      }));
+
+      Promise.all(promises).then(results => {
+        const allRows = results.flat();
+        if (allRows.length > 0) headers = Object.keys(allRows[0]);
+
+        const filtered = allRows.filter(r =>
+          headers.some(h => String(r[h] ?? '').trim().toLowerCase() === code)
+        );
+
+        renderTable(filtered);
+        setStatus(filtered.length ? `✅ Se encontraron ${filtered.length} coincidencias` : '❌ No se encontró información', !!filtered.length);
       });
     }
 
