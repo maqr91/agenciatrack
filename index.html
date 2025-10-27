@@ -48,7 +48,7 @@
     .meta{ font-size:12px; color:#475569; margin-left:auto; }
     .status{ padding:14px 16px; font-size:14px; color:#334155; }
 
-    /* STATUS resaltado: fondo amarillo + texto negro en bold */
+    /* STATUS: fondo amarillo + texto negro bold */
     .pill{
       display:inline-block; padding:4px 10px; border-radius:9999px;
       background: var(--amarillo); color:#111827; font-weight:800; font-size:12px; line-height:1;
@@ -85,7 +85,7 @@
     <section class="card" id="cardMaritimo">
       <div class="card-title">
         <!-- Icono barco -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32 96 32v64c0 26.5-21.5 48-48 48zM160 96h96V32H160v64zm-32 96h160V64h48c17.7 0 32 14.3 32 32v160l-80-26.7L208 288l-96-32-80 26.7V96c0-17.7 14.3-32 32-32h64v128z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48zM160 96h96V32H160v64zm-32 96h160V64h48c17.7 0 32 14.3 32 32v160l-80-26.7L208 288l-96-32-80 26.7V96c0-17.7 14.3-32 32-32h64v128z"/></svg>
         Rastreo Marítimo
       </div>
       <div class="card-header">
@@ -125,7 +125,7 @@
   </main>
 
   <script>
-    // URLs de Google Sheets
+    // ✅ URLs de Google Sheets
     const urls = {
       Maritimo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
       Aereo:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv'
@@ -198,9 +198,9 @@
           const col2 = headers[1];
           const statusHeader = headers.find(h => /^(status|estatus|estado)$/i.test(h)) || headers[2];
 
-          // Coincidencia parcial SOLO en columna 2
+          // Coincidencia parcial SOLO en columna 2 (limpia espacios)
           const result = rows.filter(r =>
-            String(r[col2] ?? '').toLowerCase().includes(code)
+            String(r[col2] ?? '').toLowerCase().trim().includes(code)
           );
 
           renderTable(result, kind, headers, statusHeader);
