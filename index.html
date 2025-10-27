@@ -4,41 +4,26 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rastreo | MIR</title>
-
   <style>
-    :root{
-      --azul:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
-      --texto:#0f172a; --amarillo:#fbbf24; --blanco:#ffffff;
-    }
+    :root{ --azul:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0; --texto:#0f172a; --amarillo:#fbbf24; --blanco:#ffffff; }
     body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
-
-    header{
-      background:var(--azul); color:var(--blanco);
-      padding:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;
-    }
+    header{ background:var(--azul); color:var(--blanco); padding:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; }
     header h1{ margin:0; font-size:22px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:10px; }
     .icons{ display:flex; gap:10px; align-items:center; }
     .icons svg{ width:30px; height:30px; fill:#ffffff; opacity:.9; }
     .header-right{ display:flex; align-items:center; gap:15px; }
     .flags img{ width:35px; border-radius:4px; box-shadow:0 0 4px rgba(0,0,0,.25); }
-
     .btn-refresh{ background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border:none; border-radius:10px; cursor:pointer; }
     .btn-refresh:hover{ background:#facc15; }
-
     .container{ max-width:900px; margin:20px auto; padding:0 16px; display:flex; flex-direction:column; gap:22px; }
     .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow:0 4px 16px rgba(2,6,23,.06); overflow:hidden; }
-    .card-title{
-      display:flex; align-items:center; gap:10px;
-      padding:14px 16px; font-weight:800; color:#0f172a; border-bottom:1px solid var(--gris2); background:#fafafa;
-    }
+    .card-title{ display:flex; align-items:center; gap:10px; padding:14px 16px; font-weight:800; color:#0f172a; border-bottom:1px solid var(--gris2); background:#fafafa; }
     .card-title svg{ width:22px; height:22px; fill:#0f172a; opacity:.85; }
     .card-header{ padding:16px; border-bottom:1px solid var(--gris2); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .input{ flex:1 1 260px; display:flex; align-items:center; gap:8px; border:1px solid var(--gris2); border-radius:10px; padding:10px 12px; background:var(--blanco); }
     .input input{ width:100%; border:none; outline:none; font-size:14px; }
-
     .btn{ appearance:none; border:none; background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border-radius:10px; cursor:pointer; }
     .btn:hover{ background:#facc15; }
-
     table{ width:100%; border-collapse:collapse; }
     thead{ background:#f8fafc; position:sticky; top:0; z-index:1; }
     th,td{ padding:10px 12px; border-bottom:1px solid var(--gris2); text-align:left; font-size:14px; }
@@ -46,16 +31,8 @@
     .table-wrap{ overflow:auto; max-height:70vh; }
     .empty{ padding:28px; text-align:center; color:#64748b; }
     .meta{ font-size:12px; color:#475569; margin-left:auto; }
-    .status{ padding:14px 16px; font-size:14px; color:#334155; }
-
-    /* STATUS: fondo amarillo + texto negro bold */
-    .pill{
-      display:inline-block; padding:4px 10px; border-radius:9999px;
-      background: var(--amarillo); color:#111827; font-weight:800; font-size:12px; line-height:1;
-      box-shadow:0 1px 0 rgba(0,0,0,.06);
-    }
+    .pill{ display:inline-block; padding:4px 10px; border-radius:9999px; background:var(--amarillo); color:#111827; font-weight:800; font-size:12px; line-height:1; box-shadow:0 1px 0 rgba(0,0,0,.06); }
   </style>
-
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
@@ -63,11 +40,8 @@
     <h1>
       Rastreo Maura Multiservices
       <span class="icons">
-        <!-- ✈️ -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 19l7.5-7-7.5-7 1.5-1.5 10 8.5v5l-10 8.5L2.5 19z"/></svg>
-        <!-- 📦 -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l9 4-9 4-9-4 9-4zm9 6v10l-9 4-9-4V8l9 4 9-4z"/></svg>
-        <!-- 🚢 -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M496 448H144c-26.5 0-48-21.5-48-48V160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32v240c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7 14.3-32-32-32H144z"/></svg>
       </span>
     </h1>
@@ -81,10 +55,9 @@
   </header>
 
   <main class="container">
-    <!-- RASTREO MARÍTIMO -->
+    <!-- MARÍTIMO -->
     <section class="card" id="cardMaritimo">
       <div class="card-title">
-        <!-- Icono barco -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48zM160 96h96V32H160v64zm-32 96h160V64h48c17.7 0 32 14.3 32 32v160l-80-26.7L208 288l-96-32-80 26.7V96c0-17.7 14.3-32 32-32h64v128z"/></svg>
         Rastreo Marítimo
       </div>
@@ -102,10 +75,9 @@
       </div>
     </section>
 
-    <!-- RASTREO AÉREO -->
+    <!-- AÉREO -->
     <section class="card" id="cardAereo">
       <div class="card-title">
-        <!-- Icono avión -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M480 192H365.71L260.61 8.41A24 24 0 0 0 240 0h-48a24 24 0 0 0-22.29 32.41L232.29 192H128L76.12 128H16L64 256 16 384h60.12L128 320h104.29l-62.58 159.59A24 24 0 0 0 192 512h48a24 24 0 0 0 20.61-8.41L365.71 320H480a96 96 0 0 0 96-96v-32a96 96 0 0 0-96-96z"/></svg>
         Rastreo Aéreo
       </div>
@@ -125,57 +97,39 @@
   </main>
 
   <script>
-    // ✅ URLs de Google Sheets
+    // URLs EXACTAS
     const urls = {
       Maritimo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
       Aereo:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv'
     };
 
-    function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-    }
+    function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
 
     function renderTable(data, prefix, headers, statusHeader){
       const thead = document.getElementById(`thead${prefix}`);
       const tbody = document.getElementById(`tbody${prefix}`);
       const empty = document.getElementById(`empty${prefix}`);
       const meta = document.getElementById(`meta${prefix}`);
+      thead.innerHTML = ''; tbody.innerHTML = '';
 
-      thead.innerHTML = '';
-      tbody.innerHTML = '';
-
-      if (!data.length){
-        empty.style.display = 'block';
-        meta.textContent = '';
-        return;
-      }
-      empty.style.display = 'none';
+      if (!data.length){ empty.style.display='block'; meta.textContent=''; return; }
+      empty.style.display='none';
 
       const trHead = document.createElement('tr');
-      headers.forEach(h => {
-        const th = document.createElement('th');
-        th.textContent = h;
-        trHead.appendChild(th);
-      });
+      headers.forEach(h => { const th=document.createElement('th'); th.textContent=h; trHead.appendChild(th); });
       thead.appendChild(trHead);
 
       data.forEach(row => {
         const tr = document.createElement('tr');
         headers.forEach((h,i) => {
-          const td = document.createElement('td');
-          const val = row[h] ?? '';
-          if (i === 1) {
-            td.innerHTML = `<strong>${escapeHtml(val)}</strong>`; // columna 2 en negritas
-          } else if (h === statusHeader){
-            td.innerHTML = `<span class="pill">${escapeHtml(val)}</span>`; // siempre amarillo + negro
-          } else {
-            td.innerHTML = escapeHtml(val);
-          }
+          const td = document.createElement('td'); const val = row[h] ?? '';
+          if (i===1){ td.innerHTML = `<strong>${escapeHtml(val)}</strong>`; }         // Columna 2 en negritas
+          else if (h===statusHeader){ td.innerHTML = `<span class="pill">${escapeHtml(val)}</span>`; } // STATUS amarillo
+          else { td.innerHTML = escapeHtml(val); }
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
-
       meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
     }
 
@@ -184,25 +138,19 @@
       const code = input.value.trim().toLowerCase();
       if (!code) return;
 
-      const url = urls[kind] + '&t=' + Date.now();
+      const url = urls[kind] + '&t=' + Date.now(); // anti-cache
 
       Papa.parse(url,{
-        download:true,
-        header:true,
-        skipEmptyLines:true,
+        download:true, header:true, skipEmptyLines:true,
         complete:(res)=>{
           const rows = res.data || [];
           const headers = res.meta.fields || Object.keys(rows[0] || {});
           if (headers.length < 2){ renderTable([], kind, headers, null); return; }
 
-          const col2 = headers[1];
+          const col2 = headers[1]; // buscamos en columna 2
           const statusHeader = headers.find(h => /^(status|estatus|estado)$/i.test(h)) || headers[2];
 
-          // Coincidencia parcial SOLO en columna 2 (limpia espacios)
-          const result = rows.filter(r =>
-            String(r[col2] ?? '').toLowerCase().trim().includes(code)
-          );
-
+          const result = rows.filter(r => String(r[col2] ?? '').toLowerCase().trim().includes(code));
           renderTable(result, kind, headers, statusHeader);
         },
         error: ()=> { renderTable([], kind, [], null); }
@@ -212,9 +160,9 @@
     document.getElementById('reloadBtn').addEventListener('click', ()=>{
       const m = document.getElementById('searchMaritimo').value.trim();
       const a = document.getElementById('searchAereo').value.trim();
-      if (m){ searchTracking('Maritimo'); }
-      if (a){ searchTracking('Aereo'); }
-      if (!m && !a){ location.reload(); }
+      if (m) searchTracking('Maritimo');
+      if (a) searchTracking('Aereo');
+      if (!m && !a) location.reload();
     });
   </script>
 </body>
