@@ -15,6 +15,7 @@
     .flags img{ width:35px; border-radius:4px; box-shadow:0 0 4px rgba(0,0,0,.25); }
     .btn-refresh{ background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border:none; border-radius:10px; cursor:pointer; }
     .btn-refresh:hover{ background:#facc15; }
+
     .container{ max-width:900px; margin:20px auto; padding:0 16px; display:flex; flex-direction:column; gap:22px; }
     .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow:0 4px 16px rgba(2,6,23,.06); overflow:hidden; }
     .card-title{ display:flex; align-items:center; gap:10px; padding:14px 16px; font-weight:800; color:#0f172a; border-bottom:1px solid var(--gris2); background:#fafafa; }
@@ -24,6 +25,7 @@
     .input input{ width:100%; border:none; outline:none; font-size:14px; }
     .btn{ appearance:none; border:none; background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border-radius:10px; cursor:pointer; }
     .btn:hover{ background:#facc15; }
+
     table{ width:100%; border-collapse:collapse; }
     thead{ background:#f8fafc; position:sticky; top:0; z-index:1; }
     th,td{ padding:10px 12px; border-bottom:1px solid var(--gris2); text-align:left; font-size:14px; }
@@ -42,7 +44,7 @@
       <span class="icons">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.5 19l7.5-7-7.5-7 1.5-1.5 10 8.5v5l-10 8.5L2.5 19z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2l9 4-9 4-9-4 9-4zm9 6v10l-9 4-9-4V8l9 4 9-4z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M496 448H144c-26.5 0-48-21.5-48-48V160c0-17.7 14.3-32 32-32h384c17.7 0 32 14.3 32 32v240c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7 14.3-32-32-32H144z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7 14.3-32-32-32H144z"/></svg>
       </span>
     </h1>
     <div class="header-right">
@@ -58,8 +60,7 @@
     <!-- MARÍTIMO -->
     <section class="card" id="cardMaritimo">
       <div class="card-title">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48zM160 96h96V32H160v64zm-32 96h160V64h48c17.7 0 32 14.3 32 32v160l-80-26.7L208 288l-96-32-80 26.7V96c0-17.7 14.3-32 32-32h64v128z"/></svg>
-        Rastreo Marítimo
+        🚢 Rastreo Marítimo
       </div>
       <div class="card-header">
         <div class="input"><input id="searchMaritimo" placeholder="Número de rastreo (Marítimo)" /></div>
@@ -78,8 +79,7 @@
     <!-- AÉREO -->
     <section class="card" id="cardAereo">
       <div class="card-title">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M480 192H365.71L260.61 8.41A24 24 0 0 0 240 0h-48a24 24 0 0 0-22.29 32.41L232.29 192H128L76.12 128H16L64 256 16 384h60.12L128 320h104.29l-62.58 159.59A24 24 0 0 0 192 512h48a24 24 0 0 0 20.61-8.41L365.71 320H480a96 96 0 0 0 96-96v-32a96 96 0 0 0-96-96z"/></svg>
-        Rastreo Aéreo
+        ✈️ Rastreo Aéreo
       </div>
       <div class="card-header">
         <div class="input"><input id="searchAereo" placeholder="Número de rastreo (Aéreo)" /></div>
@@ -97,72 +97,84 @@
   </main>
 
   <script>
-    // URLs EXACTAS
     const urls = {
       Maritimo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
-      Aereo:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv'
+      Aereo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv'
     };
 
-    function escapeHtml(str){ return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])); }
+    const escapeHtml = (str)=>String(str).replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
 
     function renderTable(data, prefix, headers, statusHeader){
       const thead = document.getElementById(`thead${prefix}`);
       const tbody = document.getElementById(`tbody${prefix}`);
       const empty = document.getElementById(`empty${prefix}`);
       const meta = document.getElementById(`meta${prefix}`);
-      thead.innerHTML = ''; tbody.innerHTML = '';
+      thead.innerHTML=''; tbody.innerHTML='';
 
       if (!data.length){ empty.style.display='block'; meta.textContent=''; return; }
       empty.style.display='none';
 
-      const trHead = document.createElement('tr');
-      headers.forEach(h => { const th=document.createElement('th'); th.textContent=h; trHead.appendChild(th); });
+      const trHead=document.createElement('tr');
+      headers.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; trHead.appendChild(th); });
       thead.appendChild(trHead);
 
-      data.forEach(row => {
-        const tr = document.createElement('tr');
-        headers.forEach((h,i) => {
-          const td = document.createElement('td'); const val = row[h] ?? '';
-          if (i===1){ td.innerHTML = `<strong>${escapeHtml(val)}</strong>`; }         // Columna 2 en negritas
-          else if (h===statusHeader){ td.innerHTML = `<span class="pill">${escapeHtml(val)}</span>`; } // STATUS amarillo
-          else { td.innerHTML = escapeHtml(val); }
+      data.forEach(row=>{
+        const tr=document.createElement('tr');
+        headers.forEach((h,i)=>{
+          const td=document.createElement('td');
+          const val=row[h] ?? '';
+          if (i===1){ td.innerHTML=`<strong>${escapeHtml(val)}</strong>`; } // columna 2 en negritas
+          else if (h===statusHeader){ td.innerHTML=`<span class="pill">${escapeHtml(val)}</span>`; }
+          else{ td.innerHTML=escapeHtml(val); }
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
-      meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
+
+      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
     function searchTracking(kind){
-      const input = document.getElementById(`search${kind}`);
-      const code = input.value.trim().toLowerCase();
-      if (!code) return;
+      const input=document.getElementById(`search${kind}`);
+      const code=input.value.trim().toLowerCase();
+      if(!code) return;
 
-      const url = urls[kind] + '&t=' + Date.now(); // anti-cache
+      const url=urls[kind]+'&t='+Date.now();
 
       Papa.parse(url,{
         download:true, header:true, skipEmptyLines:true,
         complete:(res)=>{
-          const rows = res.data || [];
-          const headers = res.meta.fields || Object.keys(rows[0] || {});
-          if (headers.length < 2){ renderTable([], kind, headers, null); return; }
+          const rows=res.data||[];
+          const headers=res.meta.fields||Object.keys(rows[0]||{});
+          if(!headers.length){ renderTable([],kind,[],null); return; }
 
-          const col2 = headers[1]; // buscamos en columna 2
-          const statusHeader = headers.find(h => /^(status|estatus|estado)$/i.test(h)) || headers[2];
+          const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
 
-          const result = rows.filter(r => String(r[col2] ?? '').toLowerCase().trim().includes(code));
+          // Buscar coincidencias solo en columna B (índice 1)
+          const result = rows.filter(r => {
+            const cols = Object.values(r);
+            return String(cols[1] ?? '').toLowerCase() === code;
+          });
+
           renderTable(result, kind, headers, statusHeader);
         },
-        error: ()=> { renderTable([], kind, [], null); }
+        error:()=>{ renderTable([],kind,[],null); }
       });
     }
 
     document.getElementById('reloadBtn').addEventListener('click', ()=>{
-      const m = document.getElementById('searchMaritimo').value.trim();
-      const a = document.getElementById('searchAereo').value.trim();
-      if (m) searchTracking('Maritimo');
-      if (a) searchTracking('Aereo');
-      if (!m && !a) location.reload();
+      const m=document.getElementById('searchMaritimo').value.trim();
+      const a=document.getElementById('searchAereo').value.trim();
+      if(m) searchTracking('Maritimo');
+      if(a) searchTracking('Aereo');
+      if(!m && !a) location.reload();
+    });
+
+    // ENTER para buscar directamente
+    ['Maritimo','Aereo'].forEach(kind=>{
+      document.getElementById(`search${kind}`).addEventListener('keydown',(e)=>{
+        if(e.key==='Enter') searchTracking(kind);
+      });
     });
   </script>
 </body>
