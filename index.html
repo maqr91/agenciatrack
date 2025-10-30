@@ -8,8 +8,7 @@
     :root{
       --azulClaro:#38bdf8; --azulOscuro:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
       --blanco:#ffffff; --texto:#0f172a;
-      --amarilloPálido:#fde68a; /* Buscar */
-      --amarilloPálidoHover:#fcd34d;
+      --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
       --royal:#1d4ed8; --royalHover:#1e40af;
       --celesteBg:#e0f2fe; --celesteTxt:#075985;
     }
@@ -24,9 +23,17 @@
     .flags{display:flex;gap:8px;}
     .flags img{width:28px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
     .btn-refresh{
-      background:var(--azulClaro); color:#0b1b2b; padding:8px 12px; font-weight:700; border:none; border-radius:10px; cursor:pointer;
+      background:none;border:none;color:var(--blanco);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;
     }
-    .btn-refresh:hover{filter:brightness(0.95);}
+    .btn-refresh:hover{opacity:0.85;}
+    .btn-refresh span.text{display:inline;}
+    .btn-refresh span.icon{display:none;font-size:18px;}
+
+    /* En móvil solo se muestra el ícono */
+    @media (max-width:640px){
+      .btn-refresh span.text{display:none;}
+      .btn-refresh span.icon{display:inline;}
+    }
 
     .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
     .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
@@ -34,7 +41,6 @@
     .card-header{padding:10px 12px;border-bottom:1px solid var(--gris2);display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
     .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
     .input input{width:100%;border:none;outline:none;font-size:14px;}
-    /* Buscar (único que queda amarillo y más pálido) */
     .btn{border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;font-weight:700;border-radius:10px;cursor:pointer;}
     .btn:hover{background:var(--amarilloPálidoHover);}
 
@@ -45,19 +51,15 @@
     .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
     .meta{font-size:12px;color:#475569;margin-left:auto;}
 
-    /* Ver foto: azul royal, blanco y negrita */
     .view-btn{
-      background:var(--royal); color:#fff; border:none; padding:7px 12px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:800;
+      background:var(--royal);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;
     }
-    .view-btn:hover{ background:var(--royalHover); }
-
-    /* Status resaltado celeste */
+    .view-btn:hover{background:var(--royalHover);}
     .status-pill{
-      display:inline-block; padding:4px 10px; border-radius:9999px; background:var(--celesteBg); color:var(--celesteTxt); font-weight:800; line-height:1;
+      display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;
       box-shadow:0 1px 0 rgba(0,0,0,.06);
     }
 
-    /* Responsive móvil */
     @media (max-width:640px){
       header{padding:12px 10px;}
       header h1{font-size:18px;}
@@ -65,11 +67,10 @@
       .container{gap:12px;padding:0 10px;}
       .card-title{font-size:15px;padding:8px 10px;}
       .card-header{padding:8px 10px;grid-template-columns:1fr auto;gap:6px;}
-      .btn,.btn-refresh{padding:7px 10px;font-size:12px;border-radius:8px;}
+      .btn{padding:7px 10px;font-size:12px;border-radius:8px;}
       .input{padding:7px 9px;}
       th,td{padding:7px 8px;font-size:12px;}
       table{min-width:560px;}
-      /* Ojo: si tu tabla tiene 6 columnas y la 6 es ID, se oculta en móvil */
       th:nth-child(6),td:nth-child(6){display:none;}
     }
   </style>
@@ -84,7 +85,10 @@
         <img src="https://flagcdn.com/us.svg" alt="US">
         <img src="https://flagcdn.com/ni.svg" alt="NI">
       </div>
-      <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
+      <button id="reloadBtn" class="btn-refresh">
+        <span class="icon">🔄</span>
+        <span class="text">Actualizar</span>
+      </button>
     </div>
   </header>
 
@@ -158,7 +162,6 @@
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
 
-      // Detectar columna de Status/Estatus/Estado (si existe)
       const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
 
       const trHead=document.createElement('tr');
@@ -172,11 +175,9 @@
           if(h.toLowerCase().includes('foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          } else if (statusHeader && h===statusHeader && (prefix==='Maritimo' || prefix==='Aereo')) {
-            td.innerHTML = `<span class="status-pill">${String(val)}</span>`;
-          } else {
-            td.textContent = val;
-          }
+          } else if (statusHeader && h===statusHeader && (prefix==='Maritimo'||prefix==='Aereo')) {
+            td.innerHTML=`<span class="status-pill">${String(val)}</span>`;
+          } else td.textContent=val;
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
