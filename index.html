@@ -144,7 +144,6 @@
     .btn:hover { background: #facc15; }
 
     table { width: 100%; border-collapse: collapse; }
-    thead { background: #f8fafc; position: sticky; top: 0; z-index: 1; }
     th, td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--gris2);
@@ -154,7 +153,6 @@
     }
 
     tbody tr:hover { background: #f9fafb; }
-    .table-wrap { overflow: auto; max-height: 70vh; }
     .empty { padding: 28px; text-align: center; color: #64748b; }
     .meta { font-size: 12px; color: #475569; margin-left: auto; }
     .pill {
@@ -165,23 +163,55 @@
       color: #111827;
       font-weight: 800;
       font-size: 12px;
-      line-height: 1;
-      box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    }
+
+    /* Miniaturas con vista previa */
+    .thumb-container {
+      position: relative;
+      display: inline-block;
     }
 
     img.thumb {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+      border-radius: 8px;
       cursor: pointer;
-      transition: .2s;
+      transition: transform 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
-    img.thumb:hover { transform: scale(1.1); }
+    img.thumb:hover { transform: scale(1.05); }
 
-    /* Popup */
+    .preview {
+      display: none;
+      position: absolute;
+      top: -5px;
+      left: 80px;
+      z-index: 100;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .thumb-container:hover .preview {
+      display: block;
+    }
+
+    .view-btn {
+      background: var(--amarillo);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+      margin-top: 5px;
+    }
+
+    .view-btn:hover { background: #fde047; }
+
+    /* Modal grande */
     .modal {
       display: none;
       position: fixed;
@@ -198,13 +228,6 @@
       max-width: 95%;
       max-height: 90%;
       border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      animation: zoomIn 0.3s ease;
-    }
-
-    @keyframes zoomIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
     }
 
     .close {
@@ -216,36 +239,17 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    .view-btn {
-      background: var(--amarillo);
-      border: none;
-      padding: 6px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: #111827;
-    }
-
-    .view-btn:hover { background: #fde047; }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <header>
-    <h1>
-      Rastreo Maura Multiservices
-      <span class="icons">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48z"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M480 320h-40.4l-48-48H96l-32 32H16l48-96-48-96h48l32 32h295.6l48-48H480l-64 128 64 128z"/></svg>
-      </span>
-    </h1>
+    <h1>RASTREO MAURA MULTISERVICES 🚢✈️</h1>
     <div class="header-right">
       <div class="flags">
-        <img src="https://flagcdn.com/us.svg" alt="EEUU">
-        <img src="https://flagcdn.com/ni.svg" alt="Nicaragua">
+        <img src="https://flagcdn.com/us.svg">
+        <img src="https://flagcdn.com/ni.svg">
       </div>
       <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
     </div>
@@ -259,10 +263,8 @@
         <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
         <div id="metaMaritimo" class="meta"></div>
       </div>
-      <div class="table-wrap">
-        <table><thead id="theadMaritimo"></thead><tbody id="tbodyMaritimo"></tbody></table>
-        <div id="emptyMaritimo" class="empty" style="display:none;">No se encontró información.</div>
-      </div>
+      <table><thead id="theadMaritimo"></thead><tbody id="tbodyMaritimo"></tbody></table>
+      <div id="emptyMaritimo" class="empty" style="display:none;">No se encontró información.</div>
     </section>
 
     <section class="card" id="cardAereo">
@@ -272,10 +274,8 @@
         <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
         <div id="metaAereo" class="meta"></div>
       </div>
-      <div class="table-wrap">
-        <table><thead id="theadAereo"></thead><tbody id="tbodyAereo"></tbody></table>
-        <div id="emptyAereo" class="empty" style="display:none;">No se encontró información.</div>
-      </div>
+      <table><thead id="theadAereo"></thead><tbody id="tbodyAereo"></tbody></table>
+      <div id="emptyAereo" class="empty" style="display:none;">No se encontró información.</div>
     </section>
 
     <section class="card" id="cardCompra">
@@ -285,14 +285,11 @@
         <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
         <div id="metaCompra" class="meta"></div>
       </div>
-      <div class="table-wrap">
-        <table><thead id="theadCompra"></thead><tbody id="tbodyCompra"></tbody></table>
-        <div id="emptyCompra" class="empty" style="display:none;">No se encontró información.</div>
-      </div>
+      <table><thead id="theadCompra"></thead><tbody id="tbodyCompra"></tbody></table>
+      <div id="emptyCompra" class="empty" style="display:none;">No se encontró información.</div>
     </section>
   </main>
 
-  <!-- Modal -->
   <div id="imgModal" class="modal" onclick="closeModal()">
     <span class="close">&times;</span>
     <img id="modalImg" class="modal-content" alt="Vista ampliada">
@@ -305,23 +302,15 @@
       Compra: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
     };
 
-    const escapeHtml = str => String(str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
-
-    function isImage(url){
-      if(!url) return false;
-      url = url.trim();
-      return /(https?:\/\/.*\.(jpg|jpeg|png|gif|webp)|drive\.google\.com)/i.test(url);
-    }
-
-    function normalizeImageUrl(url){
-      if(!url) return '';
+    function normalizeImageUrl(url) {
+      if (!url) return '';
       url = url.trim();
       const match = url.match(/id=([a-zA-Z0-9_-]+)/);
-      if(match){ return `https://drive.google.com/uc?export=view&id=${match[1]}`; }
+      if (match) return `https://drive.google.com/uc?export=view&id=${match[1]}`;
       return url;
     }
 
-    function renderTable(data,prefix,headers,statusHeader){
+    function renderTable(data,prefix,headers){
       const thead=document.getElementById(`thead${prefix}`);
       const tbody=document.getElementById(`tbody${prefix}`);
       const empty=document.getElementById(`empty${prefix}`);
@@ -336,18 +325,20 @@
 
       data.forEach(row=>{
         const tr=document.createElement('tr');
-        headers.forEach((h,i)=>{
-          const val=row[h] ?? '';
+        headers.forEach(h=>{
+          const val=row[h]??'';
           const td=document.createElement('td');
-          if(isImage(val)){
-            const imgUrl = normalizeImageUrl(val);
-            td.innerHTML = `<img src="${imgUrl}" class="thumb" onclick="openModal('${imgUrl}')"><br><button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          } else if(i===1){
-            td.innerHTML = `<strong>${escapeHtml(val)}</strong>`;
-          } else if(h===statusHeader){
-            td.innerHTML = `<span class="pill">${escapeHtml(val)}</span>`;
+          if(h.toLowerCase().includes('foto') && val){
+            const imgUrl=normalizeImageUrl(val);
+            td.innerHTML = `
+              <div class="thumb-container">
+                <img src="${imgUrl}" class="thumb" onclick="openModal('${imgUrl}')">
+                <img src="${imgUrl}" class="preview" width="250">
+              </div>
+              <br>
+              <button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
           } else {
-            td.innerHTML = escapeHtml(val);
+            td.textContent = val;
           }
           tr.appendChild(td);
         });
@@ -360,45 +351,30 @@
       const input=document.getElementById(`search${kind}`);
       const code=input.value.trim().toLowerCase();
       if(!code) return;
-      Papa.parse(urls[kind]+'&t='+Date.now(),{
+      Papa.parse(urls[kind],{
         download:true, header:true, skipEmptyLines:true,
         complete:res=>{
           const rows=res.data||[];
           const headers=res.meta.fields||Object.keys(rows[0]||{});
-          const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
           const result=rows.filter(r=>{
             const cols=Object.values(r).map(c=>String(c).toLowerCase());
             return cols.some(c=>c.includes(code));
           });
-          renderTable(result,kind,headers,statusHeader);
-        },
-        error:()=>renderTable([],kind,[],null)
+          renderTable(result,kind,headers);
+        }
       });
     }
 
-    document.getElementById('reloadBtn').addEventListener('click',()=>{
-      ['Maritimo','Aereo','Compra'].forEach(k=>{
-        const val=document.getElementById(`search${k}`).value.trim();
-        if(val) searchTracking(k);
-      });
-    });
-
-    ['Maritimo','Aereo','Compra'].forEach(kind=>{
-      document.getElementById(`search${kind}`).addEventListener('keydown',e=>{
-        if(e.key==='Enter') searchTracking(kind);
-      });
-    });
-
     function openModal(src){
-      const modal=document.getElementById('imgModal');
-      const img=document.getElementById('modalImg');
-      img.src=src;
-      modal.style.display='flex';
+      document.getElementById('modalImg').src=src;
+      document.getElementById('imgModal').style.display='flex';
     }
 
     function closeModal(){
       document.getElementById('imgModal').style.display='none';
     }
+
+    document.getElementById('reloadBtn').onclick = () => location.reload();
   </script>
 </body>
 </html>
