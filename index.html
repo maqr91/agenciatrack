@@ -3,36 +3,75 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Rastreo | MIR</title>
+  <title>MIRCARGOTRACK | Rastreo</title>
   <style>
     :root{
       --azulClaro:#38bdf8; --azulOscuro:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
       --blanco:#ffffff; --texto:#0f172a;
       --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
-      --royal:#1d4ed8; --royalHover:#1e40af;
+      --royal:#0284c7; --royalHover:#0369a1;
+      --cremaPálido:#fff8e1;
       --celesteBg:#e0f2fe; --celesteTxt:#075985;
     }
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
 
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
-      color:var(--blanco);padding:14px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+      color:var(--blanco);
+      padding:16px 12px;
+      display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
-    header h1{margin:0;font-size:20px;font-weight:800;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-    .flags{display:flex;gap:8px;}
-    .flags img{width:28px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
-    .btn-refresh{
-      background:none;border:none;color:var(--blanco);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;
-    }
-    .btn-refresh:hover{opacity:0.85;}
-    .btn-refresh span.text{display:inline;}
-    .btn-refresh span.icon{display:none;font-size:18px;}
 
-    /* En móvil solo se muestra el ícono */
+    header h1{
+      margin:0;
+      font-size:22px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      display:flex;align-items:center;gap:8px;
+      position:relative;
+    }
+
+    header h1::after{
+      content:"";
+      position:absolute;
+      bottom:-3px;
+      left:0;
+      width:100%;
+      height:3px;
+      background:linear-gradient(90deg,#facc15 0%,#38bdf8 100%);
+      border-radius:2px;
+    }
+
+    .flags{display:flex;gap:8px;}
+    .flags img{width:30px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
+
+    /* Botón moderno */
+    .btn-refresh{
+      background:rgba(255,255,255,0.15);
+      backdrop-filter:blur(4px);
+      border:1px solid rgba(255,255,255,0.25);
+      color:#fff;
+      padding:8px 14px;
+      font-weight:700;
+      border-radius:10px;
+      cursor:pointer;
+      transition:all .25s ease;
+      display:flex;align-items:center;gap:8px;
+    }
+    .btn-refresh:hover{
+      background:rgba(255,255,255,0.25);
+      transform:translateY(-1px);
+    }
+
+    .btn-refresh span.icon{font-size:18px;transition:transform .3s;}
+    .btn-refresh:hover span.icon{transform:rotate(180deg);}
+    .btn-refresh span.text{display:inline;}
+
+    /* En móvil solo ícono */
     @media (max-width:640px){
       .btn-refresh span.text{display:none;}
-      .btn-refresh span.icon{display:inline;}
     }
 
     .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
@@ -41,6 +80,8 @@
     .card-header{padding:10px 12px;border-bottom:1px solid var(--gris2);display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
     .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
     .input input{width:100%;border:none;outline:none;font-size:14px;}
+
+    /* Buscar */
     .btn{border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;font-weight:700;border-radius:10px;cursor:pointer;}
     .btn:hover{background:var(--amarilloPálidoHover);}
 
@@ -51,15 +92,31 @@
     .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
     .meta{font-size:12px;color:#475569;margin-left:auto;}
 
+    /* Ver foto */
     .view-btn{
-      background:var(--royal);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;
+      background:var(--royal);
+      color:var(--cremaPálido);
+      border:none;
+      padding:7px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:800;
+      box-shadow:0 1px 2px rgba(0,0,0,.15);
+      transition:all .25s ease;
     }
-    .view-btn:hover{background:var(--royalHover);}
-    .status-pill{
-      display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;
-      box-shadow:0 1px 0 rgba(0,0,0,.06);
+    .view-btn:hover{
+      background:var(--royalHover);
+      transform:scale(1.03);
     }
 
+    /* Status */
+    .status-pill{
+      display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;
+      line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);
+    }
+
+    /* Responsive */
     @media (max-width:640px){
       header{padding:12px 10px;}
       header h1{font-size:18px;}
@@ -79,7 +136,7 @@
 </head>
 <body>
   <header>
-    <h1>RASTREO MAURA MULTISERVICES 🚢✈️</h1>
+    <h1>MIRCARGOTRACK</h1>
     <div class="header-right" style="display:flex;align-items:center;gap:10px;">
       <div class="flags">
         <img src="https://flagcdn.com/us.svg" alt="US">
@@ -161,13 +218,10 @@
       thead.innerHTML='';tbody.innerHTML='';
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
-
       const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
-
       const trHead=document.createElement('tr');
       headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
-
       data.forEach(row=>{
         const tr=document.createElement('tr');
         headers.forEach(h=>{
@@ -175,9 +229,9 @@
           if(h.toLowerCase().includes('foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          } else if (statusHeader && h===statusHeader && (prefix==='Maritimo'||prefix==='Aereo')) {
+          }else if(statusHeader&&h===statusHeader&&(prefix==='Maritimo'||prefix==='Aereo')){
             td.innerHTML=`<span class="status-pill">${String(val)}</span>`;
-          } else td.textContent=val;
+          }else td.textContent=val;
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
