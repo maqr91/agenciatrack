@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rastreo | MIR</title>
   <style>
-    /* 🎨 Paleta base */
     :root{
       --azul:#1e3a8a;
-      --azulHeaderClaro:#38bdf8; /* celeste */
-      --azulHeaderOscuro:#1e40af; /* azul más intenso */
+      --azulHeaderClaro:#38bdf8;
+      --azulHeaderOscuro:#1e40af;
       --gris:#f1f5f9;
       --gris2:#e2e8f0;
       --texto:#0f172a;
@@ -24,7 +23,6 @@
       background:var(--gris);
     }
 
-    /* 🌅 Header con gradiente */
     header{
       background:linear-gradient(90deg, var(--azulHeaderClaro), var(--azulHeaderOscuro));
       color:var(--blanco);
@@ -46,113 +44,22 @@
       gap:10px;
     }
 
-    .icons{
-      display:flex;
-      gap:14px;
-      align-items:center;
-    }
+    .icons{ display:flex; gap:14px; align-items:center; }
+    .icons svg{ width:38px; height:38px; fill:#fff; filter:drop-shadow(0 1px 3px rgba(0,0,0,.25)); }
 
-    /* ✈️🚢 Iconos más notables */
-    .icons svg{
-      width:38px;
-      height:38px;
-      fill:#ffffff;
-      opacity:1;
-      filter:drop-shadow(0 1px 3px rgba(0,0,0,.25));
-    }
-
-    .header-right{
-      display:flex;
-      align-items:center;
-      gap:15px;
-    }
-
-    .flags img{
-      width:35px;
-      border-radius:4px;
-      box-shadow:0 0 4px rgba(0,0,0,.25);
-    }
-
-    .btn-refresh{
-      background:var(--amarillo);
-      color:#111827;
-      padding:10px 14px;
-      font-weight:600;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      transition:.2s;
-    }
+    .header-right{ display:flex; align-items:center; gap:15px; }
+    .flags img{ width:35px; border-radius:4px; box-shadow:0 0 4px rgba(0,0,0,.25); }
+    .btn-refresh{ background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border:none; border-radius:10px; cursor:pointer; transition:.2s; }
     .btn-refresh:hover{ background:#facc15; }
 
-    /* 📦 Contenido principal */
-    .container{
-      max-width:900px;
-      margin:20px auto;
-      padding:0 16px;
-      display:flex;
-      flex-direction:column;
-      gap:22px;
-    }
+    .container{ max-width:900px; margin:20px auto; padding:0 16px; display:flex; flex-direction:column; gap:22px; }
 
-    .card{
-      background:var(--blanco);
-      border:1px solid var(--gris2);
-      border-radius:14px;
-      box-shadow:0 4px 16px rgba(2,6,23,.06);
-      overflow:hidden;
-    }
-
-    .card-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding:14px 16px;
-      font-weight:800;
-      color:#0f172a;
-      border-bottom:1px solid var(--gris2);
-      background:#fafafa;
-      font-size:16px;
-    }
-
-    .card-header{
-      padding:16px;
-      border-bottom:1px solid var(--gris2);
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    .input{
-      flex:1 1 260px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      border:1px solid var(--gris2);
-      border-radius:10px;
-      padding:10px 12px;
-      background:var(--blanco);
-    }
-
-    .input input{
-      width:100%;
-      border:none;
-      outline:none;
-      font-size:14px;
-    }
-
-    .btn{
-      appearance:none;
-      border:none;
-      background:var(--amarillo);
-      color:#111827;
-      padding:10px 14px;
-      font-weight:600;
-      border-radius:10px;
-      cursor:pointer;
-      transition:.2s;
-    }
+    .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow:0 4px 16px rgba(2,6,23,.06); overflow:hidden; }
+    .card-title{ display:flex; align-items:center; gap:10px; padding:14px 16px; font-weight:800; color:#0f172a; border-bottom:1px solid var(--gris2); background:#fafafa; font-size:16px; }
+    .card-header{ padding:16px; border-bottom:1px solid var(--gris2); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .input{ flex:1 1 260px; display:flex; align-items:center; gap:8px; border:1px solid var(--gris2); border-radius:10px; padding:10px 12px; background:var(--blanco); }
+    .input input{ width:100%; border:none; outline:none; font-size:14px; }
+    .btn{ appearance:none; border:none; background:var(--amarillo); color:#111827; padding:10px 14px; font-weight:600; border-radius:10px; cursor:pointer; transition:.2s; }
     .btn:hover{ background:#facc15; }
 
     table{ width:100%; border-collapse:collapse; }
@@ -162,17 +69,7 @@
     .table-wrap{ overflow:auto; max-height:70vh; }
     .empty{ padding:28px; text-align:center; color:#64748b; }
     .meta{ font-size:12px; color:#475569; margin-left:auto; }
-    .pill{
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:9999px;
-      background:var(--amarillo);
-      color:#111827;
-      font-weight:800;
-      font-size:12px;
-      line-height:1;
-      box-shadow:0 1px 0 rgba(0,0,0,.06);
-    }
+    .pill{ display:inline-block; padding:4px 10px; border-radius:9999px; background:var(--amarillo); color:#111827; font-weight:800; font-size:12px; line-height:1; box-shadow:0 1px 0 rgba(0,0,0,.06); }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -182,14 +79,8 @@
     <h1>
       Rastreo Maura Multiservices
       <span class="icons">
-        <!-- 🚢 barco -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-          <path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7 14.3-32-32-32H144z"/>
-        </svg>
-        <!-- ✈️ avión -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-          <path d="M480 320h-40.4l-48-48H96l-32 32H16l48-96-48-96h48l32 32h295.6l48-48H480l-64 128 64 128zM640 224v64h-64v-64h64z"/>
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M528 448H48c-26.5 0-48-21.5-48-48v-64l96-32 96 32 96-32 96 32 96-32v64c0 26.5-21.5 48-48 48zM144 128c-17.7 0-32 14.3-32 32v16h416v-16c0-17.7 14.3-32-32-32H144z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d="M480 320h-40.4l-48-48H96l-32 32H16l48-96-48-96h48l32 32h295.6l48-48H480l-64 128 64 128zM640 224v64h-64v-64h64z"/></svg>
       </span>
     </h1>
     <div class="header-right">
@@ -235,24 +126,42 @@
         <div id="emptyAereo" class="empty" style="display:none;">No se encontró información.</div>
       </div>
     </section>
+
+    <!-- 🛍️ Rastreo de compra en línea -->
+    <section class="card" id="cardCompra">
+      <div class="card-title">🛍️ Rastreo de compra en línea</div>
+      <div class="card-header">
+        <div class="input"><input id="searchCompra" placeholder="Nombre o número de tracking" /></div>
+        <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
+        <div id="metaCompra" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadCompra"></thead>
+          <tbody id="tbodyCompra"></tbody>
+        </table>
+        <div id="emptyCompra" class="empty" style="display:none;">No se encontró información.</div>
+      </div>
+    </section>
   </main>
 
   <script>
     const urls = {
       Maritimo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
-      Aereo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv'
+      Aereo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
+      Compra: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
     };
 
-    const escapeHtml = (str)=>String(str).replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    const escapeHtml = str => String(str).replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
 
     function renderTable(data, prefix, headers, statusHeader){
-      const thead = document.getElementById(`thead${prefix}`);
-      const tbody = document.getElementById(`tbody${prefix}`);
-      const empty = document.getElementById(`empty${prefix}`);
-      const meta = document.getElementById(`meta${prefix}`);
+      const thead=document.getElementById(`thead${prefix}`);
+      const tbody=document.getElementById(`tbody${prefix}`);
+      const empty=document.getElementById(`empty${prefix}`);
+      const meta=document.getElementById(`meta${prefix}`);
       thead.innerHTML=''; tbody.innerHTML='';
 
-      if (!data.length){ empty.style.display='block'; meta.textContent=''; return; }
+      if(!data.length){ empty.style.display='block'; meta.textContent=''; return; }
       empty.style.display='none';
 
       const trHead=document.createElement('tr');
@@ -264,8 +173,8 @@
         headers.forEach((h,i)=>{
           const td=document.createElement('td');
           const val=row[h] ?? '';
-          if (i===1){ td.innerHTML=`<strong>${escapeHtml(val)}</strong>`; }
-          else if (h===statusHeader){ td.innerHTML=`<span class="pill">${escapeHtml(val)}</span>`; }
+          if(i===1){ td.innerHTML=`<strong>${escapeHtml(val)}</strong>`; }
+          else if(h===statusHeader){ td.innerHTML=`<span class="pill">${escapeHtml(val)}</span>`; }
           else{ td.innerHTML=escapeHtml(val); }
           tr.appendChild(td);
         });
@@ -279,7 +188,6 @@
       const input=document.getElementById(`search${kind}`);
       const code=input.value.trim().toLowerCase();
       if(!code) return;
-
       const url=urls[kind]+'&t='+Date.now();
 
       Papa.parse(url,{
@@ -290,31 +198,30 @@
           if(!headers.length){ renderTable([],kind,[],null); return; }
 
           const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
-          const result = rows.filter(r => {
-            const cols = Object.values(r);
-            return String(cols[1] ?? '').toLowerCase() === code;
+
+          const result = rows.filter(r=>{
+            const cols=Object.values(r).map(c=>String(c).toLowerCase());
+            return cols.some(c=>c.includes(code)); // busca por tracking o nombre
           });
 
-          renderTable(result, kind, headers, statusHeader);
+          renderTable(result,kind,headers,statusHeader);
         },
         error:()=>{ renderTable([],kind,[],null); }
       });
     }
 
-    document.getElementById('reloadBtn').addEventListener('click', ()=>{
-      const m=document.getElementById('searchMaritimo').value.trim();
-      const a=document.getElementById('searchAereo').value.trim();
-      if(m) searchTracking('Maritimo');
-      if(a) searchTracking('Aereo');
-      if(!m && !a) location.reload();
+    document.getElementById('reloadBtn').addEventListener('click',()=>{
+      ['Maritimo','Aereo','Compra'].forEach(k=>{
+        const val=document.getElementById(`search${k}`).value.trim();
+        if(val) searchTracking(k);
+      });
     });
 
-    ['Maritimo','Aereo'].forEach(kind=>{
-      document.getElementById(`search${kind}`).addEventListener('keydown',(e)=>{
+    ['Maritimo','Aereo','Compra'].forEach(kind=>{
+      document.getElementById(`search${kind}`).addEventListener('keydown',e=>{
         if(e.key==='Enter') searchTracking(kind);
       });
     });
   </script>
 </body>
 </html>
-
