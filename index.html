@@ -19,6 +19,7 @@
     .container{ max-width:900px; margin:20px auto; padding:0 16px; display:flex; flex-direction:column; gap:22px; }
     .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:14px; box-shadow:0 4px 16px rgba(2,6,23,.06); overflow:hidden; }
     .card-title{ display:flex; align-items:center; gap:10px; padding:14px 16px; font-weight:800; color:#0f172a; border-bottom:1px solid var(--gris2); background:#fafafa; }
+    .card-title svg{ width:22px; height:22px; fill:#0f172a; opacity:.85; }
     .card-header{ padding:16px; border-bottom:1px solid var(--gris2); display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .input{ flex:1 1 260px; display:flex; align-items:center; gap:8px; border:1px solid var(--gris2); border-radius:10px; padding:10px 12px; background:var(--blanco); }
     .input input{ width:100%; border:none; outline:none; font-size:14px; }
@@ -58,7 +59,9 @@
   <main class="container">
     <!-- MARÍTIMO -->
     <section class="card" id="cardMaritimo">
-      <div class="card-title">🚢 Rastreo Marítimo</div>
+      <div class="card-title">
+        🚢 Rastreo Marítimo
+      </div>
       <div class="card-header">
         <div class="input"><input id="searchMaritimo" placeholder="Número de rastreo (Marítimo)" /></div>
         <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
@@ -75,7 +78,9 @@
 
     <!-- AÉREO -->
     <section class="card" id="cardAereo">
-      <div class="card-title">✈️ Rastreo Aéreo</div>
+      <div class="card-title">
+        ✈️ Rastreo Aéreo
+      </div>
       <div class="card-header">
         <div class="input"><input id="searchAereo" placeholder="Número de rastreo (Aéreo)" /></div>
         <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
@@ -89,42 +94,24 @@
         <div id="emptyAereo" class="empty" style="display:none;">No se encontró información.</div>
       </div>
     </section>
-
-    <!-- COMPRA EN LÍNEA -->
-    <section class="card" id="cardCompra">
-      <div class="card-title">🛒 Rastreo de Compra en Línea</div>
-      <div class="card-header">
-        <div class="input"><input id="searchCompra" placeholder="Nombre o número de tracking (Amazon, FedEx, UPS)" /></div>
-        <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
-        <div id="metaCompra" class="meta"></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead id="theadCompra"></thead>
-          <tbody id="tbodyCompra"></tbody>
-        </table>
-        <div id="emptyCompra" class="empty" style="display:none;">No se encontró información.</div>
-      </div>
-    </section>
   </main>
 
   <script>
     const urls = {
       Maritimo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
-      Aereo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
-      Compra: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
+      Aereo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv'
     };
 
     const escapeHtml = (str)=>String(str).replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
 
     function renderTable(data, prefix, headers, statusHeader){
-      const thead=document.getElementById(`thead${prefix}`);
-      const tbody=document.getElementById(`tbody${prefix}`);
-      const empty=document.getElementById(`empty${prefix}`);
-      const meta=document.getElementById(`meta${prefix}`);
+      const thead = document.getElementById(`thead${prefix}`);
+      const tbody = document.getElementById(`tbody${prefix}`);
+      const empty = document.getElementById(`empty${prefix}`);
+      const meta = document.getElementById(`meta${prefix}`);
       thead.innerHTML=''; tbody.innerHTML='';
 
-      if(!data.length){ empty.style.display='block'; meta.textContent=''; return; }
+      if (!data.length){ empty.style.display='block'; meta.textContent=''; return; }
       empty.style.display='none';
 
       const trHead=document.createElement('tr');
@@ -136,13 +123,14 @@
         headers.forEach((h,i)=>{
           const td=document.createElement('td');
           const val=row[h] ?? '';
-          if(i===1){ td.innerHTML=`<strong>${escapeHtml(val)}</strong>`; }
-          else if(h===statusHeader){ td.innerHTML=`<span class="pill">${escapeHtml(val)}</span>`; }
+          if (i===1){ td.innerHTML=`<strong>${escapeHtml(val)}</strong>`; } // columna 2 en negritas
+          else if (h===statusHeader){ td.innerHTML=`<span class="pill">${escapeHtml(val)}</span>`; }
           else{ td.innerHTML=escapeHtml(val); }
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
+
       meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
@@ -152,18 +140,20 @@
       if(!code) return;
 
       const url=urls[kind]+'&t='+Date.now();
+
       Papa.parse(url,{
         download:true, header:true, skipEmptyLines:true,
         complete:(res)=>{
           const rows=res.data||[];
           const headers=res.meta.fields||Object.keys(rows[0]||{});
           if(!headers.length){ renderTable([],kind,[],null); return; }
+
           const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
 
-          // Coincidencias: por tracking o por nombre
+          // Buscar coincidencias solo en columna B (índice 1)
           const result = rows.filter(r => {
-            const values = Object.values(r).map(v => String(v).toLowerCase());
-            return values.some(v => v.includes(code));
+            const cols = Object.values(r);
+            return String(cols[1] ?? '').toLowerCase() === code;
           });
 
           renderTable(result, kind, headers, statusHeader);
@@ -175,14 +165,13 @@
     document.getElementById('reloadBtn').addEventListener('click', ()=>{
       const m=document.getElementById('searchMaritimo').value.trim();
       const a=document.getElementById('searchAereo').value.trim();
-      const c=document.getElementById('searchCompra').value.trim();
       if(m) searchTracking('Maritimo');
       if(a) searchTracking('Aereo');
-      if(c) searchTracking('Compra');
-      if(!m && !a && !c) location.reload();
+      if(!m && !a) location.reload();
     });
 
-    ['Maritimo','Aereo','Compra'].forEach(kind=>{
+    // ENTER para buscar directamente
+    ['Maritimo','Aereo'].forEach(kind=>{
       document.getElementById(`search${kind}`).addEventListener('keydown',(e)=>{
         if(e.key==='Enter') searchTracking(kind);
       });
