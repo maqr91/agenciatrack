@@ -216,6 +216,19 @@
       font-weight: bold;
       cursor: pointer;
     }
+
+    .view-btn {
+      background: var(--amarillo);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .view-btn:hover { background: #fde047; }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -279,7 +292,7 @@
     </section>
   </main>
 
-  <!-- Modal para ver imágenes grandes -->
+  <!-- Modal -->
   <div id="imgModal" class="modal" onclick="closeModal()">
     <span class="close">&times;</span>
     <img id="modalImg" class="modal-content" alt="Vista ampliada">
@@ -295,7 +308,17 @@
     const escapeHtml = str => String(str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
 
     function isImage(url){
-      return /(https?:\/\/.*\.(jpg|jpeg|png|gif|webp)|drive\.google\.com\/uc\?export=view&id=)/i.test(url);
+      if(!url) return false;
+      url = url.trim();
+      return /(https?:\/\/.*\.(jpg|jpeg|png|gif|webp)|drive\.google\.com)/i.test(url);
+    }
+
+    function normalizeImageUrl(url){
+      if(!url) return '';
+      url = url.trim();
+      const match = url.match(/id=([a-zA-Z0-9_-]+)/);
+      if(match){ return `https://drive.google.com/uc?export=view&id=${match[1]}`; }
+      return url;
     }
 
     function renderTable(data,prefix,headers,statusHeader){
@@ -306,6 +329,7 @@
       thead.innerHTML=''; tbody.innerHTML='';
       if(!data.length){ empty.style.display='block'; meta.textContent=''; return; }
       empty.style.display='none';
+
       const trHead=document.createElement('tr');
       headers.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; trHead.appendChild(th); });
       thead.appendChild(trHead);
@@ -315,14 +339,16 @@
         headers.forEach((h,i)=>{
           const val=row[h] ?? '';
           const td=document.createElement('td');
-
           if(isImage(val)){
-            td.innerHTML=`<img src="${escapeHtml(val)}" class="thumb" onclick="openModal('${escapeHtml(val)}')">`;
+            const imgUrl = normalizeImageUrl(val);
+            td.innerHTML = `<img src="${imgUrl}" class="thumb" onclick="openModal('${imgUrl}')"><br><button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
+          } else if(i===1){
+            td.innerHTML = `<strong>${escapeHtml(val)}</strong>`;
+          } else if(h===statusHeader){
+            td.innerHTML = `<span class="pill">${escapeHtml(val)}</span>`;
+          } else {
+            td.innerHTML = escapeHtml(val);
           }
-          else if(i===1){ td.innerHTML=`<strong>${escapeHtml(val)}</strong>`; }
-          else if(h===statusHeader){ td.innerHTML=`<span class="pill">${escapeHtml(val)}</span>`; }
-          else{ td.innerHTML=escapeHtml(val); }
-
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -363,7 +389,6 @@
       });
     });
 
-    // Modal functions
     function openModal(src){
       const modal=document.getElementById('imgModal');
       const img=document.getElementById('modalImg');
