@@ -5,60 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rastreo | MIR</title>
   <style>
-    :root{
+    :root {
       --azulClaro:#38bdf8; --azulOscuro:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
       --amarillo:#fbbf24; --blanco:#ffffff; --texto:#0f172a;
     }
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; color:var(--texto); background:var(--gris); }
-
-    /* Header */
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
-      color:var(--blanco); padding:14px 12px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;
+      color:var(--blanco);padding:14px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
-    header h1{ margin:0; font-size:20px; font-weight:800; text-transform:uppercase; display:flex; align-items:center; gap:8px; }
-    .flags{ display:flex; gap:8px; }
-    .flags img{ width:28px; border-radius:4px; box-shadow:0 0 4px rgba(0,0,0,.25); }
-    .btn-refresh{ background:var(--amarillo); color:#111827; padding:8px 12px; font-weight:600; border:none; border-radius:10px; cursor:pointer; }
-    .btn-refresh:hover{ background:#facc15; }
+    header h1{margin:0;font-size:20px;font-weight:800;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+    .flags{display:flex;gap:8px;}
+    .flags img{width:28px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
+    .btn-refresh{background:var(--amarillo);color:#111827;padding:8px 12px;font-weight:600;border:none;border-radius:10px;cursor:pointer;}
+    .btn-refresh:hover{background:#facc15;}
 
-    /* Layout */
-    .container{ max-width:900px; margin:14px auto; padding:0 12px; display:flex; flex-direction:column; gap:14px; }
-    .card{ background:var(--blanco); border:1px solid var(--gris2); border-radius:12px; box-shadow:0 3px 12px rgba(2,6,23,.06); overflow:hidden; }
-    .card-title{ padding:10px 12px; font-weight:800; color:var(--texto); border-bottom:1px solid var(--gris2); background:#fafafa; font-size:16px; }
-    .card-header{ padding:10px 12px; border-bottom:1px solid var(--gris2); display:grid; grid-template-columns: 1fr auto auto; gap:8px; align-items:center; }
-    .input{ display:flex; align-items:center; gap:8px; border:1px solid var(--gris2); border-radius:8px; padding:8px 10px; background:var(--blanco); }
-    .input input{ width:100%; border:none; outline:none; font-size:14px; }
-    .btn{ border:none; background:var(--amarillo); color:#111827; padding:8px 12px; font-weight:600; border-radius:10px; cursor:pointer; }
-    .btn:hover{ background:#facc15; }
+    .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
+    .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
+    .card-title{padding:10px 12px;font-weight:800;color:var(--texto);border-bottom:1px solid var(--gris2);background:#fafafa;font-size:16px;}
+    .card-header{padding:10px 12px;border-bottom:1px solid var(--gris2);display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
+    .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
+    .input input{width:100%;border:none;outline:none;font-size:14px;}
+    .btn{border:none;background:var(--amarillo);color:#111827;padding:8px 12px;font-weight:600;border-radius:10px;cursor:pointer;}
+    .btn:hover{background:#facc15;}
+    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
+    table{width:100%;border-collapse:collapse;min-width:620px;}
+    th,td{padding:8px 10px;border-bottom:1px solid var(--gris2);text-align:left;font-size:13px;vertical-align:middle;}
+    tbody tr:hover{background:#f9fafb;}
+    .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
+    .meta{font-size:12px;color:#475569;margin-left:auto;}
+    .view-btn{background:var(--amarillo);border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:#111827;}
+    .view-btn:hover{background:#fde047;}
 
-    .table-wrap{ overflow:auto; -webkit-overflow-scrolling:touch; }
-    table{ width:100%; border-collapse:collapse; min-width:620px; }
-    th,td{ padding:8px 10px; border-bottom:1px solid var(--gris2); text-align:left; font-size:13px; vertical-align:middle; }
-    tbody tr:hover{ background:#f9fafb; }
-    .empty{ padding:16px; text-align:center; color:#64748b; }
-    .meta{ font-size:12px; color:#475569; margin-left:auto; }
-    .view-btn{ background:var(--amarillo); border:none; padding:6px 10px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:600; color:#111827; }
-    .view-btn:hover{ background:#fde047; }
-
-    /* Responsive móvil */
+    /* Ocultar ID y ajustar para móvil */
     @media (max-width:640px){
-      header{ padding:12px 10px; }
-      header h1{ font-size:18px; }
-      .flags img{ width:24px; }
-      .container{ gap:12px; padding:0 10px; }
-      .card-title{ font-size:15px; padding:8px 10px; }
-      .card-header{
-        padding:8px 10px;
-        grid-template-columns: 1fr auto; /* input y botón en fila */
-        grid-auto-rows: min-content;
-        gap:6px;
-      }
-      .btn, .btn-refresh{ padding:7px 10px; font-size:12px; border-radius:8px; }
-      .input{ padding:7px 9px; }
-      th,td{ padding:7px 8px; font-size:12px; }
-      table{ min-width:560px; } /* asegura scroll horizontal si es necesario */
+      header{padding:12px 10px;}
+      header h1{font-size:18px;}
+      .flags img{width:24px;}
+      .container{gap:12px;padding:0 10px;}
+      .card-title{font-size:15px;padding:8px 10px;}
+      .card-header{padding:8px 10px;grid-template-columns:1fr auto;gap:6px;}
+      .btn,.btn-refresh{padding:7px 10px;font-size:12px;border-radius:8px;}
+      .input{padding:7px 9px;}
+      th,td{padding:7px 8px;font-size:12px;}
+      table{min-width:560px;}
+      th:nth-child(6),td:nth-child(6){display:none;} /* Oculta ID en móvil */
     }
   </style>
 
@@ -67,7 +59,7 @@
 <body>
   <header>
     <h1>RASTREO MAURA MULTISERVICES 🚢✈️</h1>
-    <div class="header-right" style="display:flex; align-items:center; gap:10px;">
+    <div class="header-right" style="display:flex;align-items:center;gap:10px;">
       <div class="flags">
         <img src="https://flagcdn.com/us.svg" alt="US">
         <img src="https://flagcdn.com/ni.svg" alt="NI">
@@ -85,10 +77,10 @@
         <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
         <div id="metaMaritimo" class="meta"></div>
       </div>
-      <div class="table-wrap">
-        <table><thead id="theadMaritimo"></thead><tbody id="tbodyMaritimo"></tbody></table>
+      <div class="table-wrap"><table><thead id="theadMaritimo"></thead><tbody id="tbodyMaritimo"></tbody></table></div>
+      <div id="emptyMaritimo" class="empty" style="display:none;">
+        ❌ No encontramos ese número de rastreo.<br>🔹 Búsquelo en la parte superior derecha de su factura.
       </div>
-      <div id="emptyMaritimo" class="empty" style="display:none;">No se encontró información.</div>
     </section>
 
     <!-- AÉREO -->
@@ -99,13 +91,13 @@
         <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
         <div id="metaAereo" class="meta"></div>
       </div>
-      <div class="table-wrap">
-        <table><thead id="theadAereo"></thead><tbody id="tbodyAereo"></tbody></table>
+      <div class="table-wrap"><table><thead id="theadAereo"></thead><tbody id="tbodyAereo"></tbody></table></div>
+      <div id="emptyAereo" class="empty" style="display:none;">
+        ❌ No encontramos ese número de rastreo.<br>🔹 Búsquelo en la parte superior derecha de su factura.
       </div>
-      <div id="emptyAereo" class="empty" style="display:none;">No se encontró información.</div>
     </section>
 
-    <!-- COMPRA EN LÍNEA -->
+    <!-- COMPRA -->
     <section class="card" id="cardCompra">
       <div class="card-title">🛍️ Rastreo de compra en línea</div>
       <div class="card-header">
@@ -113,28 +105,27 @@
         <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
         <div id="metaCompra" class="meta"></div>
       </div>
-      <div class="table-wrap">
-        <table><thead id="theadCompra"></thead><tbody id="tbodyCompra"></tbody></table>
+      <div class="table-wrap"><table><thead id="theadCompra"></thead><tbody id="tbodyCompra"></tbody></table></div>
+      <div id="emptyCompra" class="empty" style="display:none;">
+        ⚠️ Ese número de rastreo puede estar equivocado o aún no recibimos su paquete en nuestras oficinas.<br>🔹 Por favor, intente más tarde.
       </div>
-      <div id="emptyCompra" class="empty" style="display:none;">No se encontró información.</div>
     </section>
   </main>
 
   <script>
-    const urls = {
-      Maritimo: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
-      Aereo:   'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
-      Compra:  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
+    const urls={
+      Maritimo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
+      Aereo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
+      Compra:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
     };
 
     function normalizeImageUrl(url){
-      if(!url) return '';
-      url = url.trim();
-      // Soporta ?id=, /file/d/ID/, y deja otros URLs tal cual
-      let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-      m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
-      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+      if(!url)return'';
+      url=url.trim();
+      let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
+      m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
       return url;
     }
 
@@ -143,25 +134,20 @@
       const tbody=document.getElementById(`tbody${prefix}`);
       const empty=document.getElementById(`empty${prefix}`);
       const meta=document.getElementById(`meta${prefix}`);
-      thead.innerHTML=''; tbody.innerHTML='';
-      if(!data.length){ empty.style.display='block'; meta.textContent=''; return; }
+      thead.innerHTML='';tbody.innerHTML='';
+      if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
-
       const trHead=document.createElement('tr');
-      headers.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; trHead.appendChild(th); });
+      headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
-
       data.forEach(row=>{
         const tr=document.createElement('tr');
         headers.forEach(h=>{
-          const val=row[h]??'';
-          const td=document.createElement('td');
-          if(h.toLowerCase().includes('foto') && val){
+          const val=row[h]??'';const td=document.createElement('td');
+          if(h.toLowerCase().includes('foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          } else {
-            td.textContent = val;
-          }
+          }else td.textContent=val;
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -172,11 +158,9 @@
     function searchTracking(kind){
       const input=document.getElementById(`search${kind}`);
       const code=input.value.trim().toLowerCase();
-      if(!code) return;
-      // anti-caché para que en móvil también refresque
-      const csvUrl = urls[kind] + '&t=' + Date.now();
-      Papa.parse(csvUrl,{
-        download:true, header:true, skipEmptyLines:true,
+      if(!code)return;
+      Papa.parse(urls[kind]+'&t='+Date.now(),{
+        download:true,header:true,skipEmptyLines:true,
         complete:res=>{
           const rows=res.data||[];
           const headers=res.meta.fields||Object.keys(rows[0]||{});
@@ -186,15 +170,14 @@
           });
           renderTable(result,kind,headers);
         },
-        error:()=>{ renderTable([],kind,[],null); }
+        error:()=>{renderTable([],kind,[],null);}
       });
     }
 
     document.getElementById('reloadBtn').onclick=()=>location.reload();
-    // ENTER para buscar
     ['Maritimo','Aereo','Compra'].forEach(k=>{
       const el=document.getElementById(`search${k}`);
-      el.addEventListener('keydown',e=>{ if(e.key==='Enter') searchTracking(k); });
+      el.addEventListener('keydown',e=>{if(e.key==='Enter')searchTracking(k);});
     });
   </script>
 </body>
