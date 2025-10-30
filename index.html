@@ -6,42 +6,54 @@
   <title>MIRCARGOTRACK | Rastreo</title>
   <style>
     :root{
-      --azulClaro:#38bdf8; --azulOscuro:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
+      --azulClaro:#38bdf8; --azulOscuro:#1e3a8a;
+      --celesteTxt:#0284c7; --celesteBg:#e0f2fe;
+      --gris:#f1f5f9; --gris2:#e2e8f0;
       --blanco:#ffffff; --texto:#0f172a;
       --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
-      --royal:#0284c7; --royalHover:#0369a1;
-      --cremaPálido:#fff8e1;
-      --celesteBg:#e0f2fe; --celesteTxt:#075985;
     }
 
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
+    
+    /* ===== HEADER ===== */
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:var(--blanco);
-      padding:16px 12px;
+      padding:18px 12px;
       display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
 
+    /* ==== TÍTULO STARK STYLE ==== */
     header h1{
       margin:0;
-      font-size:22px;
+      font-size:24px;
       font-weight:900;
       text-transform:uppercase;
       letter-spacing:1px;
-      display:flex;align-items:center;gap:8px;
+      font-style:italic;
       position:relative;
+      display:inline-block;
+      padding-right:40px;
     }
 
     header h1::after{
-      content:"";
+      content:'';
       position:absolute;
-      bottom:-3px;
+      bottom:-5px;
       left:0;
       width:100%;
-      height:3px;
-      background:linear-gradient(90deg,#facc15 0%,#38bdf8 100%);
-      border-radius:2px;
+      height:4px;
+      background:linear-gradient(90deg,#38bdf8 0%,#1e3a8a 100%);
+      transform-origin:left;
+      animation:ray 2.8s linear infinite;
+      clip-path:polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+    }
+
+    @keyframes ray {
+      0%{opacity:0.4;transform:scaleX(0);}
+      50%{opacity:1;transform:scaleX(1);}
+      100%{opacity:0.4;transform:scaleX(0);}
     }
 
     .flags{display:flex;gap:8px;}
@@ -49,8 +61,7 @@
 
     /* Botón moderno */
     .btn-refresh{
-      background:rgba(255,255,255,0.15);
-      backdrop-filter:blur(4px);
+      background:rgba(255,255,255,0.1);
       border:1px solid rgba(255,255,255,0.25);
       color:#fff;
       padding:8px 14px;
@@ -59,21 +70,18 @@
       cursor:pointer;
       transition:all .25s ease;
       display:flex;align-items:center;gap:8px;
+      backdrop-filter:blur(5px);
     }
     .btn-refresh:hover{
       background:rgba(255,255,255,0.25);
       transform:translateY(-1px);
     }
-
     .btn-refresh span.icon{font-size:18px;transition:transform .3s;}
     .btn-refresh:hover span.icon{transform:rotate(180deg);}
     .btn-refresh span.text{display:inline;}
+    @media (max-width:640px){.btn-refresh span.text{display:none;}}
 
-    /* En móvil solo ícono */
-    @media (max-width:640px){
-      .btn-refresh span.text{display:none;}
-    }
-
+    /* ===== CONTENEDOR ===== */
     .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
     .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
     .card-title{padding:10px 12px;font-weight:800;color:var(--texto);border-bottom:1px solid var(--gris2);background:#fafafa;font-size:16px;}
@@ -81,7 +89,7 @@
     .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
     .input input{width:100%;border:none;outline:none;font-size:14px;}
 
-    /* Buscar */
+    /* Botón Buscar */
     .btn{border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;font-weight:700;border-radius:10px;cursor:pointer;}
     .btn:hover{background:var(--amarilloPálidoHover);}
 
@@ -92,31 +100,36 @@
     .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
     .meta{font-size:12px;color:#475569;margin-left:auto;}
 
-    /* Ver foto */
+    /* ===== Ver foto ===== */
     .view-btn{
-      background:var(--royal);
-      color:var(--cremaPálido);
+      background:var(--celesteTxt);
+      color:#fff;
       border:none;
       padding:7px 12px;
       border-radius:8px;
       cursor:pointer;
       font-size:12px;
       font-weight:800;
-      box-shadow:0 1px 2px rgba(0,0,0,.15);
+      box-shadow:0 1px 3px rgba(0,0,0,.15);
       transition:all .25s ease;
     }
     .view-btn:hover{
-      background:var(--royalHover);
-      transform:scale(1.03);
+      background:#0369a1;
+      transform:scale(1.05);
     }
 
-    /* Status */
+    /* ===== Status ===== */
     .status-pill{
-      display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;
-      line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:9999px;
+      background:var(--celesteBg);
+      color:var(--celesteTxt);
+      font-weight:800;
+      line-height:1;
+      box-shadow:0 1px 0 rgba(0,0,0,.06);
     }
 
-    /* Responsive */
     @media (max-width:640px){
       header{padding:12px 10px;}
       header h1{font-size:18px;}
