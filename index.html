@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rastreo | MIR</title>
   <style>
-    :root {
+    :root{
       --azulClaro:#38bdf8; --azulOscuro:#1e3a8a; --gris:#f1f5f9; --gris2:#e2e8f0;
-      --amarillo:#fbbf24; --blanco:#ffffff; --texto:#0f172a;
+      --blanco:#ffffff; --texto:#0f172a;
+      --amarilloPálido:#fde68a; /* Buscar */
+      --amarilloPálidoHover:#fcd34d;
+      --royal:#1d4ed8; --royalHover:#1e40af;
+      --celesteBg:#e0f2fe; --celesteTxt:#075985;
     }
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
+
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:var(--blanco);padding:14px 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
@@ -18,8 +23,10 @@
     header h1{margin:0;font-size:20px;font-weight:800;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
     .flags{display:flex;gap:8px;}
     .flags img{width:28px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
-    .btn-refresh{background:var(--amarillo);color:#111827;padding:8px 12px;font-weight:600;border:none;border-radius:10px;cursor:pointer;}
-    .btn-refresh:hover{background:#facc15;}
+    .btn-refresh{
+      background:var(--azulClaro); color:#0b1b2b; padding:8px 12px; font-weight:700; border:none; border-radius:10px; cursor:pointer;
+    }
+    .btn-refresh:hover{filter:brightness(0.95);}
 
     .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
     .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
@@ -27,18 +34,30 @@
     .card-header{padding:10px 12px;border-bottom:1px solid var(--gris2);display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
     .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
     .input input{width:100%;border:none;outline:none;font-size:14px;}
-    .btn{border:none;background:var(--amarillo);color:#111827;padding:8px 12px;font-weight:600;border-radius:10px;cursor:pointer;}
-    .btn:hover{background:#facc15;}
+    /* Buscar (único que queda amarillo y más pálido) */
+    .btn{border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;font-weight:700;border-radius:10px;cursor:pointer;}
+    .btn:hover{background:var(--amarilloPálidoHover);}
+
     .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
     table{width:100%;border-collapse:collapse;min-width:620px;}
     th,td{padding:8px 10px;border-bottom:1px solid var(--gris2);text-align:left;font-size:13px;vertical-align:middle;}
     tbody tr:hover{background:#f9fafb;}
     .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
     .meta{font-size:12px;color:#475569;margin-left:auto;}
-    .view-btn{background:var(--amarillo);border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:#111827;}
-    .view-btn:hover{background:#fde047;}
 
-    /* Ocultar ID y ajustar para móvil */
+    /* Ver foto: azul royal, blanco y negrita */
+    .view-btn{
+      background:var(--royal); color:#fff; border:none; padding:7px 12px; border-radius:8px; cursor:pointer; font-size:12px; font-weight:800;
+    }
+    .view-btn:hover{ background:var(--royalHover); }
+
+    /* Status resaltado celeste */
+    .status-pill{
+      display:inline-block; padding:4px 10px; border-radius:9999px; background:var(--celesteBg); color:var(--celesteTxt); font-weight:800; line-height:1;
+      box-shadow:0 1px 0 rgba(0,0,0,.06);
+    }
+
+    /* Responsive móvil */
     @media (max-width:640px){
       header{padding:12px 10px;}
       header h1{font-size:18px;}
@@ -50,7 +69,8 @@
       .input{padding:7px 9px;}
       th,td{padding:7px 8px;font-size:12px;}
       table{min-width:560px;}
-      th:nth-child(6),td:nth-child(6){display:none;} /* Oculta ID en móvil */
+      /* Ojo: si tu tabla tiene 6 columnas y la 6 es ID, se oculta en móvil */
+      th:nth-child(6),td:nth-child(6){display:none;}
     }
   </style>
 
@@ -137,9 +157,14 @@
       thead.innerHTML='';tbody.innerHTML='';
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
+
+      // Detectar columna de Status/Estatus/Estado (si existe)
+      const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
+
       const trHead=document.createElement('tr');
       headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
+
       data.forEach(row=>{
         const tr=document.createElement('tr');
         headers.forEach(h=>{
@@ -147,7 +172,11 @@
           if(h.toLowerCase().includes('foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          }else td.textContent=val;
+          } else if (statusHeader && h===statusHeader && (prefix==='Maritimo' || prefix==='Aereo')) {
+            td.innerHTML = `<span class="status-pill">${String(val)}</span>`;
+          } else {
+            td.textContent = val;
+          }
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
