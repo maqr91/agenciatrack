@@ -141,100 +141,87 @@
       Compra: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
     };
 
-    function normalizeImageUrl(url) {
-      if (!url) return '';
-      url = url.trim();
-      let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-      m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
-      if (m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+    function normalizeImageUrl(url){
+      if(!url)return'';
+      url=url.trim();
+      let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
+      m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
       return url;
     }
 
-    function cleanKey(k) {
-      return k ? k.replace(/\s+/g, '').replace(/[^\w]/g, '').toLowerCase() : '';
-    }
+    function cleanKey(k){return k? k.replace(/\s+/g,'').replace(/[^\w]/g,'').toLowerCase() : ''; }
 
-    function renderTable(data, prefix, headers) {
-      const thead = document.getElementById(`thead${prefix}`);
-      const tbody = document.getElementById(`tbody${prefix}`);
-      const empty = document.getElementById(`empty${prefix}`);
-      const meta = document.getElementById(`meta${prefix}`);
-      thead.innerHTML = ''; tbody.innerHTML = '';
-      if (!data.length) { empty.style.display = 'block'; meta.textContent = ''; return; }
-      empty.style.display = 'none';
+    function renderTable(data,prefix,headers){
+      const thead=document.getElementById(`thead${prefix}`);
+      const tbody=document.getElementById(`tbody${prefix}`);
+      const empty=document.getElementById(`empty${prefix}`);
+      const meta=document.getElementById(`meta${prefix}`);
+      thead.innerHTML='';tbody.innerHTML='';
+      if(!data.length){empty.style.display='block';meta.textContent='';return;}
+      empty.style.display='none';
 
-      const trHead = document.createElement('tr');
-      const keys = headers.filter(h => !cleanKey(h).includes('id'));
-      keys.forEach(h => {
-        const th = document.createElement('th');
-        th.textContent = h;
-        trHead.appendChild(th);
+      // Oculta columna FOTO, deja solo LINK_FOTO
+      const headersFiltrados=headers.filter(h=>{
+        const key=cleanKey(h);
+        if(key==='id')return false;
+        if(key.includes('foto') && !key.includes('linkfoto'))return false;
+        return true;
       });
+
+      const trHead=document.createElement('tr');
+      headersFiltrados.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
 
-      data.forEach(row => {
-        const tr = document.createElement('tr');
-        keys.forEach(h => {
-          const key = cleanKey(h);
-          let val = row[h] ?? row[h.trim()] ?? '';
-
-          // Detecta cualquier variante de LINK_FOTO
-          if (!val && key.includes('linkfoto')) {
-            const found = Object.keys(row).find(k => cleanKey(k).includes('linkfoto'));
-            if (found) val = row[found];
-          }
-
-          const td = document.createElement('td');
-          if (key.includes('linkfoto') && val) {
-            const imgUrl = normalizeImageUrl(val);
-            td.innerHTML = `<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          } else {
-            td.textContent = val;
-          }
+      data.forEach(row=>{
+        const tr=document.createElement('tr');
+        headersFiltrados.forEach(h=>{
+          const key=cleanKey(h);
+          let val=row[h]??row[h.trim()]??'';
+          const td=document.createElement('td');
+          if(key.includes('linkfoto') && val){
+            const imgUrl=normalizeImageUrl(val);
+            td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
+          }else td.textContent=val;
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
       });
-
-      meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
+      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
-    async function searchTracking(kind) {
-      const input = document.getElementById(`search${kind}`);
-      const code = input.value.trim().toLowerCase();
-      if (!code) return;
-
-      let urlsToFetch = Array.isArray(urls[kind]) ? urls[kind] : [urls[kind]];
-      let allData = [];
-
-      for (const u of urlsToFetch) {
-        await new Promise(resolve => {
-          Papa.parse(u + '&t=' + Date.now(), {
-            download: true, header: true, skipEmptyLines: true,
-            complete: res => {
-              allData = allData.concat(res.data || []);
+    async function searchTracking(kind){
+      const input=document.getElementById(`search${kind}`);
+      const code=input.value.trim().toLowerCase();
+      if(!code)return;
+      let urlsToFetch=Array.isArray(urls[kind])?urls[kind]:[urls[kind]];
+      let allData=[];
+      for(const u of urlsToFetch){
+        await new Promise(resolve=>{
+          Papa.parse(u+'&t='+Date.now(),{
+            download:true,header:true,skipEmptyLines:true,
+            complete:res=>{
+              allData=allData.concat(res.data||[]);
               resolve();
-            }, error: () => resolve()
+            },error:()=>resolve()
           });
         });
       }
-
-      const headers = Object.keys(allData[0] || {});
+      const headers=Object.keys(allData[0]||{});
       let result;
-      if (kind === 'Maritimo' || kind === 'Aereo') {
-        result = allData.filter(r => (r['ORDEN'] || '').toLowerCase().includes(code));
-      } else {
-        result = allData.filter(r => Object.values(r).some(v => String(v).toLowerCase().includes(code)));
+      if(kind==='Maritimo'||kind==='Aereo'){
+        result=allData.filter(r=>(r['ORDEN']||'').toLowerCase().includes(code));
+      }else{
+        result=allData.filter(r=>Object.values(r).some(v=>String(v).toLowerCase().includes(code)));
       }
-
-      renderTable(result, kind, headers);
+      renderTable(result,kind,headers);
     }
 
-    document.getElementById('reloadBtn').onclick = () => location.reload();
-    ['Maritimo', 'Aereo', 'Compra'].forEach(k => {
-      const el = document.getElementById(`search${k}`);
-      el.addEventListener('keydown', e => { if (e.key === 'Enter') searchTracking(k); });
+    document.getElementById('reloadBtn').onclick=()=>location.reload();
+    ['Maritimo','Aereo','Compra'].forEach(k=>{
+      const el=document.getElementById(`search${k}`);
+      el.addEventListener('keydown',e=>{if(e.key==='Enter')searchTracking(k);});
     });
   </script>
 </body>
