@@ -12,33 +12,15 @@
       --blanco:#ffffff; --texto:#0f172a;
       --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
     }
-
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
-    header{
-      background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
-      color:var(--blanco);
-      padding:18px 12px;
-      display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
-      box-shadow:0 2px 8px rgba(0,0,0,.25);
-    }
-    header h1{
-      margin:0;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:1px;font-style:italic;position:relative;display:inline-block;padding-right:40px;
-    }
-    header h1::after{
-      content:'';position:absolute;bottom:-5px;left:0;width:100%;height:4px;
-      background:linear-gradient(90deg,#38bdf8 0%,#1e3a8a 100%);
-      transform-origin:left;animation:ray 2.8s linear infinite;
-      clip-path:polygon(0 0,95% 0,100% 50%,95% 100%,0 100%);
-    }
+    header{background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));color:var(--blanco);padding:18px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25);}
+    header h1{margin:0;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:1px;font-style:italic;position:relative;display:inline-block;padding-right:40px;}
+    header h1::after{content:'';position:absolute;bottom:-5px;left:0;width:100%;height:4px;background:linear-gradient(90deg,#38bdf8 0%,#1e3a8a 100%);transform-origin:left;animation:ray 2.8s linear infinite;clip-path:polygon(0 0,95% 0,100% 50%,95% 100%,0 100%);}
     @keyframes ray{0%{opacity:.4;transform:scaleX(0);}50%{opacity:1;transform:scaleX(1);}100%{opacity:.4;transform:scaleX(0);}}
     .flags{display:flex;gap:8px;}
     .flags img{width:30px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
     .btn-refresh{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:8px 14px;font-weight:700;border-radius:10px;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;gap:8px;backdrop-filter:blur(5px);}
     .btn-refresh:hover{background:rgba(255,255,255,0.25);transform:translateY(-1px);}
-    .btn-refresh span.icon{font-size:18px;transition:transform .3s;}
-    .btn-refresh:hover span.icon{transform:rotate(180deg);}
-    .btn-refresh span.text{display:inline;}
-    @media (max-width:640px){.btn-refresh span.text{display:none;}}
     .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
     .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
     .card-title{padding:10px 12px;font-weight:800;color:var(--texto);border-bottom:1px solid var(--gris2);background:#fafafa;font-size:16px;}
@@ -56,19 +38,6 @@
     .view-btn{background:var(--celesteTxt);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:all .25s ease;}
     .view-btn:hover{background:#0369a1;transform:scale(1.05);}
     .status-pill{display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);}
-    @media (max-width:640px){
-      header{padding:12px 10px;}
-      header h1{font-size:18px;}
-      .flags img{width:24px;}
-      .container{gap:12px;padding:0 10px;}
-      .card-title{font-size:15px;padding:8px 10px;}
-      .card-header{padding:8px 10px;grid-template-columns:1fr auto;gap:6px;}
-      .btn{padding:7px 10px;font-size:12px;border-radius:8px;}
-      .input{padding:7px 9px;}
-      th,td{padding:7px 8px;font-size:12px;}
-      table{min-width:560px;}
-      th:nth-child(6),td:nth-child(6){display:none;}
-    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
@@ -88,12 +57,11 @@
   </header>
 
   <main class="container">
-
-    <!-- MARÍTIMO -->
+    <!-- MARÍTIMO (incluye entregas marítimas) -->
     <section class="card" id="cardMaritimo">
       <div class="card-title">🚢 Rastreo Marítimo</div>
       <div class="card-header">
-        <div class="input"><input id="searchMaritimo" placeholder="Número de rastreo (Marítimo)" /></div>
+        <div class="input"><input id="searchMaritimo" placeholder="Número de rastreo (Marítimo o Entrega Marítimo)" /></div>
         <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
         <div id="metaMaritimo" class="meta"></div>
       </div>
@@ -101,11 +69,11 @@
       <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
     </section>
 
-    <!-- AÉREO -->
+    <!-- AÉREO (incluye entregas aéreas) -->
     <section class="card" id="cardAereo">
       <div class="card-title">✈️ Rastreo Aéreo</div>
       <div class="card-header">
-        <div class="input"><input id="searchAereo" placeholder="Número de rastreo (Aéreo)" /></div>
+        <div class="input"><input id="searchAereo" placeholder="Número de rastreo (Aéreo o Entrega Aéreo)" /></div>
         <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
         <div id="metaAereo" class="meta"></div>
       </div>
@@ -124,39 +92,19 @@
       <div class="table-wrap"><table><thead id="theadCompra"></thead><tbody id="tbodyCompra"></tbody></table></div>
       <div id="emptyCompra" class="empty" style="display:none;">⚠️ Ese número puede estar equivocado o aún no se ha recibido.</div>
     </section>
-
-    <!-- NUEVO: ENTREGA AÉREO -->
-    <section class="card" id="cardAereoEntrega">
-      <div class="card-title">✈️ Rastreo Entrega Aéreo</div>
-      <div class="card-header">
-        <div class="input"><input id="searchAereoEntrega" placeholder="Número de rastreo (Entrega Aéreo)" /></div>
-        <button class="btn" onclick="searchTracking('AereoEntrega')">Buscar</button>
-        <div id="metaAereoEntrega" class="meta"></div>
-      </div>
-      <div class="table-wrap"><table><thead id="theadAereoEntrega"></thead><tbody id="tbodyAereoEntrega"></tbody></table></div>
-      <div id="emptyAereoEntrega" class="empty" style="display:none;">❌ No se encontró esa entrega aérea.</div>
-    </section>
-
-    <!-- NUEVO: ENTREGA MARÍTIMO -->
-    <section class="card" id="cardEntregaMaritimo">
-      <div class="card-title">🚢 Rastreo Entrega Marítimo</div>
-      <div class="card-header">
-        <div class="input"><input id="searchEntregaMaritimo" placeholder="Número de rastreo (Entrega Marítimo)" /></div>
-        <button class="btn" onclick="searchTracking('EntregaMaritimo')">Buscar</button>
-        <div id="metaEntregaMaritimo" class="meta"></div>
-      </div>
-      <div class="table-wrap"><table><thead id="theadEntregaMaritimo"></thead><tbody id="tbodyEntregaMaritimo"></tbody></table></div>
-      <div id="emptyEntregaMaritimo" class="empty" style="display:none;">❌ No se encontró esa entrega marítima.</div>
-    </section>
   </main>
 
   <script>
     const urls={
-      Maritimo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
-      Aereo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
-      Compra:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv',
-      AereoEntrega:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=624370760&single=true&output=csv',
-      EntregaMaritimo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=74043504&single=true&output=csv'
+      Maritimo:[
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=74043504&single=true&output=csv'
+      ],
+      Aereo:[
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=624370760&single=true&output=csv'
+      ],
+      Compra:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
     };
 
     function normalizeImageUrl(url){
@@ -196,27 +144,36 @@
       meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
-    function searchTracking(kind){
+    async function searchTracking(kind){
       const input=document.getElementById(`search${kind}`);
       const code=input.value.trim().toLowerCase();
       if(!code)return;
-      Papa.parse(urls[kind]+'&t='+Date.now(),{
-        download:true,header:true,skipEmptyLines:true,
-        complete:res=>{
-          const rows=res.data||[];
-          const headers=res.meta.fields||Object.keys(rows[0]||{});
-          const result=rows.filter(r=>{
-            const cols=Object.values(r).map(c=>String(c).toLowerCase());
-            return cols.some(c=>c.includes(code));
+
+      let urlsToFetch = Array.isArray(urls[kind]) ? urls[kind] : [urls[kind]];
+      let allData = [];
+
+      for (const u of urlsToFetch) {
+        await new Promise(resolve=>{
+          Papa.parse(u+'&t='+Date.now(),{
+            download:true,header:true,skipEmptyLines:true,
+            complete:res=>{
+              allData = allData.concat(res.data||[]);
+              resolve();
+            },error:()=>resolve()
           });
-          renderTable(result,kind,headers);
-        },
-        error:()=>{renderTable([],kind,[],null);}
+        });
+      }
+
+      const headers = Object.keys(allData[0]||{});
+      const result = allData.filter(r=>{
+        const vals=Object.values(r).map(v=>String(v).toLowerCase());
+        return vals.some(v=>v.includes(code));
       });
+      renderTable(result,kind,headers);
     }
 
     document.getElementById('reloadBtn').onclick=()=>location.reload();
-    ['Maritimo','Aereo','Compra','AereoEntrega','EntregaMaritimo'].forEach(k=>{
+    ['Maritimo','Aereo','Compra'].forEach(k=>{
       const el=document.getElementById(`search${k}`);
       el.addEventListener('keydown',e=>{if(e.key==='Enter')searchTracking(k);});
     });
