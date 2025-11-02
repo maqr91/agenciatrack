@@ -184,6 +184,13 @@
         headersFiltrados.forEach(h => {
           const key = cleanKey(h);
           let val = row[h] ?? row[h.trim()] ?? '';
+
+          // Detectar columna LINK_FOTO con cualquier forma
+          if (!val && key.includes('linkfoto')) {
+            const lfKey = Object.keys(row).find(k => cleanKey(k).includes('linkfoto'));
+            if (lfKey) val = row[lfKey];
+          }
+
           if (!val && key.includes('fecha')) {
             const fKey = Object.keys(row).find(k => cleanKey(k).includes('fecha'));
             if (fKey) val = row[fKey];
