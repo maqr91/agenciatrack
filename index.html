@@ -12,10 +12,28 @@
       --blanco:#ffffff; --texto:#0f172a;
       --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
     }
+
     body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
-    header{background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));color:var(--blanco);position:relative;padding:35px 20px 45px;box-shadow:0 2px 8px rgba(0,0,0,.25);text-align:center;}
-    .flag-left, .flag-right{position:absolute;top:18px;width:85px;height:auto;border-radius:6px;box-shadow:0 0 6px rgba(0,0,0,.4);}
-    .flag-left{left:25px;} .flag-right{right:25px;}
+    header{
+      background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
+      color:var(--blanco);
+      position:relative;
+      padding:35px 20px 45px;
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
+      text-align:center;
+    }
+
+    .flag-left, .flag-right{
+      position:absolute;
+      top:18px;
+      width:85px;
+      height:auto;
+      border-radius:6px;
+      box-shadow:0 0 6px rgba(0,0,0,.4);
+    }
+    .flag-left{left:25px;}
+    .flag-right{right:25px;}
+
     .logo svg{max-width:480px;width:90%;height:auto;}
     .container{max-width:900px;margin:24px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
     .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
@@ -31,8 +49,21 @@
     tbody tr:hover{background:#f9fafb;}
     .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
     .meta{font-size:12px;color:#475569;margin-left:auto;}
-    .view-btn{background:var(--celesteTxt);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:all .25s ease;}
+
+    .view-btn{
+      background:var(--celesteTxt);
+      color:#fff;
+      border:none;
+      padding:7px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:800;
+      box-shadow:0 1px 3px rgba(0,0,0,.15);
+      transition:all .25s ease;
+    }
     .view-btn:hover{background:#0284c7;transform:scale(1.05);}
+    .status-pill{display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);}
     .footer-btn{margin:30px auto;text-align:center;}
     .btn-refresh{background:var(--celesteTxt);color:#fff;border:none;padding:10px 26px;font-weight:800;border-radius:12px;cursor:pointer;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:all .25s ease;}
     .btn-refresh:hover{background:#0ea5e9;transform:scale(1.05);}
@@ -46,7 +77,8 @@
     <img class="flag-right" src="https://flagcdn.com/ni.svg" alt="Nicaragua">
     <div class="logo">
       <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIRCARGOTRACK logo">
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
         <g font-family="Inter, system-ui, Segoe UI, Roboto, Arial" text-anchor="middle">
           <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
             MIRCARGO<tspan fill="#fde68a">TRACK</tspan>
@@ -121,18 +153,20 @@
       return url;
     }
 
-    function cleanKey(k){return k.replace(/\s+/g,'').replace(/[^\w]/g,'').toLowerCase();}
-
     function renderTable(data,prefix,headers){
-      const thead=document.getElementById(`thead${prefix}`),tbody=document.getElementById(`tbody${prefix}`),empty=document.getElementById(`empty${prefix}`),meta=document.getElementById(`meta${prefix}`);
+      const thead=document.getElementById(`thead${prefix}`);
+      const tbody=document.getElementById(`tbody${prefix}`);
+      const empty=document.getElementById(`empty${prefix}`);
+      const meta=document.getElementById(`meta${prefix}`);
       thead.innerHTML='';tbody.innerHTML='';
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
 
-      const headersFiltrados=headers.filter(h=>{
-        const key=cleanKey(h);
-        if(key==='id')return false;
-        if(key.includes('foto')&&!key.includes('linkfoto'))return false;
+      // 🔒 Omitir columna ID y la columna FOTO (si no es LINK_FOTO)
+      const headersFiltrados = headers.filter(h=>{
+        const hl = String(h).trim().toLowerCase();
+        if(hl === 'id') return false;
+        if(hl.includes('foto') && !hl.includes('link_foto')) return false;
         return true;
       });
 
@@ -143,9 +177,8 @@
       data.forEach(row=>{
         const tr=document.createElement('tr');
         headersFiltrados.forEach(h=>{
-          const val=row[h]??row[h.trim()]??'';
-          const td=document.createElement('td');
-          if(cleanKey(h).includes('linkfoto')&&val){
+          const val=row[h]??'';const td=document.createElement('td');
+          if(String(h).toLowerCase().includes('link_foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
           }else td.textContent=val;
@@ -153,6 +186,7 @@
         });
         tbody.appendChild(tr);
       });
+
       meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
@@ -169,27 +203,28 @@
           Papa.parse(u+'&t='+Date.now(),{
             download:true,header:true,skipEmptyLines:true,
             complete:res=>{
-              allData=allData.concat(res.data||[]);
+              allData = allData.concat(res.data||[]);
               resolve();
             },error:()=>resolve()
           });
         });
       }
 
-      const headers=Object.keys(allData[0]||{});
+      const headers = Object.keys(allData[0]||{});
       let result;
 
       if(kind==='Maritimo'||kind==='Aereo'){
-        result=allData.filter(r=>{
-          const orden=(r['ORDEN']||r['Orden']||'').toLowerCase();
+        result = allData.filter(r=>{
+          const orden = (r['ORDEN']||'').toLowerCase();
           return orden.includes(code);
         });
-      }else{
-        result=allData.filter(r=>{
+      } else {
+        result = allData.filter(r=>{
           const vals=Object.values(r).map(v=>String(v).toLowerCase());
           return vals.some(v=>v.includes(code));
         });
       }
+
       renderTable(result,kind,headers);
     }
 
