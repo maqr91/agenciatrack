@@ -162,7 +162,9 @@
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
 
-      // Oculta columna FOTO, deja solo LINK_FOTO
+      // Detectar y usar la columna LINK_FOTO aunque tenga espacios o diferente formato
+      const linkHeader=headers.find(h=>cleanKey(h).includes('linkfoto'));
+
       const headersFiltrados=headers.filter(h=>{
         const key=cleanKey(h);
         if(key==='id')return false;
@@ -180,10 +182,12 @@
           const key=cleanKey(h);
           let val=row[h]??row[h.trim()]??'';
           const td=document.createElement('td');
-          if(key.includes('linkfoto') && val){
+
+          if(linkHeader && cleanKey(h)===cleanKey(linkHeader) && val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
           }else td.textContent=val;
+
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
