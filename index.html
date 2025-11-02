@@ -162,17 +162,23 @@
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
 
-      const headersFiltrados=headers.filter(h=>!h.toLowerCase().includes('foto')||h.toLowerCase().includes('link_foto'));
+      // 🔒 Omitir columna ID y la columna FOTO (si no es LINK_FOTO)
+      const headersFiltrados = headers.filter(h=>{
+        const hl = String(h).trim().toLowerCase();
+        if(hl === 'id') return false;
+        if(hl.includes('foto') && !hl.includes('link_foto')) return false;
+        return true;
+      });
+
       const trHead=document.createElement('tr');
       headersFiltrados.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
 
-      // 🔹 Mostrar TODAS las filas, incluyendo todas las fechas
       data.forEach(row=>{
         const tr=document.createElement('tr');
         headersFiltrados.forEach(h=>{
           const val=row[h]??'';const td=document.createElement('td');
-          if(h.toLowerCase().includes('link_foto')&&val){
+          if(String(h).toLowerCase().includes('link_foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
           }else td.textContent=val;
