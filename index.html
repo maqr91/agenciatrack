@@ -164,15 +164,9 @@
       if (!data.length) { empty.style.display = 'block'; meta.textContent = ''; return; }
       empty.style.display = 'none';
 
-      const headersFiltrados = headers.filter(h => {
-        const key = cleanKey(h);
-        if (key === 'id') return false;
-        if (key.includes('foto') && !key.includes('linkfoto')) return false;
-        return true;
-      });
-
       const trHead = document.createElement('tr');
-      headersFiltrados.forEach(h => {
+      const keys = headers.filter(h => !cleanKey(h).includes('id'));
+      keys.forEach(h => {
         const th = document.createElement('th');
         th.textContent = h;
         trHead.appendChild(th);
@@ -181,26 +175,23 @@
 
       data.forEach(row => {
         const tr = document.createElement('tr');
-        headersFiltrados.forEach(h => {
+        keys.forEach(h => {
           const key = cleanKey(h);
           let val = row[h] ?? row[h.trim()] ?? '';
 
-          // Detectar columna LINK_FOTO con cualquier forma
+          // Detecta cualquier variante de LINK_FOTO
           if (!val && key.includes('linkfoto')) {
-            const lfKey = Object.keys(row).find(k => cleanKey(k).includes('linkfoto'));
-            if (lfKey) val = row[lfKey];
-          }
-
-          if (!val && key.includes('fecha')) {
-            const fKey = Object.keys(row).find(k => cleanKey(k).includes('fecha'));
-            if (fKey) val = row[fKey];
+            const found = Object.keys(row).find(k => cleanKey(k).includes('linkfoto'));
+            if (found) val = row[found];
           }
 
           const td = document.createElement('td');
           if (key.includes('linkfoto') && val) {
             const imgUrl = normalizeImageUrl(val);
             td.innerHTML = `<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          } else td.textContent = val;
+          } else {
+            td.textContent = val;
+          }
           tr.appendChild(td);
         });
         tbody.appendChild(tr);
@@ -231,7 +222,6 @@
 
       const headers = Object.keys(allData[0] || {});
       let result;
-
       if (kind === 'Maritimo' || kind === 'Aereo') {
         result = allData.filter(r => (r['ORDEN'] || '').toLowerCase().includes(code));
       } else {
