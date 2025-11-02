@@ -3,226 +3,221 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MIRCARGOTRACK</title>
+  <title>MIRCARGOTRACK | Rastreo</title>
   <style>
     :root{
-      --azul:#1e3a8a; --azul-claro:#38bdf8; --gris:#f1f5f9; --gris-borde:#e2e8f0;
-      --texto:#0f172a; --blanco:#ffffff; --amarillo:#fde68a;
+      --azulClaro:#38bdf8; --azulOscuro:#1e3a8a;
+      --celesteTxt:#0284c7; --celesteBg:#e0f2fe;
+      --gris:#f1f5f9; --gris2:#e2e8f0;
+      --blanco:#ffffff; --texto:#0f172a;
+      --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;background:#eef2f7;color:var(--texto)}
-    header{position:sticky;top:0;z-index:10;background:linear-gradient(90deg,var(--azul) 0%,#0b245e 100%);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px}
-    .logo{font-weight:800;letter-spacing:.5px;font-size:20px;text-decoration:none;color:#fff}
-    .logo span{border-bottom:3px solid #64a5ff; transform:skewX(-18deg); display:inline-block; padding:2px 6px}
-    .grow{flex:1}
-    .btn{border:0;border-radius:14px;padding:10px 14px;cursor:pointer}
-    .btn-refresh{background:#2c3e75;color:#fff}
-    .container{max-width:980px;margin:24px auto;padding:0 14px}
-    .card{background:#fff;border:1px solid var(--gris-borde);border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:18px;overflow:hidden}
-    .card h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--gris-borde);display:flex;align-items:center;gap:10px}
-    .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#eef6ff;color:#0b5cab;border:1px solid #c7e2ff}
-    .bar{display:flex;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--gris-borde)}
-    input[type="text"]{flex:1;padding:10px 12px;border:1px solid var(--gris-borde);border-radius:12px;background:#fff}
-    .btn-buscar{background:#e2e8f0}
-    .btn-buscar:hover{filter:brightness(.95)}
-    table{width:100%;border-collapse:collapse}
-    thead th{font-size:12px;text-align:left;color:#475569;background:#f8fafc;border-bottom:1px solid var(--gris-borde);padding:10px}
-    tbody td{padding:10px;border-bottom:1px solid var(--gris-borde);vertical-align:middle}
-    .status{font-weight:700;background:#e6f6fe;color:#035b92;border-radius:999px;padding:4px 10px;display:inline-block}
-    .btn-ver{background:var(--azul-claro);color:#fff;border:0;border-radius:12px;padding:8px 12px;cursor:pointer;font-weight:700}
-    .muted{color:#64748b;font-size:12px}
-    .empty{padding:14px 16px;color:#64748b}
-    .foot{padding:10px 16px;font-size:12px;color:#64748b}
+
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
+    
+    header{
+      background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
+      color:var(--blanco);
+      padding:18px 12px;
+      display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
+    }
+
+    header h1{
+      margin:0;
+      font-size:24px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      font-style:italic;
+      position:relative;
+      display:inline-block;
+      padding-right:40px;
+    }
+    header h1::after{
+      content:'';
+      position:absolute;
+      bottom:-5px;
+      left:0;
+      width:100%;
+      height:4px;
+      background:linear-gradient(90deg,#38bdf8 0%,#1e3a8a 100%);
+      transform-origin:left;
+      animation:ray 2.8s linear infinite;
+      clip-path:polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+    }
+    @keyframes ray {
+      0%{opacity:0.4;transform:scaleX(0);}
+      50%{opacity:1;transform:scaleX(1);}
+      100%{opacity:0.4;transform:scaleX(0);}
+    }
+
+    .flags{display:flex;gap:8px;}
+    .flags img{width:30px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
+    .btn-refresh{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:8px 14px;font-weight:700;border-radius:10px;cursor:pointer;transition:all .25s ease;display:flex;align-items:center;gap:8px;backdrop-filter:blur(5px);}
+    .btn-refresh:hover{background:rgba(255,255,255,0.25);transform:translateY(-1px);}
+    .btn-refresh span.icon{font-size:18px;transition:transform .3s;}
+    .btn-refresh:hover span.icon{transform:rotate(180deg);}
+    .btn-refresh span.text{display:inline;}
+    @media (max-width:640px){.btn-refresh span.text{display:none;}}
+
+    .container{max-width:900px;margin:14px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
+    .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
+    .card-title{padding:10px 12px;font-weight:800;color:var(--texto);border-bottom:1px solid var(--gris2);background:#fafafa;font-size:16px;}
+    .card-header{padding:10px 12px;border-bottom:1px solid var(--gris2);display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
+    .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
+    .input input{width:100%;border:none;outline:none;font-size:14px;}
+    .btn{border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;font-weight:700;border-radius:10px;cursor:pointer;}
+    .btn:hover{background:var(--amarilloPálidoHover);}
+    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
+    table{width:100%;border-collapse:collapse;min-width:620px;}
+    th,td{padding:8px 10px;border-bottom:1px solid var(--gris2);text-align:left;font-size:13px;vertical-align:middle;}
+    tbody tr:hover{background:#f9fafb;}
+    .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
+    .meta{font-size:12px;color:#475569;margin-left:auto;}
+    .view-btn{background:var(--celesteTxt);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:all .25s ease;}
+    .view-btn:hover{background:#0369a1;transform:scale(1.05);}
+    .status-pill{display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);}
+    @media (max-width:640px){
+      header{padding:12px 10px;}
+      header h1{font-size:18px;}
+      .flags img{width:24px;}
+      .container{gap:12px;padding:0 10px;}
+      .card-title{font-size:15px;padding:8px 10px;}
+      .card-header{padding:8px 10px;grid-template-columns:1fr auto;gap:6px;}
+      .btn{padding:7px 10px;font-size:12px;border-radius:8px;}
+      .input{padding:7px 9px;}
+      th,td{padding:7px 8px;font-size:12px;}
+      table{min-width:560px;}
+      th:nth-child(6),td:nth-child(6){display:none;}
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <header>
-    <a class="logo" href="#"><span>MIRCARGOTRACK</span></a>
-    <div class="grow"></div>
-    <button id="btnRefresh" class="btn btn-refresh">Actualizar</button>
+    <h1>MIRCARGOTRACK</h1>
+    <div class="header-right" style="display:flex;align-items:center;gap:10px;">
+      <div class="flags">
+        <img src="https://flagcdn.com/us.svg" alt="US">
+        <img src="https://flagcdn.com/ni.svg" alt="NI">
+      </div>
+      <button id="reloadBtn" class="btn-refresh">
+        <span class="icon">🔄</span>
+        <span class="text">Actualizar</span>
+      </button>
+    </div>
   </header>
 
-  <div class="container">
-    <!-- Marítimo -->
-    <section class="card" id="sec-maritimo">
-      <h2>🚢 Rastreo Marítimo <span class="tag" id="tag-mar">Listo</span></h2>
-      <div class="bar">
-        <input id="q-mar" type="text" placeholder="Ingresa tu número de rastreo" />
-        <button class="btn btn-buscar" id="btn-mar">Buscar</button>
-        <span class="muted" id="count-mar"></span>
+  <main class="container">
+    <!-- MARÍTIMO -->
+    <section class="card" id="cardMaritimo">
+      <div class="card-title">🚢 Rastreo Marítimo</div>
+      <div class="card-header">
+        <div class="input"><input id="searchMaritimo" placeholder="Número de rastreo (Marítimo)" /></div>
+        <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
+        <div id="metaMaritimo" class="meta"></div>
       </div>
-      <div class="table-wrap" id="tbl-mar"></div>
-      <div class="foot">Mostrando resultados de la hoja Marítimo.</div>
+      <div class="table-wrap"><table><thead id="theadMaritimo"></thead><tbody id="tbodyMaritimo"></tbody></table></div>
+      <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
     </section>
 
-    <!-- Aéreo -->
-    <section class="card" id="sec-aereo">
-      <h2>✈️ Rastreo Aéreo <span class="tag" id="tag-air">Listo</span></h2>
-      <div class="bar">
-        <input id="q-air" type="text" placeholder="Ingresa tu número de rastreo" />
-        <button class="btn btn-buscar" id="btn-air">Buscar</button>
-        <span class="muted" id="count-air"></span>
+    <!-- AÉREO -->
+    <section class="card" id="cardAereo">
+      <div class="card-title">✈️ Rastreo Aéreo</div>
+      <div class="card-header">
+        <div class="input"><input id="searchAereo" placeholder="Número de rastreo (Aéreo)" /></div>
+        <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
+        <div id="metaAereo" class="meta"></div>
       </div>
-      <div class="table-wrap" id="tbl-air"></div>
-      <div class="foot">Mostrando resultados de la hoja Aéreo.</div>
+      <div class="table-wrap"><table><thead id="theadAereo"></thead><tbody id="tbodyAereo"></tbody></table></div>
+      <div id="emptyAereo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
     </section>
 
-    <!-- Compra en línea -->
-    <section class="card" id="sec-online">
-      <h2>🛒 Rastreo de compra en línea <span class="tag" id="tag-on">Listo</span></h2>
-      <div class="bar">
-        <input id="q-on" type="text" placeholder="Ingresa tu número o nombre" />
-        <button class="btn btn-buscar" id="btn-on">Buscar</button>
-        <span class="muted" id="count-on"></span>
+    <!-- COMPRA -->
+    <section class="card" id="cardCompra">
+      <div class="card-title">🛍️ Rastreo de compra en línea</div>
+      <div class="card-header">
+        <div class="input"><input id="searchCompra" placeholder="Nombre o número de tracking" /></div>
+        <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
+        <div id="metaCompra" class="meta"></div>
       </div>
-      <div class="table-wrap" id="tbl-on"></div>
-      <div class="foot">Mostrando resultados de la hoja Amazon/Recepciones.</div>
+      <div class="table-wrap"><table><thead id="theadCompra"></thead><tbody id="tbodyCompra"></tbody></table></div>
+      <div id="emptyCompra" class="empty" style="display:none;">⚠️ Ese número puede estar equivocado o aún no se ha recibido.</div>
     </section>
-  </div>
+  </main>
 
   <script>
-    // === URLs CSV (tus mismas hojas) ===
-    const URL_MAR = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv";
-    const URL_AIR = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv";
-    const URL_ONL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv";
-
-    // === Utilidades ===
-    const parseCSV = (text) => {
-      const rows = [];
-      let i = 0, cur = "", row = [], inQ = false;
-      while (i < text.length) {
-        const c = text[i], n = text[i+1];
-        if (c === '"' && n === '"') { cur += '"'; i+=2; continue; }
-        if (c === '"') { inQ = !inQ; i++; continue; }
-        if (!inQ && (c === ',')) { row.push(cur); cur=""; i++; continue; }
-        if (!inQ && (c === '\n' || c === '\r')) {
-          if (cur.length || row.length) { row.push(cur); rows.push(row); row=[]; cur=""; }
-          // consumir \r\n
-          if (c === '\r' && n === '\n') i++;
-          i++; continue;
-        }
-        cur += c; i++;
-      }
-      if (cur.length || row.length) { row.push(cur); rows.push(row); }
-      const headers = rows[0] || [];
-      return rows.slice(1).map(r=>{
-        const obj = {};
-        headers.forEach((h,idx)=> obj[(h||"").trim()] = (r[idx]||"").trim() );
-        return obj;
-      });
+    const urls={
+      Maritimo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
+      Aereo:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
+      Compra:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
     };
 
-    const getVal = (obj, ...cands) => {
-      for (const k of Object.keys(obj)) {
-        const K = k.toUpperCase();
-        for (const c of cands) {
-          if (K.includes(c)) return obj[k];
-        }
-      }
-      return "";
-    };
-
-    const byQuery = (rows, q) => {
-      if (!q) return rows;
-      const qq = q.trim().toLowerCase();
-      return rows.filter(r=>{
-        const a = getVal(r,'TRACKING','BARCODE','ORDEN');
-        const b = getVal(r,'ID');
-        const c = getVal(r,'NOMBRE','NAME');
-        return (a && a.toLowerCase().includes(qq)) ||
-               (b && b.toLowerCase().includes(qq)) ||
-               (c && c.toLowerCase().includes(qq));
-      });
-    };
-
-    const renderTable = (rows, mountId, countId) => {
-      const el = document.getElementById(mountId);
-      const cnt = document.getElementById(countId);
-      if (!rows.length) {
-        el.innerHTML = `<div class="empty">No se encontraron resultados.</div>`;
-        cnt.textContent = "";
-        return;
-      }
-      cnt.textContent = `Mostrando ${rows.length} coincidencia(s)`;
-      const html = [
-        `<table>`,
-        `<thead><tr>
-           <th>FECHA / HORA</th>
-           <th>BARCODE / ORDEN</th>
-           <th>STATUS</th>
-           <th>HORA</th>
-           <th>AGENTE</th>
-           <th>LINK_FOTO</th>
-           <th>ID</th>
-         </tr></thead>`,
-        `<tbody>`,
-        ...rows.map(r=>{
-          const fecha = getVal(r,'FECHA','FECHA / HORA','FECHA/HORA');
-          const ord   = getVal(r,'BARCODE','ORDEN','TRACKING');
-          const st    = getVal(r,'STATUS');
-          const hora  = getVal(r,'HORA');
-          const agt   = getVal(r,'AGENTE');
-          const link  = getVal(r,'LINK_FOTO'); // <- SOLO LINK_FOTO
-          const id    = getVal(r,'ID');
-          const btn   = link ? `<button class="btn-ver" onclick="window.open('${link}','_blank')">Ver foto</button>` : ``;
-          return `<tr>
-            <td>${fecha||""}</td>
-            <td>${ord||""}</td>
-            <td>${st?`<span class="status">${st}</span>`:""}</td>
-            <td>${hora||""}</td>
-            <td>${agt||""}</td>
-            <td>${btn}</td>
-            <td>${id||""}</td>
-          </tr>`;
-        }),
-        `</tbody></table>`
-      ].join("");
-      el.innerHTML = html;
-    };
-
-    async function loadAndRender(url, q, mountId, countId, tagId){
-      try{
-        document.getElementById(tagId).textContent = "Cargando…";
-        const res = await fetch(url, {cache:"no-store"});
-        const txt = await res.text();
-        const rows = parseCSV(txt);
-        const filtered = byQuery(rows, q);
-        renderTable(filtered, mountId, countId);
-        document.getElementById(tagId).textContent = `Mostrando ${filtered.length} coincidencia(s)`;
-      }catch(e){
-        document.getElementById(mountId).innerHTML = `<div class="empty">Error cargando datos.</div>`;
-        document.getElementById(tagId).textContent = "Error";
-        console.error(e);
-      }
+    function normalizeImageUrl(url){
+      if(!url)return'';
+      url=url.trim();
+      let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
+      m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
+      return url;
     }
 
-    // === Eventos ===
-    const refreshAll = () => {
-      loadAndRender(URL_MAR, document.getElementById('q-mar').value, 'tbl-mar','count-mar','tag-mar');
-      loadAndRender(URL_AIR, document.getElementById('q-air').value, 'tbl-air','count-air','tag-air');
-      loadAndRender(URL_ONL, document.getElementById('q-on').value,  'tbl-on','count-on','tag-on');
-    };
-
-    document.getElementById('btnRefresh').addEventListener('click', refreshAll);
-
-    // Buscar por módulo
-    document.getElementById('btn-mar').addEventListener('click', ()=> loadAndRender(URL_MAR, document.getElementById('q-mar').value, 'tbl-mar','count-mar','tag-mar'));
-    document.getElementById('btn-air').addEventListener('click', ()=> loadAndRender(URL_AIR, document.getElementById('q-air').value, 'tbl-air','count-air','tag-air'));
-    document.getElementById('btn-on').addEventListener('click',  ()=> loadAndRender(URL_ONL, document.getElementById('q-on').value,  'tbl-on','count-on','tag-on'));
-
-    // Enter para buscar
-    ['q-mar','q-air','q-on'].forEach(id=>{
-      document.getElementById(id).addEventListener('keydown',(e)=>{
-        if(e.key==='Enter'){
-          if(id==='q-mar') document.getElementById('btn-mar').click();
-          if(id==='q-air') document.getElementById('btn-air').click();
-          if(id==='q-on')  document.getElementById('btn-on').click();
-        }
+    function renderTable(data,prefix,headers){
+      const thead=document.getElementById(`thead${prefix}`);
+      const tbody=document.getElementById(`tbody${prefix}`);
+      const empty=document.getElementById(`empty${prefix}`);
+      const meta=document.getElementById(`meta${prefix}`);
+      thead.innerHTML='';tbody.innerHTML='';
+      if(!data.length){empty.style.display='block';meta.textContent='';return;}
+      empty.style.display='none';
+      const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
+      const trHead=document.createElement('tr');
+      headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
+      thead.appendChild(trHead);
+      data.forEach(row=>{
+        const tr=document.createElement('tr');
+        headers.forEach(h=>{
+          const val=row[h]??'';const td=document.createElement('td');
+          // Solo usar LINK_FOTO, ignorar FOTO
+          if(h.toLowerCase().includes('link_foto')&&val){
+            const imgUrl=normalizeImageUrl(val);
+            td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
+          }else if(statusHeader&&h===statusHeader&&(prefix==='Maritimo'||prefix==='Aereo')){
+            td.innerHTML=`<span class="status-pill">${String(val)}</span>`;
+          }else td.textContent=val;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
       });
-    });
+      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
+    }
 
-    // Primera carga
-    refreshAll();
+    function searchTracking(kind){
+      const input=document.getElementById(`search${kind}`);
+      const code=input.value.trim().toLowerCase();
+      if(!code)return;
+      Papa.parse(urls[kind]+'&t='+Date.now(),{
+        download:true,header:true,skipEmptyLines:true,
+        complete:res=>{
+          const rows=res.data||[];
+          const headers=res.meta.fields||Object.keys(rows[0]||{});
+          const result=rows.filter(r=>{
+            const cols=Object.values(r).map(c=>String(c).toLowerCase());
+            return cols.some(c=>c.includes(code));
+          });
+          renderTable(result,kind,headers);
+        },
+        error:()=>{renderTable([],kind,[],null);}
+      });
+    }
+
+    document.getElementById('reloadBtn').onclick=()=>location.reload();
+    ['Maritimo','Aereo','Compra'].forEach(k=>{
+      const el=document.getElementById(`search${k}`);
+      el.addEventListener('keydown',e=>{if(e.key==='Enter')searchTracking(k);});
+    });
   </script>
 </body>
 </html>
