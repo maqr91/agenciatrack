@@ -24,33 +24,17 @@
     }
 
     header h1{
-      margin:0;
-      font-size:24px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:1px;
-      font-style:italic;
-      position:relative;
-      display:inline-block;
-      padding-right:40px;
+      margin:0;font-size:24px;font-weight:900;text-transform:uppercase;letter-spacing:1px;font-style:italic;position:relative;display:inline-block;padding-right:40px;
     }
+
     header h1::after{
-      content:'';
-      position:absolute;
-      bottom:-5px;
-      left:0;
-      width:100%;
-      height:4px;
+      content:'';position:absolute;bottom:-5px;left:0;width:100%;height:4px;
       background:linear-gradient(90deg,#38bdf8 0%,#1e3a8a 100%);
-      transform-origin:left;
-      animation:ray 2.8s linear infinite;
-      clip-path:polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+      transform-origin:left;animation:ray 2.8s linear infinite;
+      clip-path:polygon(0 0,95% 0,100% 50%,95% 100%,0 100%);
     }
-    @keyframes ray {
-      0%{opacity:0.4;transform:scaleX(0);}
-      50%{opacity:1;transform:scaleX(1);}
-      100%{opacity:0.4;transform:scaleX(0);}
-    }
+
+    @keyframes ray{0%{opacity:.4;transform:scaleX(0);}50%{opacity:1;transform:scaleX(1);}100%{opacity:.4;transform:scaleX(0);}}
 
     .flags{display:flex;gap:8px;}
     .flags img{width:30px;border-radius:4px;box-shadow:0 0 4px rgba(0,0,0,.25);}
@@ -173,14 +157,18 @@
       if(!data.length){empty.style.display='block';meta.textContent='';return;}
       empty.style.display='none';
       const statusHeader=headers.find(h=>/^(status|estatus|estado)$/i.test(h))||null;
+      
+      // Filtrar la columna FOTO (omitida)
+      const headersFiltrados = headers.filter(h => !h.toLowerCase().includes('foto') || h.toLowerCase().includes('link_foto'));
+
       const trHead=document.createElement('tr');
-      headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
+      headersFiltrados.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
+
       data.forEach(row=>{
         const tr=document.createElement('tr');
-        headers.forEach(h=>{
+        headersFiltrados.forEach(h=>{
           const val=row[h]??'';const td=document.createElement('td');
-          // Solo usar LINK_FOTO, ignorar FOTO
           if(h.toLowerCase().includes('link_foto')&&val){
             const imgUrl=normalizeImageUrl(val);
             td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
