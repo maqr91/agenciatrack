@@ -43,17 +43,33 @@
 </head>
 <body>
   <header>
-    <h1>MIRCARGOTRACK</h1>
-    <div class="header-right" style="display:flex;align-items:center;gap:10px;">
-      <div class="flags">
-        <img src="https://flagcdn.com/us.svg" alt="US">
-        <img src="https://flagcdn.com/ni.svg" alt="NI">
-      </div>
-      <button id="reloadBtn" class="btn-refresh">
-        <span class="icon">🔄</span>
-        <span class="text">Actualizar</span>
-      </button>
-    </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <!-- LOGO MIRCARGOTRACK -->
+    <svg width="190" height="60" viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIRCARGOTRACK logo">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#38bdf8"/>
+          <stop offset="1" stop-color="#1e3a8a"/>
+        </linearGradient>
+      </defs>
+      <g font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif">
+        <text x="8" y="56" font-size="44" font-weight="900" fill="#0f172a" style="letter-spacing:1px; font-style:italic;">
+          MIRCARGO<tspan fill="#1e3a8a">TRACK</tspan>
+        </text>
+        <path d="M8 70 L386 70 L402 86 L8 86 Z" fill="url(#g)" opacity="0.9">
+          <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite" />
+        </path>
+      </g>
+      <g stroke="#0f172a" stroke-width="2.5" fill="none" opacity="0.9" transform="translate(408,24)">
+        <path d="M0 30 h40 l8-10 h-56 l8 10z" />
+        <path d="M-6 30 c10 10 20 10 30 0 c10 10 20 10 30 0" />
+      </g>
+      <g stroke="#1e3a8a" stroke-width="2.4" fill="none" transform="translate(418,8)">
+        <path d="M0 18 l34 6 M34 6 l-8 8 l8 8" />
+        <path d="M12 20 l-8 8" />
+      </g>
+    </svg>
+  </div>
   </header>
 
   <main class="container">
