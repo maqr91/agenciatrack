@@ -131,107 +131,152 @@
   </main>
 
   <script>
-    const urls={
-      Maritimo:[
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=0&single=true&output=csv',
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=74043504&single=true&output=csv'
+    // Nuevos CSV basados en tu hoja 1492LGo6...
+    const urls = {
+      Maritimo: [
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',          // Contenedor
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv' // Entregas Contenedor
       ],
-      Aereo:[
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=1764022928&single=true&output=csv',
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=624370760&single=true&output=csv'
+      Aereo: [
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',  // Encomiendas Aereas
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'  // Entregas Aereas
       ],
-      Compra:'https://docs.google.com/spreadsheets/d/e/2PACX-1vSgbPK4Q40kRpDEZ8oRYQbyqRFZW0gmvPz3z9RcEkJe3HRsGHuraEYsFIKkFwXDYGlzGovo9xDMFbnf/pub?gid=574168813&single=true&output=csv'
+      Compra:
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'     // Correo
     };
 
     function normalizeImageUrl(url){
-      if(!url)return'';
-      url=url.trim();
-      let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
-      m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
-      if(m)return`https://drive.google.com/uc?export=view&id=${m[1]}`;
+      if(!url) return '';
+      url = url.trim();
+      let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+      m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
       return url;
     }
 
-    function renderTable(data,prefix,headers){
-      const thead=document.getElementById(`thead${prefix}`);
-      const tbody=document.getElementById(`tbody${prefix}`);
-      const empty=document.getElementById(`empty${prefix}`);
-      const meta=document.getElementById(`meta${prefix}`);
-      thead.innerHTML='';tbody.innerHTML='';
-      if(!data.length){empty.style.display='block';meta.textContent='';return;}
-      empty.style.display='none';
+    // Solo mostramos: Fecha, Orden, Status, Foto, Firma
+    function renderTable(data, prefix){
+      const thead = document.getElementById(`thead${prefix}`);
+      const tbody = document.getElementById(`tbody${prefix}`);
+      const empty = document.getElementById(`empty${prefix}`);
+      const meta  = document.getElementById(`meta${prefix}`);
 
-      // 🔒 Omitir columna ID y la columna FOTO (si no es LINK_FOTO)
-      const headersFiltrados = headers.filter(h=>{
-        const hl = String(h).trim().toLowerCase();
-        if(hl === 'id') return false;
-        if(hl.includes('foto') && !hl.includes('link_foto')) return false;
-        return true;
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      if(!data.length){
+        empty.style.display = 'block';
+        meta.textContent = '';
+        return;
+      }
+      empty.style.display = 'none';
+
+      const columnas = ['Fecha','Orden','Status','Foto','Firma'];
+
+      const trHead = document.createElement('tr');
+      columnas.forEach(h=>{
+        const th = document.createElement('th');
+        th.textContent = h;
+        trHead.appendChild(th);
       });
-
-      const trHead=document.createElement('tr');
-      headersFiltrados.forEach(h=>{const th=document.createElement('th');th.textContent=h;trHead.appendChild(th);});
       thead.appendChild(trHead);
 
       data.forEach(row=>{
-        const tr=document.createElement('tr');
-        headersFiltrados.forEach(h=>{
-          const val=row[h]??'';const td=document.createElement('td');
-          if(String(h).toLowerCase().includes('link_foto')&&val){
-            const imgUrl=normalizeImageUrl(val);
-            td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          }else td.textContent=val;
+        const tr = document.createElement('tr');
+
+        const fecha  = row['Fecha'] || '';
+        const orden  = row['Orden'] || row['ORDEN'] || '';
+        const status = row['Status'] || row['STATUS'] || '';
+
+        // URLs públicas
+        const fotoUrl  = row['Web url']   || row['Web URL']   || '';
+        const firmaUrl = row['Firma url'] || row['Firma URL'] || '';
+
+        columnas.forEach(col=>{
+          const td = document.createElement('td');
+
+          if(col === 'Fecha'){
+            td.textContent = fecha;
+          } else if(col === 'Orden'){
+            td.textContent = orden;
+          } else if(col === 'Status'){
+            td.innerHTML = status
+              ? `<span class="status-pill">${status}</span>`
+              : '';
+          } else if(col === 'Foto'){
+            if(fotoUrl){
+              const imgUrl = normalizeImageUrl(fotoUrl);
+              td.innerHTML = `<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
+            }else{
+              td.textContent = '';
+            }
+          } else if(col === 'Firma'){
+            if(firmaUrl){
+              const imgUrl = normalizeImageUrl(firmaUrl);
+              td.innerHTML = `<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">✍️ Ver firma</button>`;
+            }else{
+              td.textContent = '';
+            }
+          }
+
           tr.appendChild(td);
         });
+
         tbody.appendChild(tr);
       });
 
-      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
+      meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
     }
 
     async function searchTracking(kind){
-      const input=document.getElementById(`search${kind}`);
-      const code=input.value.trim().toLowerCase();
-      if(!code)return;
+      const input = document.getElementById(`search${kind}`);
+      const code = input.value.trim().toLowerCase();
+      if(!code) return;
 
       let urlsToFetch = Array.isArray(urls[kind]) ? urls[kind] : [urls[kind]];
       let allData = [];
 
       for (const u of urlsToFetch) {
         await new Promise(resolve=>{
-          Papa.parse(u+'&t='+Date.now(),{
-            download:true,header:true,skipEmptyLines:true,
+          Papa.parse(u + '&t=' + Date.now(), {
+            download:true,
+            header:true,
+            skipEmptyLines:true,
             complete:res=>{
-              allData = allData.concat(res.data||[]);
+              allData = allData.concat(res.data || []);
               resolve();
-            },error:()=>resolve()
+            },
+            error:()=>resolve()
           });
         });
       }
 
-      const headers = Object.keys(allData[0]||{});
       let result;
 
-      if(kind==='Maritimo'||kind==='Aereo'){
+      if(kind === 'Maritimo' || kind === 'Aereo'){
         result = allData.filter(r=>{
-          const orden = (r['ORDEN']||'').toLowerCase();
+          const orden = (r['Orden'] || r['ORDEN'] || '').toLowerCase();
           return orden.includes(code);
         });
       } else {
+        // Compra: buscar en todas las columnas
         result = allData.filter(r=>{
-          const vals=Object.values(r).map(v=>String(v).toLowerCase());
+          const vals = Object.values(r).map(v=>String(v).toLowerCase());
           return vals.some(v=>v.includes(code));
         });
       }
 
-      renderTable(result,kind,headers);
+      renderTable(result, kind);
     }
 
-    document.getElementById('reloadBtn').onclick=()=>location.reload();
+    document.getElementById('reloadBtn').onclick = () => location.reload();
+
     ['Maritimo','Aereo','Compra'].forEach(k=>{
-      const el=document.getElementById(`search${k}`);
-      el.addEventListener('keydown',e=>{if(e.key==='Enter')searchTracking(k);});
+      const el = document.getElementById(`search${k}`);
+      el.addEventListener('keydown', e=>{
+        if(e.key === 'Enter') searchTracking(k);
+      });
     });
   </script>
 </body>
