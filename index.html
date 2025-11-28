@@ -21,52 +21,48 @@
       background:var(--gris);
     }
 
-    /* === ENCABEZADO AZUL (REDUCIDO) === */
+    /* === ENCABEZADO AZUL SUPER REDUCIDO (60% MENOS) === */
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:#fff;
-      padding:25px 12px 28px; /* MÁS PEQUEÑO */
+      padding:10px 12px 14px; /* <-- BIEN PEQUEÑO */
       text-align:center;
       position:relative;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
 
-    /* Encabezado aún más pequeño en computadoras */
     @media (min-width:1024px){
       header{
-        padding:18px 12px 20px !important; /* LA MITAD DE LO QUE TENÍAS */
-      }
-      .logo svg text{
-        font-size:34px !important; /* Más pequeño para caber sin empujar */
+        padding:8px 12px 10px !important; /* Todavía más pequeño en web */
       }
     }
 
-    /* === BANDERAS MÁS GRANDES === */
+    /* === BANDERAS EL DOBLE DE GRANDES (100%) === */
     .flag-left, .flag-right{
       position:absolute;
-      top:12px;
-      width:86px;   /* MÁS GRANDE */
-      border-radius:6px;
-      box-shadow:0 0 6px rgba(0,0,0,.4);
+      top:6px;
+      width:140px;  /* <-- DOBLE DE GRANDE */
+      border-radius:10px;
+      box-shadow:0 0 8px rgba(0,0,0,.45);
     }
     .flag-left{ left:10px; }
     .flag-right{ right:10px; }
 
     @media (max-width:600px){
       .flag-left, .flag-right{
-        width:70px; /* MÁS GRANDE TAMBIÉN EN MÓVIL */
+        width:110px; /* grande pero adaptada en móvil */
       }
     }
 
+    /* Logo central */
     .logo svg{
-      max-width:80%;
+      max-width:70%;  /* reduce el bloque azul pero mantiene el texto */
       height:auto;
+      margin-top:10px;
+      margin-bottom:5px;
     }
 
-    @media (max-width:600px){
-      header{ padding-top:55px; }
-    }
-
+    /* Contenedor principal */
     .container{
       max-width:900px;
       margin:20px auto;
@@ -231,7 +227,7 @@
       </table>
     </div>
 
-    <div id="emptyMaritimo" class="empty" style="display:none; padding:14px; text-align:center;">
+    <div id="emptyMaritimo" style="display:none; padding:14px; text-align:center;">
       ❌ No encontramos ese número.
     </div>
   </section>
@@ -254,7 +250,7 @@
       </table>
     </div>
 
-    <div id="emptyAereo" class="empty" style="display:none; padding:14px; text-align:center;">
+    <div id="emptyAereo" style="display:none; padding:14px; text-align:center;">
       ❌ No encontramos ese número.
     </div>
   </section>
@@ -277,7 +273,7 @@
       </table>
     </div>
 
-    <div id="emptyCompra" class="empty" style="display:none; padding:14px; text-align:center;">
+    <div id="emptyCompra" style="display:none; padding:14px; text-align:center;">
       ⚠️ No se encontró esa compra.
     </div>
   </section>
@@ -300,21 +296,21 @@ const urls = {
     'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
   ],
   Compra:
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4ग2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
 };
 
 function normalizeImageUrl(url){
   if(!url) return '';
-  url = url.trim();
-  let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  url=url.trim();
+  let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-  m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+  m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
   return url;
 }
 
 function openSignatureWhiteBg(url){
-  const win = window.open("", "_blank");
+  const win=window.open("", "_blank");
   win.document.write(`
     <html>
       <head><title>Firma</title></head>
@@ -326,9 +322,7 @@ function openSignatureWhiteBg(url){
 }
 
 function safe(r, keys){
-  for(const k of keys){
-    if(r[k]) return r[k];
-  }
+  for(const k of keys){ if(r[k]) return r[k]; }
   return '';
 }
 
@@ -337,14 +331,12 @@ function renderTable(data, type){
   const tbody=document.getElementById(`tbody${type}`);
   const empty=document.getElementById(`empty${type}`);
 
-  thead.innerHTML='';
-  tbody.innerHTML='';
+  thead.innerHTML=''; tbody.innerHTML='';
 
   if(!data.length){
     empty.style.display='block';
     return;
   }
-
   empty.style.display='none';
 
   const columns = type==='Compra'
@@ -378,9 +370,10 @@ function renderTable(data, type){
       else if(col=='Tracking #') td.textContent=track;
       else if(col=='Nombre') td.textContent=nombre;
       else if(col=='Agente') td.textContent=agente;
-      else if(col==='Status') td.innerHTML=status?`<span class="status-pill">${status}</span>`:'';
-      else if(col==='Foto') td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>`:'';
-      else if(col==='Firma') td.innerHTML=firma?`<button class="view-btn" onclick="openSignatureWhiteBg('${firma}')">✍️ Ver firma</button>`:'';
+      else if(col=='Status') td.innerHTML=status?`<span class="status-pill">${status}</span>`:'';
+      else if(col=='Foto') td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>`:'';
+      else if(col=='Firma') td.innerHTML=firma?
+        `<button class="view-btn" onclick="openSignatureWhiteBg('${firma}')">✍️ Ver firma</button>`:'';
 
       tr.appendChild(td);
     });
@@ -394,34 +387,29 @@ async function searchTracking(type){
   const code=input.value.trim().toLowerCase();
   if(!code) return;
 
-  let links = Array.isArray(urls[type]) ? urls[type] : [urls[type]];
+  let links=Array.isArray(urls[type])?urls[type]:[urls[type]];
   let allData=[];
 
   for(const link of links){
     await new Promise(resolve=>{
-      Papa.parse(link + "&t=" + Date.now(), {
-        download:true,
-        header:true,
-        skipEmptyLines:true,
-        complete:res=>{
-          allData = allData.concat(res.data);
-          resolve();
-        }
+      Papa.parse(link+"&t="+Date.now(),{
+        download:true,header:true,skipEmptyLines:true,
+        complete:res=>{ allData=allData.concat(res.data); resolve(); }
       });
     });
   }
 
-  const result = allData.filter(r=>{
+  const result=allData.filter(r=>{
     const track=safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
     const name=safe(r,['Nombre','Cliente']).toLowerCase();
-    return track.includes(code) || name.includes(code);
+    return track.includes(code)||name.includes(code);
   });
 
-  renderTable(result, type);
+  renderTable(result,type);
 }
 
 ['Maritimo','Aereo','Compra'].forEach(type=>{
-  document.getElementById(`search${type}`).addEventListener('keydown', e=>{
+  document.getElementById(`search${type}`).addEventListener('keydown',e=>{
     if(e.key==='Enter') searchTracking(type);
   });
 });
