@@ -1,192 +1,465 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MiRCargoTrack | Rastreo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiRCargoTrack | Rastreo</title>
 
-<style>
-  :root {
-    --azul1: #38bdf8;
-    --azul2: #1e3a8a;
-    --gris: #f1f5f9;
-    --gris2: #e2e8f0;
-    --blanco: #ffffff;
-    --texto: #0f172a;
-    --amarillo: #fde68a;
-    --amarillo2: #fcd34d;
-    --celesteTxt:#0ea5e9;
-  }
-
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background: var(--gris);
-    color: var(--texto);
-  }
-
-  /* HEADER */
-  header {
-    background: linear-gradient(90deg, var(--azul1), var(--azul2));
-    padding: 35px 10px 45px;
-    text-align: center;
-    color: white;
-    position: relative;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-  }
-
-  .flag {
-    width: 70px;
-    position: absolute;
-    top: 18px;
-    border-radius: 6px;
-    box-shadow: 0 0 6px rgba(0,0,0,0.4);
-  }
-
-  .flag-left { left: 15px; }
-  .flag-right { right: 15px; }
-
-  /* ------------------------------ */
-  /*   TÍTULO RESPONSIVE REAL       */
-  /* ------------------------------ */
-
-  /* CELULAR → pequeño */
-  .title {
-    font-size: 28px;
-    font-weight: 900;
-    font-style: italic;
-    letter-spacing: 1px;
-    margin: 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,.25);
-  }
-
-  /* TABLET → mediano */
-  @media (min-width: 600px) {
-    .title {
-      font-size: 40px;
+  <style>
+    :root{
+      --azulClaro:#38bdf8; --azulOscuro:#1e3a8a;
+      --celesteTxt:#0ea5e9; --celesteBg:#e0f2fe;
+      --gris:#f1f5f9; --gris2:#e2e8f0;
+      --blanco:#ffffff; --texto:#0f172a;
+      --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
     }
-  }
 
-  /* COMPUTADORA → grande */
-  @media (min-width: 1024px) {
-    .title {
-      font-size: 58px !important;
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--texto);
+      background:var(--gris);
     }
-  }
 
-  /* CONTENEDOR */
-  .container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 10px;
-  }
+    header{
+      background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
+      color:var(--blanco);
+      position:relative;
+      padding:55px 20px 50px;
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
+      text-align:center;
+    }
 
-  .card {
-    background: white;
-    border-radius: 12px;
-    border: 1px solid var(--gris2);
-    padding: 15px;
-    margin-top: 18px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  }
+    .flag-left, .flag-right{
+      position:absolute;
+      top:18px;
+      width:85px;
+      border-radius:6px;
+      box-shadow:0 0 6px rgba(0,0,0,.4);
+    }
+    .flag-left{left:25px;}
+    .flag-right{right:25px;}
 
-  .card-title {
-    font-weight: 800;
-    margin-bottom: 8px;
-    font-size: 17px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+    /* Logos añadidos */
+    .logo-extra-left, .logo-extra-right{
+      position:absolute;
+      top:110px;
+      width:120px;
+      height:auto;
+      border-radius:10px;
+      box-shadow:0 3px 8px rgba(0,0,0,.3);
+      background:white;
+      padding:4px;
+    }
 
-  .input-box {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-  }
+    .logo-extra-left{left:25px;}
+    .logo-extra-right{right:25px;}
 
-  input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--gris2);
-  }
+    .logo svg{
+      max-width:480px;
+      width:90%;
+      height:auto;
+    }
 
-  button {
-    background: var(--amarillo);
-    padding: 10px 16px;
-    font-weight: 800;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
+    .container{
+      max-width:900px;
+      margin:40px auto;
+      padding:0 12px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
 
-  button:hover {
-    background: var(--amarillo2);
-  }
+    .card{
+      background:var(--blanco);
+      border:1px solid var(--gris2);
+      border-radius:12px;
+      box-shadow:0 3px 12px rgba(2,6,23,.06);
+      overflow:hidden;
+    }
 
-  .btn-refresh {
-    background: var(--celesteTxt);
-    color: white;
-    padding: 12px 24px;
-    margin: 30px auto;
-    display: block;
-    border-radius: 12px;
-    font-size: 15px;
-  }
+    .card-title{
+      padding:10px 12px;
+      font-weight:800;
+      color:var(--texto);
+      border-bottom:1px solid var(--gris2);
+      background:#fafafa;
+      font-size:16px;
+    }
 
-</style>
+    .card-header{
+      padding:10px 12px;
+      border-bottom:1px solid var(--gris2);
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:8px;
+      align-items:center;
+    }
+
+    .input{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--gris2);
+      border-radius:8px;
+      padding:8px 10px;
+      background:var(--blanco);
+    }
+
+    .input input{
+      width:100%;
+      border:none;
+      outline:none;
+      font-size:14px;
+    }
+
+    .btn{
+      border:none;
+      background:var(--amarilloPálido);
+      color:#1f2937;
+      padding:8px 12px;
+      font-weight:700;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .btn:hover{
+      background:var(--amarilloPálidoHover);
+    }
+
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    table{width:100%;border-collapse:collapse;min-width:620px;}
+    th,td{
+      padding:8px 10px;
+      border-bottom:1px solid var(--gris2);
+      font-size:13px;
+    }
+
+    tbody tr:hover{background:#f9fafb;}
+
+    .empty{
+      padding:16px;
+      text-align:center;
+      color:#64748b;
+      font-size:13px;
+    }
+
+    .meta{
+      font-size:12px;
+      color:#475569;
+      margin-left:auto;
+    }
+
+    .view-btn{
+      background:var(--celesteTxt);
+      color:#fff;
+      border:none;
+      padding:7px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:800;
+      transition:all .25s ease;
+    }
+
+    .view-btn:hover{
+      background:#0284c7;
+      transform:scale(1.05);
+    }
+
+    .status-pill{
+      padding:4px 10px;
+      border-radius:9999px;
+      background:var(--celesteBg);
+      color:var(--celesteTxt);
+      font-weight:800;
+    }
+
+    .footer-btn{
+      margin:30px auto;
+      text-align:center;
+    }
+
+    .btn-refresh{
+      background:var(--celesteTxt);
+      color:#fff;
+      border:none;
+      padding:10px 26px;
+      font-weight:800;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:14px;
+      transition:all .25s ease;
+    }
+
+    .btn-refresh:hover{
+      background:#0ea5e9;
+      transform:scale(1.05);
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 
 <body>
 
-<header>
-  <img class="flag flag-left" src="https://flagcdn.com/us.svg" alt="USA">
-  <img class="flag flag-right" src="https://flagcdn.com/ni.svg" alt="NI">
-  <h1 class="title">MiRCargoTrack</h1>
-</header>
+  <header>
 
+    <!-- Banderas -->
+    <img class="flag-left" src="https://flagcdn.com/us.svg">
+    <img class="flag-right" src="https://flagcdn.com/ni.svg">
 
-<main class="container">
+    <!-- Logos añadidos -->
+    <img class="logo-extra-left"
+         src="https://drive.google.com/uc?export=view&id=1ES2J36OGKg5jyx3gVwwS9kQVu-1vF8Po">
 
-  <!-- MARÍTIMO -->
-  <div class="card">
-    <div class="card-title">🚢 Rastreo Marítimo</div>
+    <img class="logo-extra-right"
+         src="https://drive.google.com/uc?export=view&id=1Y7iPVTZV-UgJcN0nVI1HqR7kddVEMULB">
 
-    <div class="input-box">
-      <input id="maritimoInput" placeholder="Número de rastreo marítimo">
-      <button onclick="buscar('maritimo')">Buscar</button>
+    <!-- LOGO CENTRAL -->
+    <div class="logo">
+      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1">
+            <stop offset="0" stop-color="#38bdf8"/>
+            <stop offset="1" stop-color="#1e3a8a"/>
+          </linearGradient>
+        </defs>
+        <g font-family="Inter" text-anchor="middle">
+          <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
+            MiR<tspan fill="#fde68a">CargoTrack</tspan>
+          </text>
+          <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+          </path>
+        </g>
+      </svg>
     </div>
 
-    <div id="maritimoResultados"></div>
-  </div>
+  </header>
 
-  <!-- AÉREO -->
-  <div class="card">
-    <div class="card-title">✈️ Rastreo Aéreo</div>
+  <main class="container">
 
-    <div class="input-box">
-      <input id="aereoInput" placeholder="Número de rastreo aéreo">
-      <button onclick="buscar('aereo')">Buscar</button>
+    <!-- MARITIMO -->
+    <section class="card" id="cardMaritimo">
+      <div class="card-title">🚢 Rastreo Marítimo</div>
+      <div class="card-header">
+        <div class="input">
+          <input id="searchMaritimo" placeholder="Número de rastreo marítimo" />
+        </div>
+        <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
+        <div id="metaMaritimo" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadMaritimo"></thead>
+          <tbody id="tbodyMaritimo"></tbody>
+        </table>
+      </div>
+      <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
+    </section>
+
+    <!-- AÉREO -->
+    <section class="card" id="cardAereo">
+      <div class="card-title">✈️ Rastreo Aéreo</div>
+      <div class="card-header">
+        <div class="input">
+          <input id="searchAereo" placeholder="Número de rastreo aéreo" />
+        </div>
+        <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
+        <div id="metaAereo" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadAereo"></thead>
+          <tbody id="tbodyAereo"></tbody>
+        </table>
+      </div>
+      <div id="emptyAereo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
+    </section>
+
+    <!-- COMPRAS -->
+    <section class="card" id="cardCompra">
+      <div class="card-title">🛍️ Rastreo de compras en línea</div>
+      <div class="card-header">
+        <div class="input">
+          <input id="searchCompra" placeholder="Nombre o número de tracking" />
+        </div>
+        <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
+        <div id="metaCompra" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadCompra"></thead>
+          <tbody id="tbodyCompra"></tbody>
+        </table>
+      </div>
+      <div id="emptyCompra" class="empty" style="display:none;">⚠️ No se encontró esa compra.</div>
+    </section>
+
+    <div class="footer-btn">
+      <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
     </div>
 
-    <div id="aereoResultados"></div>
-  </div>
+  </main>
 
-  <!-- COMPRAS -->
-  <div class="card">
-    <div class="card-title">🛍️ Rastreo de compras en línea</div>
+  <!-- 🔥 JAVASCRIPT FUNCIONAL -->
+  <script>
 
-    <div class="input-box">
-      <input id="compraInput" placeholder="Nombre o número de tracking">
-      <button onclick="buscar('compra')">Buscar</button>
-    </div>
+    const urls = {
+      Maritimo: [
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv'
+      ],
+      Aereo: [
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
+      ],
+      Compra:
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
+    };
 
-    <div id="compraResultados"></div>
-  </div>
+    function normalizeImageUrl(url){
+      if(!url) return '';
+      url = url.trim();
+      let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+      m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+      return url;
+    }
 
-  <button class="btn-refresh" onclick="location.reload()">🔄 Actualizar</button>
-</main>
+    function safe(r, arr){
+      for(const a of arr){
+        if(r[a]) return r[a];
+      }
+      return '';
+    }
+
+    function renderTable(data, tipo){
+      const thead = document.getElementById(`thead${tipo}`);
+      const tbody = document.getElementById(`tbody${tipo}`);
+      const empty = document.getElementById(`empty${tipo}`);
+      const meta  = document.getElementById(`meta${tipo}`);
+
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      if(!data.length){
+        empty.style.display = 'block';
+        meta.textContent = '';
+        return;
+      }
+      empty.style.display = 'none';
+
+      let columnas;
+
+      if(tipo === 'Compra'){
+        columnas = ['Fecha','Tracking','Nombre','Foto','Agente'];
+      } else {
+        columnas = ['Fecha','Status','Foto','Firma','Agente'];
+      }
+
+      const trHead = document.createElement('tr');
+      columnas.forEach(h=>{
+        const th=document.createElement('th');
+        th.textContent = h === 'Tracking' ? 'Tracking #' : h;
+        trHead.appendChild(th);
+      });
+      thead.appendChild(trHead);
+
+      data.forEach(row=>{
+        const tr=document.createElement('tr');
+
+        const fecha  = safe(row,['Fecha','FECHA']);
+        const track  = safe(row,['Tracking','Tracking #','Orden','ORDEN']);
+        const status = safe(row,['Status','STATUS']);
+        const nombre = safe(row,['Nombre','Cliente']);
+        const agente = safe(row,['Agente','AGENTE','Recibido por','Usuario']);
+
+        const foto   = normalizeImageUrl(safe(row,['Web url','Web URL']));
+        const firma  = normalizeImageUrl(safe(row,['Firma url','Firma URL']));
+
+        columnas.forEach(col=>{
+          const td=document.createElement('td');
+
+          if(col==='Fecha') td.textContent = fecha;
+          else if(col==='Tracking') td.textContent = track;
+          else if(col==='Nombre') td.textContent = nombre;
+          else if(col==='Agente') td.textContent = agente;
+
+          else if(col==='Status'){
+            td.innerHTML = status ? `<span class="status-pill">${status}</span>` : '';
+          }
+
+          else if(col==='Foto'){
+            td.innerHTML = foto
+              ? `<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>`
+              : '';
+          }
+
+          else if(col==='Firma'){
+            td.innerHTML = firma
+              ? `<button class="view-btn" onclick="window.open('${firma}','_blank')">✍️ Ver firma</button>`
+              : '';
+          }
+
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
+    }
+
+    async function searchTracking(tipo){
+      const input = document.getElementById(`search${tipo}`);
+      const code = input.value.trim().toLowerCase();
+      if(!code) return;
+
+      let urlsToFetch = Array.isArray(urls[tipo]) ? urls[tipo] : [urls[tipo]];
+      let allData = [];
+
+      for(const u of urlsToFetch){
+        await new Promise(resolve=>{
+          Papa.parse(u + '&t=' + Date.now(),{
+            download:true,
+            header:true,
+            skipEmptyLines:true,
+            complete:res=>{
+              allData = allData.concat(res.data || []);
+              resolve();
+            },
+            error:()=>resolve()
+          });
+        });
+      }
+
+      let result = allData.filter(r=>{
+        const track = safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
+        const nombre= safe(r,['Nombre','Cliente']).toLowerCase();
+        return track.includes(code) || nombre.includes(code);
+      });
+
+      renderTable(result, tipo);
+    }
+
+    document.getElementById('reloadBtn').onclick = () => location.reload();
+
+    ['Maritimo','Aereo','Compra'].forEach(t=>{
+      document.getElementById(`search${t}`)
+      .addEventListener('keydown', e=>{
+        if(e.key==='Enter') searchTracking(t);
+      });
+    });
+
+  </script>
 
 </body>
 </html>
