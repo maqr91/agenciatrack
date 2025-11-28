@@ -25,7 +25,7 @@
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:var(--blanco);
       position:relative;
-      padding:35px 20px 45px;
+      padding:55px 20px 50px;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
       text-align:center;
     }
@@ -34,12 +34,26 @@
       position:absolute;
       top:18px;
       width:85px;
-      height:auto;
       border-radius:6px;
       box-shadow:0 0 6px rgba(0,0,0,.4);
     }
     .flag-left{left:25px;}
     .flag-right{right:25px;}
+
+    /* Logos añadidos */
+    .logo-extra-left, .logo-extra-right{
+      position:absolute;
+      top:110px;
+      width:120px;
+      height:auto;
+      border-radius:10px;
+      box-shadow:0 3px 8px rgba(0,0,0,.3);
+      background:white;
+      padding:4px;
+    }
+
+    .logo-extra-left{left:25px;}
+    .logo-extra-right{right:25px;}
 
     .logo svg{
       max-width:480px;
@@ -49,7 +63,7 @@
 
     .container{
       max-width:900px;
-      margin:24px auto;
+      margin:40px auto;
       padding:0 12px;
       display:flex;
       flex-direction:column;
@@ -119,30 +133,20 @@
       -webkit-overflow-scrolling:touch;
     }
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:620px;
-    }
-
+    table{width:100%;border-collapse:collapse;min-width:620px;}
     th,td{
       padding:8px 10px;
       border-bottom:1px solid var(--gris2);
-      text-align:left;
       font-size:13px;
-      vertical-align:middle;
     }
 
-    tbody tr:hover{
-      background:#f9fafb;
-    }
+    tbody tr:hover{background:#f9fafb;}
 
     .empty{
       padding:16px;
       text-align:center;
       color:#64748b;
       font-size:13px;
-      line-height:1.4;
     }
 
     .meta{
@@ -160,7 +164,6 @@
       cursor:pointer;
       font-size:12px;
       font-weight:800;
-      box-shadow:0 1px 3px rgba(0,0,0,.15);
       transition:all .25s ease;
     }
 
@@ -170,14 +173,11 @@
     }
 
     .status-pill{
-      display:inline-block;
       padding:4px 10px;
       border-radius:9999px;
       background:var(--celesteBg);
       color:var(--celesteTxt);
       font-weight:800;
-      line-height:1;
-      box-shadow:0 1px 0 rgba(0,0,0,.06);
     }
 
     .footer-btn{
@@ -194,7 +194,6 @@
       border-radius:12px;
       cursor:pointer;
       font-size:14px;
-      box-shadow:0 2px 6px rgba(0,0,0,.2);
       transition:all .25s ease;
     }
 
@@ -204,24 +203,34 @@
     }
   </style>
 
-  <!-- PapaParse para leer los CSV publicados de Google Sheets -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 
 <body>
-  <header>
-    <img class="flag-left" src="https://flagcdn.com/us.svg" alt="USA">
-    <img class="flag-right" src="https://flagcdn.com/ni.svg" alt="Nicaragua">
 
+  <header>
+
+    <!-- Banderas -->
+    <img class="flag-left" src="https://flagcdn.com/us.svg">
+    <img class="flag-right" src="https://flagcdn.com/ni.svg">
+
+    <!-- Logos añadidos -->
+    <img class="logo-extra-left"
+         src="https://drive.google.com/uc?export=view&id=1ES2J36OGKg5jyx3gVwwS9kQVu-1vF8Po">
+
+    <img class="logo-extra-right"
+         src="https://drive.google.com/uc?export=view&id=1Y7iPVTZV-UgJcN0nVI1HqR7kddVEMULB">
+
+    <!-- LOGO CENTRAL -->
     <div class="logo">
-      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MiRCargoTrack logo">
+      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+          <linearGradient id="g" x1="0" x2="1">
             <stop offset="0" stop-color="#38bdf8"/>
             <stop offset="1" stop-color="#1e3a8a"/>
           </linearGradient>
         </defs>
-        <g font-family="Inter, system-ui, Segoe UI, Roboto, Arial" text-anchor="middle">
+        <g font-family="Inter" text-anchor="middle">
           <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
             MiR<tspan fill="#fde68a">CargoTrack</tspan>
           </text>
@@ -231,15 +240,17 @@
         </g>
       </svg>
     </div>
+
   </header>
 
   <main class="container">
-    <!-- Marítimo -->
+
+    <!-- MARITIMO -->
     <section class="card" id="cardMaritimo">
-      <div class="card-title">🚢 Rastreo Marítimo (Contenedor y Entregas)</div>
+      <div class="card-title">🚢 Rastreo Marítimo</div>
       <div class="card-header">
         <div class="input">
-          <input id="searchMaritimo" placeholder="Número de rastreo (Marítimo / Entrega Marítimo)" />
+          <input id="searchMaritimo" placeholder="Número de rastreo marítimo" />
         </div>
         <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
         <div id="metaMaritimo" class="meta"></div>
@@ -250,17 +261,15 @@
           <tbody id="tbodyMaritimo"></tbody>
         </table>
       </div>
-      <div id="emptyMaritimo" class="empty" style="display:none;">
-        ❌ No encontramos ese número de rastreo.
-      </div>
+      <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
     </section>
 
-    <!-- Aéreo -->
+    <!-- AÉREO -->
     <section class="card" id="cardAereo">
-      <div class="card-title">✈️ Rastreo Aéreo (Encomiendas y Entregas)</div>
+      <div class="card-title">✈️ Rastreo Aéreo</div>
       <div class="card-header">
         <div class="input">
-          <input id="searchAereo" placeholder="Número de rastreo (Aéreo / Entrega Aéreo)" />
+          <input id="searchAereo" placeholder="Número de rastreo aéreo" />
         </div>
         <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
         <div id="metaAereo" class="meta"></div>
@@ -271,12 +280,10 @@
           <tbody id="tbodyAereo"></tbody>
         </table>
       </div>
-      <div id="emptyAereo" class="empty" style="display:none;">
-        ❌ No encontramos ese número de rastreo.
-      </div>
+      <div id="emptyAereo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
     </section>
 
-    <!-- Compras en línea -->
+    <!-- COMPRAS -->
     <section class="card" id="cardCompra">
       <div class="card-title">🛍️ Rastreo de compras en línea</div>
       <div class="card-header">
@@ -292,55 +299,44 @@
           <tbody id="tbodyCompra"></tbody>
         </table>
       </div>
-      <div id="emptyCompra" class="empty" style="display:none;">
-        ⚠️ Ese número puede estar equivocado o aún no se ha recibido.
-      </div>
+      <div id="emptyCompra" class="empty" style="display:none;">⚠️ No se encontró esa compra.</div>
     </section>
 
     <div class="footer-btn">
       <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
     </div>
+
   </main>
 
+  <!-- 🔥 JAVASCRIPT FUNCIONAL -->
   <script>
-    // URLs CSV publicados desde tu documento 1492LGo6...
+
     const urls = {
       Maritimo: [
-        // Contenedor
         'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',
-        // Entregas Contenedor
         'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv'
       ],
       Aereo: [
-        // Encomiendas Aéreas
         'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',
-        // Entregas Aéreas
         'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
       ],
       Compra:
-        // Correo / compras en línea
         'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
     };
 
     function normalizeImageUrl(url){
       if(!url) return '';
       url = url.trim();
-
-      // ?id=xxx
       let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
       if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-
-      // /file/d/xxx/
       m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
       if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-
       return url;
     }
 
-    // Helper para leer diferentes nombres de la misma columna
-    function safe(row, keys){
-      for(const k of keys){
-        if(row[k] !== undefined && row[k] !== null && row[k] !== '') return row[k];
+    function safe(r, arr){
+      for(const a of arr){
+        if(r[a]) return r[a];
       }
       return '';
     }
@@ -364,73 +360,53 @@
       let columnas;
 
       if(tipo === 'Compra'){
-        // Para compras en línea:
-        // Fecha, Tracking #, Nombre, Web url (como "Ver foto"), Agente
         columnas = ['Fecha','Tracking','Nombre','Foto','Agente'];
       } else {
-        // Para Marítimo y Aéreo:
-        // Fecha, Status, Web url (foto), Firma url (firma), Agente
         columnas = ['Fecha','Status','Foto','Firma','Agente'];
       }
 
-      // Encabezado
       const trHead = document.createElement('tr');
-      columnas.forEach(nombre=>{
-        const th = document.createElement('th');
-        if(nombre === 'Tracking') th.textContent = 'Tracking #';
-        else if(nombre === 'Foto') th.textContent = 'Web url';
-        else th.textContent = nombre;
+      columnas.forEach(h=>{
+        const th=document.createElement('th');
+        th.textContent = h === 'Tracking' ? 'Tracking #' : h;
         trHead.appendChild(th);
       });
       thead.appendChild(trHead);
 
-      // Filas
       data.forEach(row=>{
-        const tr = document.createElement('tr');
+        const tr=document.createElement('tr');
 
-        const fecha   = safe(row,['Fecha','FECHA']);
-        const tracking= safe(row,['Tracking #','Tracking','TRACKING','Orden','ORDEN']);
-        const status  = safe(row,['Status','STATUS']);
-        const nombre  = safe(row,['Nombre','NOMBRE','Cliente','CLIENTE']);
-        const agente  = safe(row,['Agente','AGENTE','Recibido por','RECIBIDO POR','Usuario','USUARIO']);
+        const fecha  = safe(row,['Fecha','FECHA']);
+        const track  = safe(row,['Tracking','Tracking #','Orden','ORDEN']);
+        const status = safe(row,['Status','STATUS']);
+        const nombre = safe(row,['Nombre','Cliente']);
+        const agente = safe(row,['Agente','AGENTE','Recibido por','Usuario']);
 
-        const webUrl   = normalizeImageUrl(safe(row,['Web url','Web URL','WEB URL']));
-        const firmaUrl = normalizeImageUrl(safe(row,['Firma url','Firma URL','FIRMA URL']));
+        const foto   = normalizeImageUrl(safe(row,['Web url','Web URL']));
+        const firma  = normalizeImageUrl(safe(row,['Firma url','Firma URL']));
 
         columnas.forEach(col=>{
-          const td = document.createElement('td');
+          const td=document.createElement('td');
 
-          if(col === 'Fecha'){
-            td.textContent = fecha;
+          if(col==='Fecha') td.textContent = fecha;
+          else if(col==='Tracking') td.textContent = track;
+          else if(col==='Nombre') td.textContent = nombre;
+          else if(col==='Agente') td.textContent = agente;
 
-          } else if(col === 'Tracking'){
-            td.textContent = tracking;
+          else if(col==='Status'){
+            td.innerHTML = status ? `<span class="status-pill">${status}</span>` : '';
+          }
 
-          } else if(col === 'Nombre'){
-            td.textContent = nombre;
-
-          } else if(col === 'Agente'){
-            td.textContent = agente;
-
-          } else if(col === 'Status'){
-            td.innerHTML = status
-              ? `<span class="status-pill">${status}</span>`
+          else if(col==='Foto'){
+            td.innerHTML = foto
+              ? `<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>`
               : '';
+          }
 
-          } else if(col === 'Foto'){
-            // Usamos Web url como "Ver foto"
-            if(webUrl){
-              td.innerHTML = `<button class="view-btn" onclick="window.open('${webUrl}','_blank')">📷 Ver foto</button>`;
-            } else {
-              td.textContent = '';
-            }
-
-          } else if(col === 'Firma'){
-            if(firmaUrl){
-              td.innerHTML = `<button class="view-btn" onclick="window.open('${firmaUrl}','_blank')">✍️ Ver firma</button>`;
-            } else {
-              td.textContent = '';
-            }
+          else if(col==='Firma'){
+            td.innerHTML = firma
+              ? `<button class="view-btn" onclick="window.open('${firma}','_blank')">✍️ Ver firma</button>`
+              : '';
           }
 
           tr.appendChild(td);
@@ -450,10 +426,9 @@
       let urlsToFetch = Array.isArray(urls[tipo]) ? urls[tipo] : [urls[tipo]];
       let allData = [];
 
-      // Cargar todas las hojas del tipo (Marítimo, Aéreo, Compra)
       for(const u of urlsToFetch){
         await new Promise(resolve=>{
-          Papa.parse(u + '&t=' + Date.now(), {
+          Papa.parse(u + '&t=' + Date.now(),{
             download:true,
             header:true,
             skipEmptyLines:true,
@@ -466,36 +441,25 @@
         });
       }
 
-      let result;
-
-      if(tipo === 'Maritimo' || tipo === 'Aereo'){
-        // Buscar por tracking/orden
-        result = allData.filter(r=>{
-          const codeRow = safe(r,['Tracking #','Tracking','TRACKING','Orden','ORDEN']).toLowerCase();
-          return codeRow.includes(code);
-        });
-      } else {
-        // Compra: buscar por tracking o nombre
-        result = allData.filter(r=>{
-          const codeRow = safe(r,['Tracking #','Tracking','TRACKING','Orden','ORDEN']).toLowerCase();
-          const nombre  = safe(r,['Nombre','NOMBRE','Cliente','CLIENTE']).toLowerCase();
-          return codeRow.includes(code) || nombre.includes(code);
-        });
-      }
+      let result = allData.filter(r=>{
+        const track = safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
+        const nombre= safe(r,['Nombre','Cliente']).toLowerCase();
+        return track.includes(code) || nombre.includes(code);
+      });
 
       renderTable(result, tipo);
     }
 
-    // Botón de recargar
     document.getElementById('reloadBtn').onclick = () => location.reload();
 
-    // Buscar con Enter
-    ['Maritimo','Aereo','Compra'].forEach(tipo=>{
-      const el = document.getElementById(`search${tipo}`);
-      el.addEventListener('keydown', e=>{
-        if(e.key === 'Enter') searchTracking(tipo);
+    ['Maritimo','Aereo','Compra'].forEach(t=>{
+      document.getElementById(`search${t}`)
+      .addEventListener('keydown', e=>{
+        if(e.key==='Enter') searchTracking(t);
       });
     });
+
   </script>
+
 </body>
 </html>
