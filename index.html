@@ -1,159 +1,157 @@
-<script>
-  const urls = {
-    Maritimo: [
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv'
-    ],
-    Aereo: [
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
-    ],
-    Compra:
-      'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
-  };
-
-  function normalizeImageUrl(url){
-    if(!url) return '';
-    url = url.trim();
-
-    let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-    if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-
-    m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
-    if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-
-    return url;
-  }
-
-  function safe(r, arr){
-    for(const a of arr){
-      if(r[a] !== undefined) return r[a];
-    }
-    return '';
-  }
-
-  function renderTable(data, prefix){
-    const thead = document.getElementById(`thead${prefix}`);
-    const tbody = document.getElementById(`tbody${prefix}`);
-    const empty = document.getElementById(`empty${prefix}`);
-    const meta  = document.getElementById(`meta${prefix}`);
-
-    thead.innerHTML = '';
-    tbody.innerHTML = '';
-
-    if(!data.length){
-      empty.style.display = 'block';
-      meta.textContent = '';
-      return;
-    }
-    empty.style.display = 'none';
-
-    let columnas = [];
-
-    if(prefix === 'Compra'){
-      columnas = ['Fecha','Orden','Nombre','Agente'];
-    } else {
-      columnas = ['Fecha','Orden','Status','Foto','Firma','Agente'];
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MIRCARGOTRACK | Rastreo</title>
+  <style>
+    :root{
+      --azulClaro:#38bdf8; --azulOscuro:#1e3a8a;
+      --celesteTxt:#0ea5e9; --celesteBg:#e0f2fe;
+      --gris:#f1f5f9; --gris2:#e2e8f0;
+      --blanco:#ffffff; --texto:#0f172a;
+      --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
     }
 
-    const trHead = document.createElement('tr');
-    columnas.forEach(c=>{
-      const th=document.createElement('th'); 
-      th.textContent=c;
-      trHead.appendChild(th);
-    });
-    thead.appendChild(trHead);
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
+    header{background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));color:var(--blanco);position:relative;padding:35px 20px 45px;box-shadow:0 2px 8px rgba(0,0,0,.25);text-align:center;}
+    .flag-left, .flag-right{position:absolute;top:18px;width:85px;height:auto;border-radius:6px;box-shadow:0 0 6px rgba(0,0,0,.4);}
+    .flag-left{left:25px;} .flag-right{right:25px;}
+    header{
+      background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
+      color:var(--blanco);
+      position:relative;
+      padding:35px 20px 45px;
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
+      text-align:center;
+    }
 
-    data.forEach(r=>{
-      const tr = document.createElement('tr');
+    .flag-left, .flag-right{
+      position:absolute;
+      top:18px;
+      width:85px;
+      height:auto;
+      border-radius:6px;
+      box-shadow:0 0 6px rgba(0,0,0,.4);
+    }
+    .flag-left{left:25px;}
+    .flag-right{right:25px;}
 
-      const fecha  = safe(r,['Fecha']);
-      const orden  = safe(r,['Orden','ORDEN','Tracking','TRACKING']);
-      const status = safe(r,['Status','STATUS']);
-      const nombre = safe(r,['Nombre','NOMBRE','Cliente']);
-      const agente = safe(r,['Agente','AGENTE','Usuario','USUARIO']);
+    .logo svg{max-width:480px;width:90%;height:auto;}
+    .container{max-width:900px;margin:24px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
+    .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
+@@ -31,8 +49,21 @@
+    tbody tr:hover{background:#f9fafb;}
+    .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
+    .meta{font-size:12px;color:#475569;margin-left:auto;}
+    .view-btn{background:var(--celesteTxt);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:all .25s ease;}
 
-      const fotoUrl  = normalizeImageUrl(safe(r,['Web url','Web URL']));
-      const firmaUrl = normalizeImageUrl(safe(r,['Firma url','Firma URL']));
+    .view-btn{
+      background:var(--celesteTxt);
+      color:#fff;
+      border:none;
+      padding:7px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:800;
+      box-shadow:0 1px 3px rgba(0,0,0,.15);
+      transition:all .25s ease;
+    }
+    .view-btn:hover{background:#0284c7;transform:scale(1.05);}
+    .status-pill{display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);}
+    .footer-btn{margin:30px auto;text-align:center;}
+    .btn-refresh{background:var(--celesteTxt);color:#fff;border:none;padding:10px 26px;font-weight:800;border-radius:12px;cursor:pointer;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:all .25s ease;}
+    .btn-refresh:hover{background:#0ea5e9;transform:scale(1.05);}
+@@ -46,7 +77,8 @@
+    <img class="flag-right" src="https://flagcdn.com/ni.svg" alt="Nicaragua">
+    <div class="logo">
+      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIRCARGOTRACK logo">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
+        <g font-family="Inter, system-ui, Segoe UI, Roboto, Arial" text-anchor="middle">
+          <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
+            MIRCARGO<tspan fill="#fde68a">TRACK</tspan>
+@@ -121,18 +153,20 @@
+      return url;
+    }
 
-      columnas.forEach(col=>{
-        const td=document.createElement('td');
+    function cleanKey(k){return k.replace(/\s+/g,'').replace(/[^\w]/g,'').toLowerCase();}
 
-        if(col==='Fecha') td.textContent = fecha;
-        else if(col==='Orden') td.textContent = orden;
-        else if(col==='Nombre') td.textContent = nombre;
-        else if(col==='Agente') td.textContent = agente;
+    function renderTable(data,prefix,headers){
+      const thead=document.getElementById(`thead${prefix}`),tbody=document.getElementById(`tbody${prefix}`),empty=document.getElementById(`empty${prefix}`),meta=document.getElementById(`meta${prefix}`);
+      const thead=document.getElementById(`thead${prefix}`);
+      const tbody=document.getElementById(`tbody${prefix}`);
+      const empty=document.getElementById(`empty${prefix}`);
+      const meta=document.getElementById(`meta${prefix}`);
+      thead.innerHTML='';tbody.innerHTML='';
+      if(!data.length){empty.style.display='block';meta.textContent='';return;}
+      empty.style.display='none';
 
-        else if(col==='Status'){
-          td.innerHTML = status ? `<span class="status-pill">${status}</span>` : '';
-        }
-
-        else if(col==='Foto'){
-          td.innerHTML = fotoUrl
-            ? `<button class="view-btn" onclick="window.open('${fotoUrl}','_blank')">📷 Ver foto</button>`
-            : '';
-        }
-
-        else if(col==='Firma'){
-          td.innerHTML = firmaUrl
-            ? `<button class="view-btn" onclick="window.open('${firmaUrl}','_blank')">✍️ Ver firma</button>`
-            : '';
-        }
-
-        tr.appendChild(td);
+      const headersFiltrados=headers.filter(h=>{
+        const key=cleanKey(h);
+        if(key==='id')return false;
+        if(key.includes('foto')&&!key.includes('linkfoto'))return false;
+      // 🔒 Omitir columna ID y la columna FOTO (si no es LINK_FOTO)
+      const headersFiltrados = headers.filter(h=>{
+        const hl = String(h).trim().toLowerCase();
+        if(hl === 'id') return false;
+        if(hl.includes('foto') && !hl.includes('link_foto')) return false;
+        return true;
       });
 
-      tbody.appendChild(tr);
-    });
-
-    meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
-  }
-
-  async function searchTracking(kind){
-    const input = document.getElementById(`search${kind}`);
-    const code = input.value.trim().toLowerCase();
-    if(!code) return;
-
-    let urlsToFetch = Array.isArray(urls[kind]) ? urls[kind] : [urls[kind]];
-    let allData = [];
-
-    for(const u of urlsToFetch){
-      await new Promise(resolve=>{
-        Papa.parse(u + '&t=' + Date.now(),{
-          download:true,
-          header:true,
-          skipEmptyLines:true,
-          complete:res=>{
-            allData = allData.concat(res.data || []);
-            resolve();
-          },
-          error:()=>resolve()
+@@ -143,16 +177,16 @@
+      data.forEach(row=>{
+        const tr=document.createElement('tr');
+        headersFiltrados.forEach(h=>{
+          const val=row[h]??row[h.trim()]??'';
+          const td=document.createElement('td');
+          if(cleanKey(h).includes('linkfoto')&&val){
+          const val=row[h]??'';const td=document.createElement('td');
+          if(String(h).toLowerCase().includes('link_foto')&&val){
+            const imgUrl=normalizeImageUrl(val);
+            td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
+          }else td.textContent=val;
+          tr.appendChild(td);
         });
+        tbody.appendChild(tr);
       });
+
+      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
-    let result;
+@@ -169,27 +203,28 @@
+          Papa.parse(u+'&t='+Date.now(),{
+            download:true,header:true,skipEmptyLines:true,
+            complete:res=>{
+              allData=allData.concat(res.data||[]);
+              allData = allData.concat(res.data||[]);
+              resolve();
+            },error:()=>resolve()
+          });
+        });
+      }
 
-    if(kind === 'Maritimo' || kind === 'Aereo'){
-      result = allData.filter(r=>{
-        const orden = safe(r,['Orden','ORDEN','Tracking']).toLowerCase();
-        return orden.includes(code);
-      });
-    } else {
-      result = allData.filter(r=>{
-        return Object.values(r).some(v=>String(v).toLowerCase().includes(code));
-      });
+      const headers=Object.keys(allData[0]||{});
+      const headers = Object.keys(allData[0]||{});
+      let result;
+
+      if(kind==='Maritimo'||kind==='Aereo'){
+        result=allData.filter(r=>{
+          const orden=(r['ORDEN']||r['Orden']||'').toLowerCase();
+        result = allData.filter(r=>{
+          const orden = (r['ORDEN']||'').toLowerCase();
+          return orden.includes(code);
+        });
+      }else{
+        result=allData.filter(r=>{
+      } else {
+        result = allData.filter(r=>{
+          const vals=Object.values(r).map(v=>String(v).toLowerCase());
+          return vals.some(v=>v.includes(code));
+        });
+      }
+
+      renderTable(result,kind,headers);
     }
-
-    renderTable(result, kind);
-  }
-
-  document.getElementById('reloadBtn').onclick = () => location.reload();
-
-  ['Maritimo','Aereo','Compra'].forEach(k=>{
-    const el=document.getElementById(`search${k}`);
-    el.addEventListener('keydown', e=>{
-      if(e.key==='Enter') searchTracking(k);
-    });
-  });
-</script>
