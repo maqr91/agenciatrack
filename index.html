@@ -25,7 +25,7 @@
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:var(--blanco);
       position:relative;
-      padding:55px 20px 50px;
+      padding:45px 20px 65px;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
       text-align:center;
     }
@@ -40,27 +40,31 @@
     .flag-left{left:25px;}
     .flag-right{right:25px;}
 
-    /* Logos añadidos */
-    .logo-extra-left, .logo-extra-right{
-      position:absolute;
-      top:110px;
+    /* LOGOS A LOS LADOS DEL TEXTO */
+    .brand-wrapper{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:40px;
+      margin-top:10px;
+      position:relative;
+    }
+
+    .logo-side{
       width:120px;
       height:auto;
       border-radius:10px;
-      box-shadow:0 3px 8px rgba(0,0,0,.3);
       background:white;
-      padding:4px;
+      padding:6px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.3);
     }
 
-    .logo-extra-left{left:25px;}
-    .logo-extra-right{right:25px;}
-
     .logo svg{
-      max-width:480px;
-      width:90%;
+      width:380px;
       height:auto;
     }
 
+    /* Contenedor general */
     .container{
       max-width:900px;
       margin:40px auto;
@@ -96,81 +100,34 @@
       align-items:center;
     }
 
-    .input{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      border:1px solid var(--gris2);
-      border-radius:8px;
-      padding:8px 10px;
-      background:var(--blanco);
-    }
-
-    .input input{
-      width:100%;
-      border:none;
-      outline:none;
-      font-size:14px;
-    }
+    .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
+    .input input{width:100%;border:none;outline:none;font-size:14px;}
 
     .btn{
-      border:none;
-      background:var(--amarilloPálido);
-      color:#1f2937;
-      padding:8px 12px;
-      font-weight:700;
-      border-radius:10px;
-      cursor:pointer;
-      font-size:14px;
+      border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;
+      font-weight:700;border-radius:10px;cursor:pointer;font-size:14px;
     }
+    .btn:hover{background:var(--amarilloPálidoHover);}
 
-    .btn:hover{
-      background:var(--amarilloPálidoHover);
-    }
-
-    .table-wrap{
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-    }
-
+    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
     table{width:100%;border-collapse:collapse;min-width:620px;}
-    th,td{
-      padding:8px 10px;
-      border-bottom:1px solid var(--gris2);
-      font-size:13px;
-    }
-
+    th,td{padding:8px 10px;border-bottom:1px solid var(--gris2);font-size:13px;}
     tbody tr:hover{background:#f9fafb;}
 
-    .empty{
-      padding:16px;
-      text-align:center;
-      color:#64748b;
-      font-size:13px;
-    }
-
-    .meta{
-      font-size:12px;
-      color:#475569;
-      margin-left:auto;
-    }
+    .empty{text-align:center;color:#64748b;padding:16px;}
+    .meta{font-size:12px;text-align:right;padding-right:10px;color:#475569;}
 
     .view-btn{
       background:var(--celesteTxt);
-      color:#fff;
-      border:none;
+      color:white;
       padding:7px 12px;
       border-radius:8px;
+      border:none;
       cursor:pointer;
       font-size:12px;
       font-weight:800;
-      transition:all .25s ease;
     }
-
-    .view-btn:hover{
-      background:#0284c7;
-      transform:scale(1.05);
-    }
+    .view-btn:hover{background:#0284c7;}
 
     .status-pill{
       padding:4px 10px;
@@ -180,11 +137,7 @@
       font-weight:800;
     }
 
-    .footer-btn{
-      margin:30px auto;
-      text-align:center;
-    }
-
+    .footer-btn{text-align:center;margin:30px;}
     .btn-refresh{
       background:var(--celesteTxt);
       color:#fff;
@@ -194,13 +147,8 @@
       border-radius:12px;
       cursor:pointer;
       font-size:14px;
-      transition:all .25s ease;
     }
-
-    .btn-refresh:hover{
-      background:#0ea5e9;
-      transform:scale(1.05);
-    }
+    .btn-refresh:hover{background:#0ea5e9;}
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -214,39 +162,45 @@
     <img class="flag-left" src="https://flagcdn.com/us.svg">
     <img class="flag-right" src="https://flagcdn.com/ni.svg">
 
-    <!-- Logos añadidos -->
-    <img class="logo-extra-left"
-         src="https://drive.google.com/uc?export=view&id=1ES2J36OGKg5jyx3gVwwS9kQVu-1vF8Po">
+    <!-- WRAPPER CENTRAL CON LOGOS A LOS LADOS -->
+    <div class="brand-wrapper">
 
-    <img class="logo-extra-right"
-         src="https://drive.google.com/uc?export=view&id=1Y7iPVTZV-UgJcN0nVI1HqR7kddVEMULB">
+      <!-- Logo izquierdo -->
+      <img class="logo-side"
+           src="https://drive.google.com/uc?export=view&id=1ES2J36OGKg5jyx3gVwwS9kQVu-1vF8Po">
 
-    <!-- LOGO CENTRAL -->
-    <div class="logo">
-      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="g" x1="0" x2="1">
-            <stop offset="0" stop-color="#38bdf8"/>
-            <stop offset="1" stop-color="#1e3a8a"/>
-          </linearGradient>
-        </defs>
-        <g font-family="Inter" text-anchor="middle">
-          <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
-            MiR<tspan fill="#fde68a">CargoTrack</tspan>
-          </text>
-          <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
-            <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
-          </path>
-        </g>
-      </svg>
+      <!-- LOGO CENTRAL MiRCargoTrack -->
+      <div class="logo">
+        <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#38bdf8"/>
+              <stop offset="1" stop-color="#1e3a8a"/>
+            </linearGradient>
+          </defs>
+          <g font-family="Inter" text-anchor="middle">
+            <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
+              MiR<tspan fill="#fde68a">CargoTrack</tspan>
+            </text>
+            <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+            </path>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Logo derecho -->
+      <img class="logo-side"
+           src="https://drive.google.com/uc?export=view&id=1Y7iPVTZV-UgJcN0nVI1HqR7kddVEMULB">
+
     </div>
 
   </header>
 
   <main class="container">
 
-    <!-- MARITIMO -->
-    <section class="card" id="cardMaritimo">
+    <!-- MARÍTIMO -->
+    <section class="card">
       <div class="card-title">🚢 Rastreo Marítimo</div>
       <div class="card-header">
         <div class="input">
@@ -261,11 +215,11 @@
           <tbody id="tbodyMaritimo"></tbody>
         </table>
       </div>
-      <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
+      <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número.</div>
     </section>
 
     <!-- AÉREO -->
-    <section class="card" id="cardAereo">
+    <section class="card">
       <div class="card-title">✈️ Rastreo Aéreo</div>
       <div class="card-header">
         <div class="input">
@@ -280,11 +234,11 @@
           <tbody id="tbodyAereo"></tbody>
         </table>
       </div>
-      <div id="emptyAereo" class="empty" style="display:none;">❌ No encontramos ese número de rastreo.</div>
+      <div id="emptyAereo" class="empty" style="display:none;">❌ No encontramos ese número.</div>
     </section>
 
-    <!-- COMPRAS -->
-    <section class="card" id="cardCompra">
+    <!-- COMPRAS EN LÍNEA -->
+    <section class="card">
       <div class="card-title">🛍️ Rastreo de compras en línea</div>
       <div class="card-header">
         <div class="input">
@@ -308,7 +262,6 @@
 
   </main>
 
-  <!-- 🔥 JAVASCRIPT FUNCIONAL -->
   <script>
 
     const urls = {
@@ -342,72 +295,54 @@
     }
 
     function renderTable(data, tipo){
-      const thead = document.getElementById(`thead${tipo}`);
-      const tbody = document.getElementById(`tbody${tipo}`);
-      const empty = document.getElementById(`empty${tipo}`);
-      const meta  = document.getElementById(`meta${tipo}`);
+      const thead=document.getElementById(`thead${tipo}`);
+      const tbody=document.getElementById(`tbody${tipo}`);
+      const empty=document.getElementById(`empty${tipo}`);
+      const meta=document.getElementById(`meta${tipo}`);
 
-      thead.innerHTML = '';
-      tbody.innerHTML = '';
+      thead.innerHTML=''; tbody.innerHTML='';
 
       if(!data.length){
-        empty.style.display = 'block';
-        meta.textContent = '';
+        empty.style.display='block';
+        meta.textContent='';
         return;
       }
-      empty.style.display = 'none';
+      empty.style.display='none';
 
-      let columnas;
+      let columnas = tipo==='Compra'
+        ? ['Fecha','Tracking','Nombre','Foto','Agente']
+        : ['Fecha','Status','Foto','Firma','Agente'];
 
-      if(tipo === 'Compra'){
-        columnas = ['Fecha','Tracking','Nombre','Foto','Agente'];
-      } else {
-        columnas = ['Fecha','Status','Foto','Firma','Agente'];
-      }
-
-      const trHead = document.createElement('tr');
-      columnas.forEach(h=>{
+      const thRow=document.createElement('tr');
+      columnas.forEach(c=>{
         const th=document.createElement('th');
-        th.textContent = h === 'Tracking' ? 'Tracking #' : h;
-        trHead.appendChild(th);
+        th.textContent=c==='Tracking'?'Tracking #':c;
+        thRow.appendChild(th);
       });
-      thead.appendChild(trHead);
+      thead.appendChild(thRow);
 
       data.forEach(row=>{
         const tr=document.createElement('tr');
 
-        const fecha  = safe(row,['Fecha','FECHA']);
-        const track  = safe(row,['Tracking','Tracking #','Orden','ORDEN']);
-        const status = safe(row,['Status','STATUS']);
-        const nombre = safe(row,['Nombre','Cliente']);
-        const agente = safe(row,['Agente','AGENTE','Recibido por','Usuario']);
+        const fecha=safe(row,['Fecha','FECHA']);
+        const track=safe(row,['Tracking','Tracking #','Orden','ORDEN']);
+        const status=safe(row,['Status','STATUS']);
+        const nombre=safe(row,['Nombre','Cliente']);
+        const agente=safe(row,['Agente','AGENTE','Usuario']);
 
-        const foto   = normalizeImageUrl(safe(row,['Web url','Web URL']));
-        const firma  = normalizeImageUrl(safe(row,['Firma url','Firma URL']));
+        const foto=normalizeImageUrl(safe(row,['Web url','Web URL']));
+        const firma=normalizeImageUrl(safe(row,['Firma url','Firma URL']));
 
         columnas.forEach(col=>{
           const td=document.createElement('td');
 
-          if(col==='Fecha') td.textContent = fecha;
-          else if(col==='Tracking') td.textContent = track;
-          else if(col==='Nombre') td.textContent = nombre;
-          else if(col==='Agente') td.textContent = agente;
-
-          else if(col==='Status'){
-            td.innerHTML = status ? `<span class="status-pill">${status}</span>` : '';
-          }
-
-          else if(col==='Foto'){
-            td.innerHTML = foto
-              ? `<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>`
-              : '';
-          }
-
-          else if(col==='Firma'){
-            td.innerHTML = firma
-              ? `<button class="view-btn" onclick="window.open('${firma}','_blank')">✍️ Ver firma</button>`
-              : '';
-          }
+          if(col==='Fecha') td.textContent=fecha;
+          else if(col==='Tracking') td.textContent=track;
+          else if(col==='Nombre') td.textContent=nombre;
+          else if(col==='Agente') td.textContent=agente;
+          else if(col==='Status') td.innerHTML=status?`<span class="status-pill">${status}</span>`:'';
+          else if(col==='Foto') td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>`:'';
+          else if(col==='Firma') td.innerHTML=firma?`<button class="view-btn" onclick="window.open('${firma}')">✍️ Ver firma</button>`:'';
 
           tr.appendChild(td);
         });
@@ -415,16 +350,16 @@
         tbody.appendChild(tr);
       });
 
-      meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
+      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
     }
 
     async function searchTracking(tipo){
-      const input = document.getElementById(`search${tipo}`);
-      const code = input.value.trim().toLowerCase();
+      const input=document.getElementById(`search${tipo}`);
+      const code=input.value.trim().toLowerCase();
       if(!code) return;
 
       let urlsToFetch = Array.isArray(urls[tipo]) ? urls[tipo] : [urls[tipo]];
-      let allData = [];
+      let allData=[];
 
       for(const u of urlsToFetch){
         await new Promise(resolve=>{
@@ -433,33 +368,33 @@
             header:true,
             skipEmptyLines:true,
             complete:res=>{
-              allData = allData.concat(res.data || []);
+              allData = allData.concat(res.data);
               resolve();
-            },
-            error:()=>resolve()
+            }
           });
         });
       }
 
       let result = allData.filter(r=>{
-        const track = safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
-        const nombre= safe(r,['Nombre','Cliente']).toLowerCase();
+        const track=safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
+        const nombre=safe(r,['Nombre','Cliente']).toLowerCase();
         return track.includes(code) || nombre.includes(code);
       });
 
       renderTable(result, tipo);
     }
 
-    document.getElementById('reloadBtn').onclick = () => location.reload();
+    document.getElementById('reloadBtn').onclick=()=>location.reload();
 
     ['Maritimo','Aereo','Compra'].forEach(t=>{
       document.getElementById(`search${t}`)
-      .addEventListener('keydown', e=>{
-        if(e.key==='Enter') searchTracking(t);
-      });
+        .addEventListener('keydown',e=>{
+          if(e.key==='Enter') searchTracking(t);
+        });
     });
 
   </script>
 
 </body>
 </html>
+
