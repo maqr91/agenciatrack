@@ -21,44 +21,50 @@
       background:var(--gris);
     }
 
+    /* === ENCABEZADO AZUL (REDUCIDO) === */
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:#fff;
-      padding:35px 12px 40px;
+      padding:25px 12px 28px; /* MÁS PEQUEÑO */
       text-align:center;
       position:relative;
       box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
 
-    /* Reducimos encabezado en computadora */
+    /* Encabezado aún más pequeño en computadoras */
     @media (min-width:1024px){
       header{
-        padding:25px 12px 30px !important;
+        padding:18px 12px 20px !important; /* LA MITAD DE LO QUE TENÍAS */
       }
       .logo svg text{
-        font-size:40px !important;
+        font-size:34px !important; /* Más pequeño para caber sin empujar */
       }
     }
 
+    /* === BANDERAS MÁS GRANDES === */
     .flag-left, .flag-right{
       position:absolute;
-      top:15px;
-      width:70px;
+      top:12px;
+      width:86px;   /* MÁS GRANDE */
       border-radius:6px;
       box-shadow:0 0 6px rgba(0,0,0,.4);
     }
     .flag-left{ left:10px; }
     .flag-right{ right:10px; }
 
+    @media (max-width:600px){
+      .flag-left, .flag-right{
+        width:70px; /* MÁS GRANDE TAMBIÉN EN MÓVIL */
+      }
+    }
+
     .logo svg{
-      max-width:82%;
+      max-width:80%;
       height:auto;
     }
 
     @media (max-width:600px){
       header{ padding-top:55px; }
-      .flag-left { width:55px; left:8px; }
-      .flag-right{ width:55px; right:8px; }
     }
 
     .container{
@@ -194,7 +200,7 @@
         </linearGradient>
       </defs>
       <g font-family="Inter" text-anchor="middle">
-        <text x="260" y="58" font-size="52" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
+        <text x="260" y="58" font-size="50" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
           MiR<tspan fill="#fde68a">CargoTrack</tspan>
         </text>
         <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.8">
@@ -253,7 +259,7 @@
     </div>
   </section>
 
-  <!-- COMPRAS EN LÍNEA -->
+  <!-- COMPRAS -->
   <section class="card">
     <div class="card-title">🛍️ Rastreo de compras en línea</div>
 
@@ -294,7 +300,7 @@ const urls = {
     'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
   ],
   Compra:
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4ग2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
 };
 
 function normalizeImageUrl(url){
@@ -381,7 +387,6 @@ function renderTable(data, type){
 
     tbody.appendChild(tr);
   });
-
 }
 
 async function searchTracking(type){
