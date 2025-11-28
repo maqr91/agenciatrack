@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MIRCARGOTRACK | Rastreo</title>
+  <title>MiRCargoTrack | Rastreo</title>
+
   <style>
     :root{
       --azulClaro:#38bdf8; --azulOscuro:#1e3a8a;
@@ -13,10 +14,13 @@
       --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
     }
 
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--texto);background:var(--gris);}
-    header{background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));color:var(--blanco);position:relative;padding:35px 20px 45px;box-shadow:0 2px 8px rgba(0,0,0,.25);text-align:center;}
-    .flag-left, .flag-right{position:absolute;top:18px;width:85px;height:auto;border-radius:6px;box-shadow:0 0 6px rgba(0,0,0,.4);}
-    .flag-left{left:25px;} .flag-right{right:25px;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--texto);
+      background:var(--gris);
+    }
+
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:var(--blanco);
@@ -37,14 +41,115 @@
     .flag-left{left:25px;}
     .flag-right{right:25px;}
 
-    .logo svg{max-width:480px;width:90%;height:auto;}
-    .container{max-width:900px;margin:24px auto;padding:0 12px;display:flex;flex-direction:column;gap:14px;}
-    .card{background:var(--blanco);border:1px solid var(--gris2);border-radius:12px;box-shadow:0 3px 12px rgba(2,6,23,.06);overflow:hidden;}
-@@ -31,8 +49,21 @@
-    tbody tr:hover{background:#f9fafb;}
-    .empty{padding:16px;text-align:center;color:#64748b;font-size:13px;line-height:1.4;}
-    .meta{font-size:12px;color:#475569;margin-left:auto;}
-    .view-btn{background:var(--celesteTxt);color:#fff;border:none;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:800;box-shadow:0 1px 3px rgba(0,0,0,.15);transition:all .25s ease;}
+    .logo svg{
+      max-width:480px;
+      width:90%;
+      height:auto;
+    }
+
+    .container{
+      max-width:900px;
+      margin:24px auto;
+      padding:0 12px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .card{
+      background:var(--blanco);
+      border:1px solid var(--gris2);
+      border-radius:12px;
+      box-shadow:0 3px 12px rgba(2,6,23,.06);
+      overflow:hidden;
+    }
+
+    .card-title{
+      padding:10px 12px;
+      font-weight:800;
+      color:var(--texto);
+      border-bottom:1px solid var(--gris2);
+      background:#fafafa;
+      font-size:16px;
+    }
+
+    .card-header{
+      padding:10px 12px;
+      border-bottom:1px solid var(--gris2);
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:8px;
+      align-items:center;
+    }
+
+    .input{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--gris2);
+      border-radius:8px;
+      padding:8px 10px;
+      background:var(--blanco);
+    }
+
+    .input input{
+      width:100%;
+      border:none;
+      outline:none;
+      font-size:14px;
+    }
+
+    .btn{
+      border:none;
+      background:var(--amarilloPálido);
+      color:#1f2937;
+      padding:8px 12px;
+      font-weight:700;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .btn:hover{
+      background:var(--amarilloPálidoHover);
+    }
+
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:620px;
+    }
+
+    th,td{
+      padding:8px 10px;
+      border-bottom:1px solid var(--gris2);
+      text-align:left;
+      font-size:13px;
+      vertical-align:middle;
+    }
+
+    tbody tr:hover{
+      background:#f9fafb;
+    }
+
+    .empty{
+      padding:16px;
+      text-align:center;
+      color:#64748b;
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    .meta{
+      font-size:12px;
+      color:#475569;
+      margin-left:auto;
+    }
 
     .view-btn{
       background:var(--celesteTxt);
@@ -58,100 +163,339 @@
       box-shadow:0 1px 3px rgba(0,0,0,.15);
       transition:all .25s ease;
     }
-    .view-btn:hover{background:#0284c7;transform:scale(1.05);}
-    .status-pill{display:inline-block;padding:4px 10px;border-radius:9999px;background:var(--celesteBg);color:var(--celesteTxt);font-weight:800;line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.06);}
-    .footer-btn{margin:30px auto;text-align:center;}
-    .btn-refresh{background:var(--celesteTxt);color:#fff;border:none;padding:10px 26px;font-weight:800;border-radius:12px;cursor:pointer;font-size:14px;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:all .25s ease;}
-    .btn-refresh:hover{background:#0ea5e9;transform:scale(1.05);}
-@@ -46,7 +77,8 @@
+
+    .view-btn:hover{
+      background:#0284c7;
+      transform:scale(1.05);
+    }
+
+    .status-pill{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:9999px;
+      background:var(--celesteBg);
+      color:var(--celesteTxt);
+      font-weight:800;
+      line-height:1;
+      box-shadow:0 1px 0 rgba(0,0,0,.06);
+    }
+
+    .footer-btn{
+      margin:30px auto;
+      text-align:center;
+    }
+
+    .btn-refresh{
+      background:var(--celesteTxt);
+      color:#fff;
+      border:none;
+      padding:10px 26px;
+      font-weight:800;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:14px;
+      box-shadow:0 2px 6px rgba(0,0,0,.2);
+      transition:all .25s ease;
+    }
+
+    .btn-refresh:hover{
+      background:#0ea5e9;
+      transform:scale(1.05);
+    }
+  </style>
+
+  <!-- PapaParse para leer los CSV publicados de Google Sheets -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <img class="flag-left" src="https://flagcdn.com/us.svg" alt="USA">
     <img class="flag-right" src="https://flagcdn.com/ni.svg" alt="Nicaragua">
+
     <div class="logo">
-      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MIRCARGOTRACK logo">
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#1e3a8a"/></linearGradient></defs>
+      <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MiRCargoTrack logo">
+        <defs>
+          <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#38bdf8"/>
+            <stop offset="1" stop-color="#1e3a8a"/>
+          </linearGradient>
+        </defs>
         <g font-family="Inter, system-ui, Segoe UI, Roboto, Arial" text-anchor="middle">
           <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
-            MIRCARGO<tspan fill="#fde68a">TRACK</tspan>
-@@ -121,18 +153,20 @@
+            MiR<tspan fill="#fde68a">CargoTrack</tspan>
+          </text>
+          <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+          </path>
+        </g>
+      </svg>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Marítimo -->
+    <section class="card" id="cardMaritimo">
+      <div class="card-title">🚢 Rastreo Marítimo (Contenedor y Entregas)</div>
+      <div class="card-header">
+        <div class="input">
+          <input id="searchMaritimo" placeholder="Número de rastreo (Marítimo / Entrega Marítimo)" />
+        </div>
+        <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
+        <div id="metaMaritimo" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadMaritimo"></thead>
+          <tbody id="tbodyMaritimo"></tbody>
+        </table>
+      </div>
+      <div id="emptyMaritimo" class="empty" style="display:none;">
+        ❌ No encontramos ese número de rastreo.
+      </div>
+    </section>
+
+    <!-- Aéreo -->
+    <section class="card" id="cardAereo">
+      <div class="card-title">✈️ Rastreo Aéreo (Encomiendas y Entregas)</div>
+      <div class="card-header">
+        <div class="input">
+          <input id="searchAereo" placeholder="Número de rastreo (Aéreo / Entrega Aéreo)" />
+        </div>
+        <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
+        <div id="metaAereo" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadAereo"></thead>
+          <tbody id="tbodyAereo"></tbody>
+        </table>
+      </div>
+      <div id="emptyAereo" class="empty" style="display:none;">
+        ❌ No encontramos ese número de rastreo.
+      </div>
+    </section>
+
+    <!-- Compras en línea -->
+    <section class="card" id="cardCompra">
+      <div class="card-title">🛍️ Rastreo de compras en línea</div>
+      <div class="card-header">
+        <div class="input">
+          <input id="searchCompra" placeholder="Nombre o número de tracking" />
+        </div>
+        <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
+        <div id="metaCompra" class="meta"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead id="theadCompra"></thead>
+          <tbody id="tbodyCompra"></tbody>
+        </table>
+      </div>
+      <div id="emptyCompra" class="empty" style="display:none;">
+        ⚠️ Ese número puede estar equivocado o aún no se ha recibido.
+      </div>
+    </section>
+
+    <div class="footer-btn">
+      <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
+    </div>
+  </main>
+
+  <script>
+    // URLs CSV publicados desde tu documento 1492LGo6...
+    const urls = {
+      Maritimo: [
+        // Contenedor
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',
+        // Entregas Contenedor
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv'
+      ],
+      Aereo: [
+        // Encomiendas Aéreas
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',
+        // Entregas Aéreas
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
+      ],
+      Compra:
+        // Correo / compras en línea
+        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
+    };
+
+    function normalizeImageUrl(url){
+      if(!url) return '';
+      url = url.trim();
+
+      // ?id=xxx
+      let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+
+      // /file/d/xxx/
+      m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+
       return url;
     }
 
-    function cleanKey(k){return k.replace(/\s+/g,'').replace(/[^\w]/g,'').toLowerCase();}
+    // Helper para leer diferentes nombres de la misma columna
+    function safe(row, keys){
+      for(const k of keys){
+        if(row[k] !== undefined && row[k] !== null && row[k] !== '') return row[k];
+      }
+      return '';
+    }
 
-    function renderTable(data,prefix,headers){
-      const thead=document.getElementById(`thead${prefix}`),tbody=document.getElementById(`tbody${prefix}`),empty=document.getElementById(`empty${prefix}`),meta=document.getElementById(`meta${prefix}`);
-      const thead=document.getElementById(`thead${prefix}`);
-      const tbody=document.getElementById(`tbody${prefix}`);
-      const empty=document.getElementById(`empty${prefix}`);
-      const meta=document.getElementById(`meta${prefix}`);
-      thead.innerHTML='';tbody.innerHTML='';
-      if(!data.length){empty.style.display='block';meta.textContent='';return;}
-      empty.style.display='none';
+    function renderTable(data, tipo){
+      const thead = document.getElementById(`thead${tipo}`);
+      const tbody = document.getElementById(`tbody${tipo}`);
+      const empty = document.getElementById(`empty${tipo}`);
+      const meta  = document.getElementById(`meta${tipo}`);
 
-      const headersFiltrados=headers.filter(h=>{
-        const key=cleanKey(h);
-        if(key==='id')return false;
-        if(key.includes('foto')&&!key.includes('linkfoto'))return false;
-      // 🔒 Omitir columna ID y la columna FOTO (si no es LINK_FOTO)
-      const headersFiltrados = headers.filter(h=>{
-        const hl = String(h).trim().toLowerCase();
-        if(hl === 'id') return false;
-        if(hl.includes('foto') && !hl.includes('link_foto')) return false;
-        return true;
+      thead.innerHTML = '';
+      tbody.innerHTML = '';
+
+      if(!data.length){
+        empty.style.display = 'block';
+        meta.textContent = '';
+        return;
+      }
+      empty.style.display = 'none';
+
+      let columnas;
+
+      if(tipo === 'Compra'){
+        // Para compras en línea:
+        // Fecha, Tracking #, Nombre, Web url (como "Ver foto"), Agente
+        columnas = ['Fecha','Tracking','Nombre','Foto','Agente'];
+      } else {
+        // Para Marítimo y Aéreo:
+        // Fecha, Status, Web url (foto), Firma url (firma), Agente
+        columnas = ['Fecha','Status','Foto','Firma','Agente'];
+      }
+
+      // Encabezado
+      const trHead = document.createElement('tr');
+      columnas.forEach(nombre=>{
+        const th = document.createElement('th');
+        if(nombre === 'Tracking') th.textContent = 'Tracking #';
+        else if(nombre === 'Foto') th.textContent = 'Web url';
+        else th.textContent = nombre;
+        trHead.appendChild(th);
       });
+      thead.appendChild(trHead);
 
-@@ -143,16 +177,16 @@
+      // Filas
       data.forEach(row=>{
-        const tr=document.createElement('tr');
-        headersFiltrados.forEach(h=>{
-          const val=row[h]??row[h.trim()]??'';
-          const td=document.createElement('td');
-          if(cleanKey(h).includes('linkfoto')&&val){
-          const val=row[h]??'';const td=document.createElement('td');
-          if(String(h).toLowerCase().includes('link_foto')&&val){
-            const imgUrl=normalizeImageUrl(val);
-            td.innerHTML=`<button class="view-btn" onclick="window.open('${imgUrl}','_blank')">📷 Ver foto</button>`;
-          }else td.textContent=val;
+        const tr = document.createElement('tr');
+
+        const fecha   = safe(row,['Fecha','FECHA']);
+        const tracking= safe(row,['Tracking #','Tracking','TRACKING','Orden','ORDEN']);
+        const status  = safe(row,['Status','STATUS']);
+        const nombre  = safe(row,['Nombre','NOMBRE','Cliente','CLIENTE']);
+        const agente  = safe(row,['Agente','AGENTE','Recibido por','RECIBIDO POR','Usuario','USUARIO']);
+
+        const webUrl   = normalizeImageUrl(safe(row,['Web url','Web URL','WEB URL']));
+        const firmaUrl = normalizeImageUrl(safe(row,['Firma url','Firma URL','FIRMA URL']));
+
+        columnas.forEach(col=>{
+          const td = document.createElement('td');
+
+          if(col === 'Fecha'){
+            td.textContent = fecha;
+
+          } else if(col === 'Tracking'){
+            td.textContent = tracking;
+
+          } else if(col === 'Nombre'){
+            td.textContent = nombre;
+
+          } else if(col === 'Agente'){
+            td.textContent = agente;
+
+          } else if(col === 'Status'){
+            td.innerHTML = status
+              ? `<span class="status-pill">${status}</span>`
+              : '';
+
+          } else if(col === 'Foto'){
+            // Usamos Web url como "Ver foto"
+            if(webUrl){
+              td.innerHTML = `<button class="view-btn" onclick="window.open('${webUrl}','_blank')">📷 Ver foto</button>`;
+            } else {
+              td.textContent = '';
+            }
+
+          } else if(col === 'Firma'){
+            if(firmaUrl){
+              td.innerHTML = `<button class="view-btn" onclick="window.open('${firmaUrl}','_blank')">✍️ Ver firma</button>`;
+            } else {
+              td.textContent = '';
+            }
+          }
+
           tr.appendChild(td);
         });
+
         tbody.appendChild(tr);
       });
 
-      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
+      meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
     }
 
-@@ -169,27 +203,28 @@
-          Papa.parse(u+'&t='+Date.now(),{
-            download:true,header:true,skipEmptyLines:true,
+    async function searchTracking(tipo){
+      const input = document.getElementById(`search${tipo}`);
+      const code = input.value.trim().toLowerCase();
+      if(!code) return;
+
+      let urlsToFetch = Array.isArray(urls[tipo]) ? urls[tipo] : [urls[tipo]];
+      let allData = [];
+
+      // Cargar todas las hojas del tipo (Marítimo, Aéreo, Compra)
+      for(const u of urlsToFetch){
+        await new Promise(resolve=>{
+          Papa.parse(u + '&t=' + Date.now(), {
+            download:true,
+            header:true,
+            skipEmptyLines:true,
             complete:res=>{
-              allData=allData.concat(res.data||[]);
-              allData = allData.concat(res.data||[]);
+              allData = allData.concat(res.data || []);
               resolve();
-            },error:()=>resolve()
+            },
+            error:()=>resolve()
           });
         });
       }
 
-      const headers=Object.keys(allData[0]||{});
-      const headers = Object.keys(allData[0]||{});
       let result;
 
-      if(kind==='Maritimo'||kind==='Aereo'){
-        result=allData.filter(r=>{
-          const orden=(r['ORDEN']||r['Orden']||'').toLowerCase();
+      if(tipo === 'Maritimo' || tipo === 'Aereo'){
+        // Buscar por tracking/orden
         result = allData.filter(r=>{
-          const orden = (r['ORDEN']||'').toLowerCase();
-          return orden.includes(code);
+          const codeRow = safe(r,['Tracking #','Tracking','TRACKING','Orden','ORDEN']).toLowerCase();
+          return codeRow.includes(code);
         });
-      }else{
-        result=allData.filter(r=>{
       } else {
+        // Compra: buscar por tracking o nombre
         result = allData.filter(r=>{
-          const vals=Object.values(r).map(v=>String(v).toLowerCase());
-          return vals.some(v=>v.includes(code));
+          const codeRow = safe(r,['Tracking #','Tracking','TRACKING','Orden','ORDEN']).toLowerCase();
+          const nombre  = safe(r,['Nombre','NOMBRE','Cliente','CLIENTE']).toLowerCase();
+          return codeRow.includes(code) || nombre.includes(code);
         });
       }
 
-      renderTable(result,kind,headers);
+      renderTable(result, tipo);
     }
+
+    // Botón de recargar
+    document.getElementById('reloadBtn').onclick = () => location.reload();
+
+    // Buscar con Enter
+    ['Maritimo','Aereo','Compra'].forEach(tipo=>{
+      const el = document.getElementById(`search${tipo}`);
+      el.addEventListener('keydown', e=>{
+        if(e.key === 'Enter') searchTracking(tipo);
+      });
+    });
+  </script>
+</body>
+</html>
