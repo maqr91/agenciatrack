@@ -16,7 +16,6 @@
     --amarillo: #fde68a;
     --amarillo2: #fcd34d;
     --celesteTxt:#0ea5e9;
-    --celesteBg:#e0f2fe;
   }
 
   body {
@@ -29,7 +28,7 @@
   /* HEADER */
   header {
     background: linear-gradient(90deg, var(--azul1), var(--azul2));
-    padding: 30px 10px 40px;
+    padding: 35px 10px 45px;
     text-align: center;
     color: white;
     position: relative;
@@ -37,7 +36,7 @@
   }
 
   .flag {
-    width: 75px;
+    width: 70px;
     position: absolute;
     top: 18px;
     border-radius: 6px;
@@ -47,27 +46,31 @@
   .flag-left { left: 15px; }
   .flag-right { right: 15px; }
 
-  /* TÍTULO */
+  /* ------------------------------ */
+  /*   TÍTULO RESPONSIVE REAL       */
+  /* ------------------------------ */
+
+  /* CELULAR → pequeño */
   .title {
-    font-size: 46px;           /* tamaño grande para móviles */
+    font-size: 28px;
     font-weight: 900;
     font-style: italic;
     letter-spacing: 1px;
-    text-shadow: 0 3px 5px rgba(0,0,0,.25);
     margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,.25);
   }
 
-  /* Tablets */
+  /* TABLET → mediano */
   @media (min-width: 600px) {
     .title {
-      font-size: 52px;
+      font-size: 40px;
     }
   }
 
-  /* Computadoras y laptops */
+  /* COMPUTADORA → grande */
   @media (min-width: 1024px) {
     .title {
-      font-size: 32px !important;   /* más pequeño en web */
+      font-size: 58px !important;
     }
   }
 
@@ -131,6 +134,7 @@
     border-radius: 12px;
     font-size: 15px;
   }
+
 </style>
 </head>
 
@@ -169,7 +173,7 @@
     <div id="aereoResultados"></div>
   </div>
 
-  <!-- COMPRAS EN LÍNEA -->
+  <!-- COMPRAS -->
   <div class="card">
     <div class="card-title">🛍️ Rastreo de compras en línea</div>
 
