@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>MiRCargoTrack | Rastreo</title>
 
   <style>
@@ -11,7 +11,7 @@
       --celesteTxt:#0ea5e9; --celesteBg:#e0f2fe;
       --gris:#f1f5f9; --gris2:#e2e8f0;
       --blanco:#ffffff; --texto:#0f172a;
-      --amarilloPálido:#fde68a; --amarilloPálidoHover:#fcd34d;
+      --amarilloPálido:#fde68a; --amarilloHover:#fcd34d;
     }
 
     body{
@@ -23,132 +23,148 @@
 
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
-      color:var(--blanco);
-      position:relative;
-      padding:45px 20px 65px;
-      box-shadow:0 2px 8px rgba(0,0,0,.25);
+      color:#fff;
+      padding:35px 12px 50px;
       text-align:center;
+      position:relative;
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
 
     .flag-left, .flag-right{
       position:absolute;
-      top:18px;
-      width:85px;
+      top:15px;
+      width:70px;
       border-radius:6px;
       box-shadow:0 0 6px rgba(0,0,0,.4);
     }
-    .flag-left{left:25px;}
-    .flag-right{right:25px;}
+    .flag-left{ left:10px; }
+    .flag-right{ right:10px; }
 
-    /* LOGOS A LOS LADOS DEL TEXTO */
-    .brand-wrapper{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:40px;
-      margin-top:10px;
-      position:relative;
-    }
-
-    .logo-side{
-      width:120px;
-      height:auto;
-      border-radius:10px;
-      background:white;
-      padding:6px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.3);
-    }
-
+    /* Logo central */
     .logo svg{
-      width:380px;
+      max-width:85%;
       height:auto;
     }
 
-    /* Contenedor general */
+    /* MOBILE FIRST */
+    @media (max-width:600px){
+      header{ padding-top:50px; }
+      .flag-left { width:55px; left:8px; }
+      .flag-right{ width:55px; right:8px; }
+    }
+
     .container{
       max-width:900px;
-      margin:40px auto;
+      margin:20px auto;
       padding:0 12px;
       display:flex;
       flex-direction:column;
-      gap:14px;
+      gap:18px;
     }
 
     .card{
-      background:var(--blanco);
-      border:1px solid var(--gris2);
+      background:#fff;
       border-radius:12px;
-      box-shadow:0 3px 12px rgba(2,6,23,.06);
-      overflow:hidden;
+      border:1px solid var(--gris2);
+      box-shadow:0 3px 12px rgba(0,0,0,.08);
     }
 
     .card-title{
-      padding:10px 12px;
-      font-weight:800;
-      color:var(--texto);
-      border-bottom:1px solid var(--gris2);
+      padding:12px;
       background:#fafafa;
-      font-size:16px;
+      font-size:17px;
+      font-weight:800;
+      border-bottom:1px solid var(--gris2);
     }
 
     .card-header{
-      padding:10px 12px;
+      padding:10px;
       border-bottom:1px solid var(--gris2);
-      display:grid;
-      grid-template-columns:1fr auto auto;
-      gap:8px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
       align-items:center;
     }
 
-    .input{display:flex;align-items:center;gap:8px;border:1px solid var(--gris2);border-radius:8px;padding:8px 10px;background:var(--blanco);}
-    .input input{width:100%;border:none;outline:none;font-size:14px;}
+    .input{
+      flex:1;
+      display:flex;
+      align-items:center;
+      background:white;
+      border-radius:8px;
+      border:1px solid var(--gris2);
+      padding:8px 12px;
+    }
+
+    .input input{
+      border:none;
+      width:100%;
+      font-size:15px;
+      outline:none;
+    }
 
     .btn{
-      border:none;background:var(--amarilloPálido);color:#1f2937;padding:8px 12px;
-      font-weight:700;border-radius:10px;cursor:pointer;font-size:14px;
+      background:var(--amarilloPálido);
+      border:none;
+      padding:10px 14px;
+      border-radius:10px;
+      font-size:15px;
+      font-weight:700;
+      cursor:pointer;
     }
-    .btn:hover{background:var(--amarilloPálidoHover);}
+    .btn:hover{
+      background:var(--amarilloHover);
+    }
 
-    .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;}
-    table{width:100%;border-collapse:collapse;min-width:620px;}
-    th,td{padding:8px 10px;border-bottom:1px solid var(--gris2);font-size:13px;}
-    tbody tr:hover{background:#f9fafb;}
+    .table-wrap{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
 
-    .empty{text-align:center;color:#64748b;padding:16px;}
-    .meta{font-size:12px;text-align:right;padding-right:10px;color:#475569;}
+    table{
+      width:100%;
+      min-width:640px;
+      border-collapse:collapse;
+    }
+    th,td{
+      padding:10px;
+      border-bottom:1px solid var(--gris2);
+      font-size:14px;
+    }
+
+    .status-pill{
+      background:var(--celesteBg);
+      color:var(--celesteTxt);
+      padding:4px 10px;
+      border-radius:30px;
+      font-weight:700;
+    }
 
     .view-btn{
       background:var(--celesteTxt);
-      color:white;
-      padding:7px 12px;
+      color:#fff;
+      padding:6px 12px;
       border-radius:8px;
       border:none;
+      font-size:13px;
       cursor:pointer;
-      font-size:12px;
-      font-weight:800;
-    }
-    .view-btn:hover{background:#0284c7;}
-
-    .status-pill{
-      padding:4px 10px;
-      border-radius:9999px;
-      background:var(--celesteBg);
-      color:var(--celesteTxt);
-      font-weight:800;
     }
 
-    .footer-btn{text-align:center;margin:30px;}
+    .footer-btn{
+      text-align:center;
+      margin:25px;
+    }
+
     .btn-refresh{
       background:var(--celesteTxt);
       color:#fff;
       border:none;
-      padding:10px 26px;
+      padding:12px 26px;
       font-weight:800;
       border-radius:12px;
       cursor:pointer;
-      font-size:14px;
+      font-size:15px;
     }
-    .btn-refresh:hover{background:#0ea5e9;}
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -156,245 +172,240 @@
 
 <body>
 
-  <header>
+<header>
+  <!-- Banderas -->
+  <img class="flag-left" src="https://flagcdn.com/us.svg">
+  <img class="flag-right" src="https://flagcdn.com/ni.svg">
 
-    <!-- Banderas -->
-    <img class="flag-left" src="https://flagcdn.com/us.svg">
-    <img class="flag-right" src="https://flagcdn.com/ni.svg">
+  <!-- Logo central -->
+  <div class="logo">
+    <svg viewBox="0 0 520 120">
+      <defs>
+        <linearGradient id="g" x1="0" x2="1">
+          <stop offset="0" stop-color="#38bdf8"/>
+          <stop offset="1" stop-color="#1e3a8a"/>
+        </linearGradient>
+      </defs>
+      <g font-family="Inter" text-anchor="middle">
+        <text x="260" y="58" font-size="52" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
+          MiR<tspan fill="#fde68a">CargoTrack</tspan>
+        </text>
+        <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
+          <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+        </path>
+      </g>
+    </svg>
+  </div>
+</header>
 
-    <!-- WRAPPER CENTRAL CON LOGOS A LOS LADOS -->
-    <div class="brand-wrapper">
+<main class="container">
 
-      <!-- Logo izquierdo -->
-      <img class="logo-side"
-           src="https://drive.google.com/uc?export=view&id=1ES2J36OGKg5jyx3gVwwS9kQVu-1vF8Po">
+  <!-- MARÍTIMO -->
+  <section class="card">
+    <div class="card-title">🚢 Rastreo Marítimo</div>
 
-      <!-- LOGO CENTRAL MiRCargoTrack -->
-      <div class="logo">
-        <svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="g" x1="0" x2="1">
-              <stop offset="0" stop-color="#38bdf8"/>
-              <stop offset="1" stop-color="#1e3a8a"/>
-            </linearGradient>
-          </defs>
-          <g font-family="Inter" text-anchor="middle">
-            <text x="260" y="58" font-size="54" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
-              MiR<tspan fill="#fde68a">CargoTrack</tspan>
-            </text>
-            <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
-            </path>
-          </g>
-        </svg>
+    <div class="card-header">
+      <div class="input">
+        <input id="searchMaritimo" placeholder="Número de rastreo marítimo">
       </div>
-
-      <!-- Logo derecho -->
-      <img class="logo-side"
-           src="https://drive.google.com/uc?export=view&id=1Y7iPVTZV-UgJcN0nVI1HqR7kddVEMULB">
-
+      <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
     </div>
 
-  </header>
-
-  <main class="container">
-
-    <!-- MARÍTIMO -->
-    <section class="card">
-      <div class="card-title">🚢 Rastreo Marítimo</div>
-      <div class="card-header">
-        <div class="input">
-          <input id="searchMaritimo" placeholder="Número de rastreo marítimo" />
-        </div>
-        <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
-        <div id="metaMaritimo" class="meta"></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead id="theadMaritimo"></thead>
-          <tbody id="tbodyMaritimo"></tbody>
-        </table>
-      </div>
-      <div id="emptyMaritimo" class="empty" style="display:none;">❌ No encontramos ese número.</div>
-    </section>
-
-    <!-- AÉREO -->
-    <section class="card">
-      <div class="card-title">✈️ Rastreo Aéreo</div>
-      <div class="card-header">
-        <div class="input">
-          <input id="searchAereo" placeholder="Número de rastreo aéreo" />
-        </div>
-        <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
-        <div id="metaAereo" class="meta"></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead id="theadAereo"></thead>
-          <tbody id="tbodyAereo"></tbody>
-        </table>
-      </div>
-      <div id="emptyAereo" class="empty" style="display:none;">❌ No encontramos ese número.</div>
-    </section>
-
-    <!-- COMPRAS EN LÍNEA -->
-    <section class="card">
-      <div class="card-title">🛍️ Rastreo de compras en línea</div>
-      <div class="card-header">
-        <div class="input">
-          <input id="searchCompra" placeholder="Nombre o número de tracking" />
-        </div>
-        <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
-        <div id="metaCompra" class="meta"></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead id="theadCompra"></thead>
-          <tbody id="tbodyCompra"></tbody>
-        </table>
-      </div>
-      <div id="emptyCompra" class="empty" style="display:none;">⚠️ No se encontró esa compra.</div>
-    </section>
-
-    <div class="footer-btn">
-      <button id="reloadBtn" class="btn-refresh">🔄 Actualizar</button>
+    <div class="table-wrap">
+      <table>
+        <thead id="theadMaritimo"></thead>
+        <tbody id="tbodyMaritimo"></tbody>
+      </table>
     </div>
 
-  </main>
+    <div id="emptyMaritimo" class="empty" style="display:none; padding:14px; text-align:center;">
+      ❌ No encontramos ese número.
+    </div>
+  </section>
 
-  <script>
+  <!-- AÉREO -->
+  <section class="card">
+    <div class="card-title">✈️ Rastreo Aéreo</div>
 
-    const urls = {
-      Maritimo: [
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv'
-      ],
-      Aereo: [
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
-      ],
-      Compra:
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
-    };
+    <div class="card-header">
+      <div class="input">
+        <input id="searchAereo" placeholder="Número de rastreo aéreo">
+      </div>
+      <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
+    </div>
 
-    function normalizeImageUrl(url){
-      if(!url) return '';
-      url = url.trim();
-      let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-      m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
-      if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-      return url;
-    }
+    <div class="table-wrap">
+      <table>
+        <thead id="theadAereo"></thead>
+        <tbody id="tbodyAereo"></tbody>
+      </table>
+    </div>
 
-    function safe(r, arr){
-      for(const a of arr){
-        if(r[a]) return r[a];
-      }
-      return '';
-    }
+    <div id="emptyAereo" class="empty" style="display:none; padding:14px; text-align:center;">
+      ❌ No encontramos ese número.
+    </div>
+  </section>
 
-    function renderTable(data, tipo){
-      const thead=document.getElementById(`thead${tipo}`);
-      const tbody=document.getElementById(`tbody${tipo}`);
-      const empty=document.getElementById(`empty${tipo}`);
-      const meta=document.getElementById(`meta${tipo}`);
+  <!-- COMPRAS EN LÍNEA -->
+  <section class="card">
+    <div class="card-title">🛍️ Rastreo de compras en línea</div>
 
-      thead.innerHTML=''; tbody.innerHTML='';
+    <div class="card-header">
+      <div class="input">
+        <input id="searchCompra" placeholder="Nombre o número de tracking">
+      </div>
+      <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
+    </div>
 
-      if(!data.length){
-        empty.style.display='block';
-        meta.textContent='';
-        return;
-      }
-      empty.style.display='none';
+    <div class="table-wrap">
+      <table>
+        <thead id="theadCompra"></thead>
+        <tbody id="tbodyCompra"></tbody>
+      </table>
+    </div>
 
-      let columnas = tipo==='Compra'
-        ? ['Fecha','Tracking','Nombre','Foto','Agente']
-        : ['Fecha','Status','Foto','Firma','Agente'];
+    <div id="emptyCompra" class="empty" style="display:none; padding:14px; text-align:center;">
+      ⚠️ No se encontró esa compra.
+    </div>
+  </section>
 
-      const thRow=document.createElement('tr');
-      columnas.forEach(c=>{
-        const th=document.createElement('th');
-        th.textContent=c==='Tracking'?'Tracking #':c;
-        thRow.appendChild(th);
-      });
-      thead.appendChild(thRow);
+  <div class="footer-btn">
+    <button class="btn-refresh" onclick="location.reload()">🔄 Actualizar</button>
+  </div>
 
-      data.forEach(row=>{
-        const tr=document.createElement('tr');
+</main>
 
-        const fecha=safe(row,['Fecha','FECHA']);
-        const track=safe(row,['Tracking','Tracking #','Orden','ORDEN']);
-        const status=safe(row,['Status','STATUS']);
-        const nombre=safe(row,['Nombre','Cliente']);
-        const agente=safe(row,['Agente','AGENTE','Usuario']);
+<script>
 
-        const foto=normalizeImageUrl(safe(row,['Web url','Web URL']));
-        const firma=normalizeImageUrl(safe(row,['Firma url','Firma URL']));
+const urls = {
+  Maritimo: [
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv',
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv'
+  ],
+  Aereo: [
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv',
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv'
+  ],
+  Compra:
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=532919355&single=true&output=csv'
+};
 
-        columnas.forEach(col=>{
-          const td=document.createElement('td');
+function normalizeImageUrl(url){
+  if(!url) return '';
+  url = url.trim();
+  let m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+  m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+  if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+  return url;
+}
 
-          if(col==='Fecha') td.textContent=fecha;
-          else if(col==='Tracking') td.textContent=track;
-          else if(col==='Nombre') td.textContent=nombre;
-          else if(col==='Agente') td.textContent=agente;
-          else if(col==='Status') td.innerHTML=status?`<span class="status-pill">${status}</span>`:'';
-          else if(col==='Foto') td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>`:'';
-          else if(col==='Firma') td.innerHTML=firma?`<button class="view-btn" onclick="window.open('${firma}')">✍️ Ver firma</button>`:'';
+function safe(r, keys){
+  for(const k of keys){
+    if(r[k]) return r[k];
+  }
+  return '';
+}
 
-          tr.appendChild(td);
-        });
+function renderTable(data, type){
+  const thead=document.getElementById(`thead${type}`);
+  const tbody=document.getElementById(`tbody${type}`);
+  const empty=document.getElementById(`empty${type}`);
+  const meta=document.getElementById(`meta${type}`);
 
-        tbody.appendChild(tr);
-      });
+  thead.innerHTML='';
+  tbody.innerHTML='';
 
-      meta.textContent=`Mostrando ${data.length} coincidencia(s)`;
-    }
+  if(!data.length){
+    empty.style.display='block';
+    if(meta) meta.textContent='';
+    return;
+  }
 
-    async function searchTracking(tipo){
-      const input=document.getElementById(`search${tipo}`);
-      const code=input.value.trim().toLowerCase();
-      if(!code) return;
+  empty.style.display='none';
 
-      let urlsToFetch = Array.isArray(urls[tipo]) ? urls[tipo] : [urls[tipo]];
-      let allData=[];
+  const columns = type==='Compra'
+    ? ['Fecha','Tracking #','Nombre','Foto','Agente']
+    : ['Fecha','Status','Foto','Firma','Agente'];
 
-      for(const u of urlsToFetch){
-        await new Promise(resolve=>{
-          Papa.parse(u + '&t=' + Date.now(),{
-            download:true,
-            header:true,
-            skipEmptyLines:true,
-            complete:res=>{
-              allData = allData.concat(res.data);
-              resolve();
-            }
-          });
-        });
-      }
+  const trHead=document.createElement('tr');
+  columns.forEach(c=>{
+    const th=document.createElement('th');
+    th.textContent=c;
+    trHead.appendChild(th);
+  });
+  thead.appendChild(trHead);
 
-      let result = allData.filter(r=>{
-        const track=safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
-        const nombre=safe(r,['Nombre','Cliente']).toLowerCase();
-        return track.includes(code) || nombre.includes(code);
-      });
+  data.forEach(row=>{
+    const tr=document.createElement('tr');
 
-      renderTable(result, tipo);
-    }
+    const fecha=safe(row,['Fecha','FECHA']);
+    const track=safe(row,['Tracking','Tracking #','Orden','ORDEN']);
+    const status=safe(row,['Status','STATUS']);
+    const nombre=safe(row,['Nombre','Cliente']);
+    const agente=safe(row,['Agente','AGENTE','Usuario']);
 
-    document.getElementById('reloadBtn').onclick=()=>location.reload();
+    const foto=normalizeImageUrl(safe(row,['Web url','Web URL']));
+    const firma=normalizeImageUrl(safe(row,['Firma url','Firma URL']));
 
-    ['Maritimo','Aereo','Compra'].forEach(t=>{
-      document.getElementById(`search${t}`)
-        .addEventListener('keydown',e=>{
-          if(e.key==='Enter') searchTracking(t);
-        });
+    columns.forEach(col=>{
+      const td=document.createElement('td');
+
+      if(col=='Fecha') td.textContent=fecha;
+      else if(col=='Tracking #') td.textContent=track;
+      else if(col=='Nombre') td.textContent=nombre;
+      else if(col=='Agente') td.textContent=agente;
+      else if(col==='Status') td.innerHTML=status?`<span class="status-pill">${status}</span>`:'';
+      else if(col==='Foto') td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>`:'';
+      else if(col==='Firma') td.innerHTML=firma?`<button class="view-btn" onclick="window.open('${firma}')">✍️ Ver firma</button>`:'';
+
+      tr.appendChild(td);
     });
 
-  </script>
+    tbody.appendChild(tr);
+  });
+
+  if(meta) meta.textContent = `Mostrando ${data.length} coincidencia(s)`;
+}
+
+async function searchTracking(type){
+  const input=document.getElementById(`search${type}`);
+  const code=input.value.trim().toLowerCase();
+  if(!code) return;
+
+  let links = Array.isArray(urls[type]) ? urls[type] : [urls[type]];
+  let allData=[];
+
+  for(const link of links){
+    await new Promise(resolve=>{
+      Papa.parse(link + "&t=" + Date.now(), {
+        download:true,
+        header:true,
+        skipEmptyLines:true,
+        complete:res=>{
+          allData = allData.concat(res.data);
+          resolve();
+        }
+      });
+    });
+  }
+
+  const result = allData.filter(r=>{
+    const track=safe(r,['Tracking','Tracking #','Orden','ORDEN']).toLowerCase();
+    const name=safe(r,['Nombre','Cliente']).toLowerCase();
+    return track.includes(code) || name.includes(code);
+  });
+
+  renderTable(result, type);
+}
+
+['Maritimo','Aereo','Compra'].forEach(type=>{
+  document.getElementById(`search${type}`).addEventListener('keydown', e=>{
+    if(e.key==='Enter') searchTracking(type);
+  });
+});
+
+</script>
 
 </body>
 </html>
-
