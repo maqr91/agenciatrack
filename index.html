@@ -49,17 +49,25 @@
 
   /* TÍTULO */
   .title {
-    font-size: 44px;
+    font-size: 46px;           /* tamaño grande para móviles */
     font-weight: 900;
     font-style: italic;
     letter-spacing: 1px;
     text-shadow: 0 3px 5px rgba(0,0,0,.25);
+    margin: 0;
   }
 
-  /* EN COMPUTADORA → hacer el logo más pequeño */
+  /* Tablets */
+  @media (min-width: 600px) {
+    .title {
+      font-size: 52px;
+    }
+  }
+
+  /* Computadoras y laptops */
   @media (min-width: 1024px) {
     .title {
-      font-size: 32px !important;
+      font-size: 32px !important;   /* más pequeño en web */
     }
   }
 
@@ -131,7 +139,7 @@
 <header>
   <img class="flag flag-left" src="https://flagcdn.com/us.svg" alt="USA">
   <img class="flag flag-right" src="https://flagcdn.com/ni.svg" alt="NI">
-  <div class="title">MiRCargoTrack</div>
+  <h1 class="title">MiRCargoTrack</h1>
 </header>
 
 
