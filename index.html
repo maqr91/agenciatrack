@@ -17,48 +17,53 @@
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:var(--gris);
       color:var(--texto);
+      background:var(--gris);
     }
-
-    /* ---------------- HEADER ---------------- */
 
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:#fff;
-      padding:25px 12px 38px;
+      padding:35px 12px 40px;
       text-align:center;
       position:relative;
-      box-shadow:0 2px 8px rgba(0,0,0,.2);
+      box-shadow:0 2px 8px rgba(0,0,0,.25);
+    }
+
+    /* Reducimos encabezado en computadora */
+    @media (min-width:1024px){
+      header{
+        padding:25px 12px 30px !important;
+      }
+      .logo svg text{
+        font-size:40px !important;
+      }
     }
 
     .flag-left, .flag-right{
       position:absolute;
-      top:8px;
-      width:60px;
+      top:15px;
+      width:70px;
       border-radius:6px;
-      box-shadow:0 0 6px rgba(0,0,0,.3);
+      box-shadow:0 0 6px rgba(0,0,0,.4);
     }
-    .flag-left{ left:12px; }
-    .flag-right{ right:12px; }
+    .flag-left{ left:10px; }
+    .flag-right{ right:10px; }
 
     .logo svg{
-      max-width:80%;
+      max-width:82%;
       height:auto;
-      margin-top:15px;
     }
 
-    /* Reducido especial para WEB */
-    @media (min-width:900px){
-      header{ padding:20px 12px 30px; }
-      .logo svg text{ font-size:38px !important; }
+    @media (max-width:600px){
+      header{ padding-top:55px; }
+      .flag-left { width:55px; left:8px; }
+      .flag-right{ width:55px; right:8px; }
     }
-
-    /* ---------------- CONTENEDOR ---------------- */
 
     .container{
       max-width:900px;
-      margin:16px auto;
+      margin:20px auto;
       padding:0 12px;
       display:flex;
       flex-direction:column;
@@ -70,22 +75,23 @@
       border-radius:12px;
       border:1px solid var(--gris2);
       box-shadow:0 3px 12px rgba(0,0,0,.08);
-      overflow:hidden;
     }
 
     .card-title{
       padding:12px;
       background:#fafafa;
-      font-size:18px;
+      font-size:17px;
       font-weight:800;
+      border-bottom:1px solid var(--gris2);
     }
 
     .card-header{
-      padding:12px;
+      padding:10px;
+      border-bottom:1px solid var(--gris2);
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      border-bottom:1px solid var(--gris2);
+      align-items:center;
     }
 
     .input{
@@ -93,46 +99,42 @@
       display:flex;
       align-items:center;
       background:white;
+      border-radius:8px;
       border:1px solid var(--gris2);
-      padding:10px;
-      border-radius:10px;
+      padding:8px 12px;
     }
 
     .input input{
       border:none;
       width:100%;
-      font-size:16px;
+      font-size:15px;
       outline:none;
     }
 
     .btn{
       background:var(--amarilloPálido);
       border:none;
+      padding:10px 14px;
       border-radius:10px;
-      padding:10px 16px;
+      font-size:15px;
       font-weight:700;
       cursor:pointer;
-      font-size:16px;
     }
-
     .btn:hover{
       background:var(--amarilloHover);
     }
 
-    /* ---------------- TABLAS ---------------- */
-
-    /* Vista en web (tabla normal) */
     .table-wrap{
       overflow:auto;
+      -webkit-overflow-scrolling:touch;
     }
 
     table{
       width:100%;
-      border-collapse:collapse;
       min-width:650px;
+      border-collapse:collapse;
     }
-
-    th, td{
+    th,td{
       padding:10px;
       border-bottom:1px solid var(--gris2);
       font-size:14px;
@@ -144,7 +146,6 @@
       padding:4px 10px;
       border-radius:30px;
       font-weight:700;
-      font-size:13px;
     }
 
     .view-btn{
@@ -153,50 +154,26 @@
       padding:6px 12px;
       border-radius:8px;
       border:none;
-      cursor:pointer;
       font-size:13px;
+      cursor:pointer;
     }
-
-    /* ---------------- TARJETAS EN CELULAR ---------------- */
-
-    @media (max-width:600px){
-      table{ display:none; }
-      .mobile-card{
-        display:flex;
-        flex-direction:column;
-        background:white;
-        padding:12px;
-        border-bottom:1px solid var(--gris2);
-        gap:6px;
-      }
-      .row-label{
-        font-weight:700;
-        color:#475569;
-        font-size:14px;
-      }
-      .row-value{
-        font-size:15px;
-        color:#0f172a;
-      }
-    }
-
-    /* ---------------- BOTÓN REFRESCAR ---------------- */
 
     .footer-btn{
       text-align:center;
-      padding:20px;
+      margin:25px;
     }
 
     .btn-refresh{
       background:var(--celesteTxt);
-      border:none;
-      padding:14px 30px;
-      font-size:16px;
-      border-radius:12px;
-      font-weight:800;
       color:#fff;
+      border:none;
+      padding:12px 26px;
+      font-weight:800;
+      border-radius:12px;
       cursor:pointer;
+      font-size:15px;
     }
+
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -217,10 +194,10 @@
         </linearGradient>
       </defs>
       <g font-family="Inter" text-anchor="middle">
-        <text x="260" y="58" font-size="48" font-weight="900" fill="#fff" style="font-style:italic;">
+        <text x="260" y="58" font-size="52" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
           MiR<tspan fill="#fde68a">CargoTrack</tspan>
         </text>
-        <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.9">
+        <path d="M70 70 L450 70 L466 86 L70 86 Z" fill="url(#g)" opacity="0.8">
           <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
         </path>
       </g>
@@ -230,16 +207,16 @@
 
 <main class="container">
 
-  <!-- ---------------- MARÍTIMO ---------------- -->
+  <!-- MARÍTIMO -->
   <section class="card">
     <div class="card-title">🚢 Rastreo Marítimo</div>
 
     <div class="card-header">
-      <div class="input"><input id="searchMaritimo" placeholder="Número de rastreo marítimo"></div>
+      <div class="input">
+        <input id="searchMaritimo" placeholder="Número de rastreo marítimo">
+      </div>
       <button class="btn" onclick="searchTracking('Maritimo')">Buscar</button>
     </div>
-
-    <div id="maritimo-results"></div>
 
     <div class="table-wrap">
       <table>
@@ -248,19 +225,21 @@
       </table>
     </div>
 
-    <div id="emptyMaritimo" style="display:none; padding:14px; text-align:center;">❌ No encontramos ese número.</div>
+    <div id="emptyMaritimo" class="empty" style="display:none; padding:14px; text-align:center;">
+      ❌ No encontramos ese número.
+    </div>
   </section>
 
-  <!-- ---------------- AÉREO ---------------- -->
+  <!-- AÉREO -->
   <section class="card">
     <div class="card-title">✈️ Rastreo Aéreo</div>
 
     <div class="card-header">
-      <div class="input"><input id="searchAereo" placeholder="Número de rastreo aéreo"></div>
+      <div class="input">
+        <input id="searchAereo" placeholder="Número de rastreo aéreo">
+      </div>
       <button class="btn" onclick="searchTracking('Aereo')">Buscar</button>
     </div>
-
-    <div id="aereo-results"></div>
 
     <div class="table-wrap">
       <table>
@@ -269,19 +248,21 @@
       </table>
     </div>
 
-    <div id="emptyAereo" style="display:none; padding:14px; text-align:center;">❌ No encontramos ese número.</div>
+    <div id="emptyAereo" class="empty" style="display:none; padding:14px; text-align:center;">
+      ❌ No encontramos ese número.
+    </div>
   </section>
 
-  <!-- ---------------- COMPRAS ---------------- -->
+  <!-- COMPRAS EN LÍNEA -->
   <section class="card">
     <div class="card-title">🛍️ Rastreo de compras en línea</div>
 
     <div class="card-header">
-      <div class="input"><input id="searchCompra" placeholder="Nombre o número de tracking"></div>
+      <div class="input">
+        <input id="searchCompra" placeholder="Nombre o número de tracking">
+      </div>
       <button class="btn" onclick="searchTracking('Compra')">Buscar</button>
     </div>
-
-    <div id="compra-results"></div>
 
     <div class="table-wrap">
       <table>
@@ -290,7 +271,9 @@
       </table>
     </div>
 
-    <div id="emptyCompra" style="display:none; padding:14px; text-align:center;">⚠️ No se encontró esa compra.</div>
+    <div id="emptyCompra" class="empty" style="display:none; padding:14px; text-align:center;">
+      ⚠️ No se encontró esa compra.
+    </div>
   </section>
 
   <div class="footer-btn">
@@ -324,6 +307,18 @@ function normalizeImageUrl(url){
   return url;
 }
 
+function openSignatureWhiteBg(url){
+  const win = window.open("", "_blank");
+  win.document.write(`
+    <html>
+      <head><title>Firma</title></head>
+      <body style="margin:0; background:white; display:flex; justify-content:center; align-items:center;">
+        <img src="${url}" style="max-width:100%; height:auto;" />
+      </body>
+    </html>
+  `);
+}
+
 function safe(r, keys){
   for(const k of keys){
     if(r[k]) return r[k];
@@ -331,42 +326,10 @@ function safe(r, keys){
   return '';
 }
 
-function renderMobileCards(data, containerId){
-  const container = document.getElementById(containerId);
-  container.innerHTML = '';
-
-  data.forEach(r=>{
-    const fecha = safe(r,['Fecha','FECHA']);
-    const status = safe(r,['Status','STATUS']);
-    const track = safe(r,['Tracking','Tracking #','Orden','ORDEN']);
-    const nombre = safe(r,['Nombre','Cliente']);
-    const agente = safe(r,['Agente','AGENTE','Usuario']);
-
-    const foto = normalizeImageUrl(safe(r,['Web url','Web URL']));
-    const firma = normalizeImageUrl(safe(r,['Firma url','Firma URL']));
-
-    let card = `
-      <div class="mobile-card">
-        <div><span class="row-label">Fecha:</span> <span class="row-value">${fecha}</span></div>
-        ${track ? `<div><span class="row-label">Tracking:</span> <span class="row-value">${track}</span></div>` : ''}
-        ${nombre ? `<div><span class="row-label">Nombre:</span> <span class="row-value">${nombre}</span></div>` : ''}
-        ${status ? `<div><span class="row-label">Status:</span> <span class="status-pill">${status}</span></div>` : ''}
-        ${agente ? `<div><span class="row-label">Agente:</span> <span class="row-value">${agente}</span></div>` : ''}
-        ${foto ? `<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>` : ''}
-        ${firma ? `<button class="view-btn" onclick="window.open('${firma}')">✍️ Ver firma</button>` : ''}
-      </div>
-    `;
-
-    container.innerHTML += card;
-  });
-}
-
 function renderTable(data, type){
   const thead=document.getElementById(`thead${type}`);
   const tbody=document.getElementById(`tbody${type}`);
   const empty=document.getElementById(`empty${type}`);
-
-  document.getElementById(`${type.toLowerCase()}-results`).innerHTML = '';
 
   thead.innerHTML='';
   tbody.innerHTML='';
@@ -375,6 +338,7 @@ function renderTable(data, type){
     empty.style.display='block';
     return;
   }
+
   empty.style.display='none';
 
   const columns = type==='Compra'
@@ -410,7 +374,7 @@ function renderTable(data, type){
       else if(col=='Agente') td.textContent=agente;
       else if(col==='Status') td.innerHTML=status?`<span class="status-pill">${status}</span>`:'';
       else if(col==='Foto') td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}')">📷 Ver foto</button>`:'';
-      else if(col==='Firma') td.innerHTML=firma?`<button class="view-btn" onclick="window.open('${firma}')">✍️ Ver firma</button>`:'';
+      else if(col==='Firma') td.innerHTML=firma?`<button class="view-btn" onclick="openSignatureWhiteBg('${firma}')">✍️ Ver firma</button>`:'';
 
       tr.appendChild(td);
     });
@@ -418,20 +382,12 @@ function renderTable(data, type){
     tbody.appendChild(tr);
   });
 
-  // MOBILE VIEW
-  renderMobileCards(
-    data,
-    `${type.toLowerCase()}-results`
-  );
 }
 
 async function searchTracking(type){
   const input=document.getElementById(`search${type}`);
   const code=input.value.trim().toLowerCase();
   if(!code) return;
-
-  const empty = document.getElementById(`empty${type}`);
-  empty.style.display='none';
 
   let links = Array.isArray(urls[type]) ? urls[type] : [urls[type]];
   let allData=[];
