@@ -131,21 +131,16 @@
 
     .btn:hover{ background:var(--amarilloH); }
 
-    .table-wrap{
-      overflow:auto;
-      -webkit-overflow-scrolling:touch;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:650px;
-    }
-
-    th,td{
-      padding:10px;
+    .result-block{
+      padding:16px 16px;
       border-bottom:1px solid var(--gris2);
-      font-size:15px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .result-block:last-child{
+      border-bottom:none;
     }
 
     .status-pill{
@@ -156,7 +151,6 @@
       font-weight:700;
     }
 
-    /* VIEW BUTTON */
     .view-btn{
       background:var(--celesteTxt);
       color:white;
@@ -167,25 +161,14 @@
       cursor:pointer;
       font-weight:700;
       width:100%;
-    }
-
-    .detail-vertical{
-      padding:18px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      background:white;
-    }
-
-    .detail-vertical p{
-      margin:0;
-      font-size:16px;
+      margin-top:4px;
     }
 
     .detail-actions{
       display:flex;
       flex-direction:column;
       gap:10px;
+      margin-top:10px;
     }
 
     @media(min-width:620px){
@@ -199,35 +182,10 @@
 
     /* MOBILE FIX */
     @media(max-width:700px){
-
       .container{
         padding:0 10px;
         margin-top:10px;
         gap:14px;
-      }
-
-      .card{
-        border-radius:12px;
-        margin:0;
-        box-shadow:0 2px 10px rgba(0,0,0,.08);
-      }
-
-      .card-header{
-        flex-direction:column;
-        align-items:stretch;
-        gap:8px;
-      }
-
-      .card-header .input{
-        width:100%;
-      }
-
-      .card-header .btn{
-        width:100%;
-      }
-
-      table{
-        min-width:500px;
       }
 
       header{
@@ -243,7 +201,6 @@
         margin-top:6px;
         max-width:260px;
       }
-
     }
 
   </style>
@@ -291,13 +248,6 @@
 
     <div id="resultsMaritimo"></div>
 
-    <div class="table-wrap">
-      <table>
-        <thead id="theadMaritimo"></thead>
-        <tbody id="tbodyMaritimo"></tbody>
-      </table>
-    </div>
-
     <div id="emptyMaritimo" style="display:none; padding:14px; text-align:center;">
       ❌ No encontramos ese número.
     </div>
@@ -315,13 +265,6 @@
     </div>
 
     <div id="resultsAereo"></div>
-
-    <div class="table-wrap">
-      <table>
-        <thead id="theadAereo"></thead>
-        <tbody id="tbodyAereo"></tbody>
-      </table>
-    </div>
 
     <div id="emptyAereo" style="display:none; padding:14px; text-align:center;">
       ❌ No encontramos ese número.
@@ -341,21 +284,10 @@
 
     <div id="resultsCompra"></div>
 
-    <div class="table-wrap">
-      <table>
-        <thead id="theadCompra"></thead>
-        <tbody id="tbodyCompra"></tbody>
-      </table>
-    </div>
-
     <div id="emptyCompra" style="display:none; padding:14px; text-align:center;">
       ⚠️ Sin resultados.
     </div>
   </section>
-
-  <div class="footer-btn" style="text-align:center; margin:26px;">
-    <button class="btn-refresh" onclick="location.reload()" style="background:var(--celesteTxt); color:white; padding:12px 26px; border:none; border-radius:12px; font-weight:800; cursor:pointer;">🔄 Actualizar</button>
-  </div>
 
 </main>
 
@@ -376,7 +308,6 @@ const urls = {
 
 function normalizeImageUrl(url){
   if(!url) return "";
-
   url = url.trim();
 
   // Normal: /file/d/ID/
@@ -387,10 +318,8 @@ function normalizeImageUrl(url){
   m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
 
-  // googleusercontent → AppSheet direct image
-  if(url.includes("googleusercontent")){
-    return url;
-  }
+  // googleusercontent → directo
+  if(url.includes("googleusercontent")) return url;
 
   return url;
 }
@@ -402,49 +331,59 @@ function safe(r,keys){
 
 function renderTable(list,type){
   const container = document.getElementById(`results${type}`);
-  const thead = document.getElementById(`thead${type}`);
-  const tbody = document.getElementById(`tbody${type}`);
   const empty = document.getElementById(`empty${type}`);
 
-  thead.innerHTML = "";
-  tbody.innerHTML = "";
-  container.innerHTML = "";
+  container.innerHTML="";
+  empty.style.display="none";
 
   if(!list.length){
     empty.style.display="block";
     return;
   }
 
-  empty.style.display="none";
+  // COMPRAS: limitar a 40
+  if(type === "Compra"){
+    list = list.slice(0,40);
+  }
 
-  // MOSTRAR SOLO EL PRIMER RESULTADO EN FORMATO VERTICAL
-  const r = list[0];
+  list.forEach(r=>{
+    const fecha = safe(r,["Fecha","FECHA"]);
+    const track = safe(r,["Tracking","Tracking #","Orden","ORDEN"]);
+    const nombre = safe(r,["Nombre","Cliente","CLIENTE"]);
+    const status = safe(r,["Status","STATUS"]);
+    const agente = safe(r,["Agente","AGENTE","Usuario"]);
 
-  const fecha = safe(r,["Fecha","FECHA"]);
-  const track = safe(r,["Tracking","Tracking #","Orden","ORDEN"]);
-  const nombre = safe(r,["Nombre","Cliente","CLIENTE"]);
-  const status = safe(r,["Status","STATUS"]);
-  const agente = safe(r,["Agente","AGENTE","Usuario"]);
+    const foto = normalizeImageUrl(safe(r,["Web url","Web URL"]));
+    const firma = normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
 
-  const foto = normalizeImageUrl(safe(r,["Web url","Web URL"]));
-  const firma = normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
+    let html = `
+      <div class="result-block">
+        <p><strong>Fecha:</strong> ${fecha}</p>
+        <p><strong>Tracking:</strong> ${track}</p>
+    `;
 
-  container.innerHTML = `
-    <div class="detail-vertical">
+    if(type === "Compra"){
+      html += `<p><strong>Nombre:</strong> ${nombre}</p>`;
+      html += `<p><strong>Agente:</strong> ${agente}</p>`;
+    } else {
+      html += `<p><strong>Status:</strong> <span class="status-pill">${status}</span></p>`;
+      html += `<p><strong>Agente:</strong> ${agente}</p>`;
+    }
 
-      <p><strong>Fecha:</strong> ${fecha}</p>
-      <p><strong>Tracking:</strong> ${track}</p>
-      ${nombre ? `<p><strong>Nombre:</strong> ${nombre}</p>` : ""}
-      <p><strong>Status:</strong> <span class="status-pill">${status}</span></p>
-      <p><strong>Agente:</strong> ${agente}</p>
+    html += `<div class="detail-actions">`;
 
-      <div class="detail-actions">
-        ${foto ? `<button class="view-btn" onclick="window.open('${foto}', '_blank')">📷 Ver foto</button>` : ""}
-        ${firma ? `<button class="view-btn" onclick="window.open('${firma}', '_blank')">✍️ Ver firma</button>` : ""}
-      </div>
+    if(foto){
+      html += `<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>`;
+    }
 
-    </div>
-  `;
+    if(type !== "Compra" && firma){
+      html += `<button class="view-btn" onclick="window.open('${firma}','_blank')">✍️ Ver firma</button>`;
+    }
+
+    html += `</div></div>`;
+
+    container.innerHTML += html;
+  });
 }
 
 async function searchTracking(type){
