@@ -172,11 +172,13 @@
       font-weight:700;
     }
 
+    /* Móvil: ancho completo */
     .detail-actions .view-btn{
       width:100%;
       text-align:center;
     }
 
+    /* Web: botones más pequeños */
     @media(min-width:601px){
       .detail-actions{
         display:flex;
@@ -204,73 +206,6 @@
       cursor:pointer;
     }
 
-    /* ============================================================
-       AJUSTES MÓVIL — PARA QUE SE VEA EXACTO COMO LA SEGUNDA FOTO
-       ============================================================ */
-    @media(max-width:700px){
-
-      /* contenedor más cómodo */
-      .container{
-        padding:0 10px;
-        margin-top:10px;
-        gap:14px;
-      }
-
-      /* tarjetas compactas */
-      .card{
-        border-radius:12px;
-        margin:0;
-        box-shadow:0 2px 10px rgba(0,0,0,.08);
-      }
-
-      /* Inputs + botón apilados */
-      .card-header{
-        flex-direction:column;
-        align-items:stretch;
-        gap:8px;
-      }
-
-      .card-header .input{
-        width:100%;
-      }
-
-      .card-header .btn{
-        width:100%;
-        margin-top:4px;
-      }
-
-      /* botones ver foto/firma 100% ancho */
-      .view-btn{
-        width:100% !important;
-        font-size:16px !important;
-        padding:12px 14px !important;
-      }
-
-      .detail-actions{
-        flex-direction:column !important;
-        gap:8px !important;
-      }
-
-      /* tabla scrollea suavemente */
-      table{
-        min-width:500px;
-      }
-
-      /* header más pequeño */
-      header{
-        padding:14px 12px 22px;
-      }
-
-      .flag-left, .flag-right{
-        width:88px;
-        top:6px;
-      }
-
-      .logo svg{
-        margin-top:6px;
-        max-width:260px;
-      }
-    }
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -278,16 +213,21 @@
 
 <body>
 
+<!-- ========================== ENCABEZADO ========================== -->
+
 <header>
+
   <img class="flag-left" src="https://flagcdn.com/us.svg">
   <img class="flag-right" src="https://flagcdn.com/ni.svg">
 
   <div class="logo">
     <svg viewBox="0 0 520 120">
-      <defs><linearGradient id="g" x1="0" x2="1">
-        <stop offset="0" stop-color="#38bdf8"/>
-        <stop offset="1" stop-color="#1e3a8a"/>
-      </linearGradient></defs>
+      <defs>
+        <linearGradient id="g" x1="0" x2="1">
+          <stop offset="0" stop-color="#38bdf8"/>
+          <stop offset="1" stop-color="#1e3a8a"/>
+        </linearGradient>
+      </defs>
       <g font-family="Inter" text-anchor="middle">
         <text x="260" y="54" font-size="48" font-weight="900" fill="#fff" style="letter-spacing:1px; font-style:italic;">
           MiR<tspan fill="#fde68a">CargoTrack</tspan>
@@ -298,11 +238,15 @@
       </g>
     </svg>
   </div>
+
 </header>
+
+<!-- ========================== CUERPO ========================== -->
 
 <main class="container">
 
-  <!-- =============== MARÍTIMO =============== -->
+  <!-- ================= MARÍTIMO ================= -->
+
   <section class="card">
     <div class="card-title">🚢 Rastreo Marítimo</div>
 
@@ -327,7 +271,8 @@
     </div>
   </section>
 
-  <!-- =============== AÉREO =============== -->
+  <!-- ================= AÉREO ================= -->
+
   <section class="card">
     <div class="card-title">✈️ Rastreo Aéreo</div>
 
@@ -352,7 +297,8 @@
     </div>
   </section>
 
-  <!-- =============== COMPRAS =============== -->
+  <!-- ================= COMPRAS ================= -->
+
   <section class="card">
     <div class="card-title">🛍️ Rastreo de compras en línea</div>
 
@@ -383,7 +329,7 @@
 
 </main>
 
-<!-- ================= SCRIPTS ================= -->
+<!-- ========================== SCRIPTS ========================== -->
 
 <script>
 
@@ -403,13 +349,17 @@ const urls = {
 function normalizeImageUrl(url){
   if(!url) return "";
   url=url.trim();
+
   let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+
   m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+
   return url;
 }
 
+// Abrir firma con fondo blanco
 function openWhiteViewer(url){
   const win = window.open("", "_blank");
   win.document.write(`
@@ -528,6 +478,7 @@ async function searchTracking(type){
       if(e.key==="Enter") searchTracking(t);
     });
 });
+
 </script>
 
 </body>
