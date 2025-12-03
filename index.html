@@ -36,7 +36,6 @@
       box-shadow:0 2px 6px rgba(0,0,0,.25);
     }
 
-    /* Encabezado reducido 60% en web */
     @media(min-width:700px){
       header{
         padding:15px 12px 25px;
@@ -54,7 +53,6 @@
     .flag-left{ left:12px; }
     .flag-right{ right:12px; }
 
-    /* LOGO */
     .logo svg{
       width:80%;
       max-width:380px;
@@ -69,7 +67,6 @@
     }
 
     /* ========================== CONTENIDO ========================== */
-
     .container{
       max-width:900px;
       margin:20px auto;
@@ -129,11 +126,11 @@
       font-weight:800;
       cursor:pointer;
       font-size:16px;
+      width:auto;
     }
 
     .btn:hover{ background:var(--amarilloH); }
 
-    /* TABLAS */
     .table-wrap{
       overflow:auto;
       -webkit-overflow-scrolling:touch;
@@ -159,71 +156,62 @@
       font-weight:700;
     }
 
-    /* ========================== VIEW BUTTON ========================== */
-
+    /* VIEW BUTTON */
     .view-btn{
       background:var(--celesteTxt);
       color:white;
-      padding:8px 14px;
-      border-radius:8px;
+      padding:10px 14px;
+      border-radius:10px;
       border:none;
-      font-size:14px;
+      font-size:15px;
       cursor:pointer;
       font-weight:700;
-    }
-
-    .detail-actions .view-btn{
       width:100%;
-      text-align:center;
     }
 
-    @media(min-width:601px){
+    .detail-vertical{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background:white;
+    }
+
+    .detail-vertical p{
+      margin:0;
+      font-size:16px;
+    }
+
+    .detail-actions{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    @media(min-width:620px){
       .detail-actions{
-        display:flex;
         flex-direction:row;
-        gap:10px;
       }
       .detail-actions .view-btn{
-        width:auto !important;
-        padding:6px 12px !important;
-        font-size:13px !important;
-        display:inline-block !important;
+        width:auto;
       }
     }
 
-    /* Footer */
-    .footer-btn{text-align:center;margin:26px;}
-    .btn-refresh{
-      background:var(--celesteTxt);
-      color:white;
-      border:none;
-      padding:12px 26px;
-      border-radius:12px;
-      font-weight:800;
-      font-size:16px;
-      cursor:pointer;
-    }
-
-    /* ============================================================
-       AJUSTES MÓVIL — PARA QUE SE VEA EXACTO COMO LA SEGUNDA FOTO
-       ============================================================ */
+    /* MOBILE FIX */
     @media(max-width:700px){
 
-      /* contenedor más cómodo */
       .container{
         padding:0 10px;
         margin-top:10px;
         gap:14px;
       }
 
-      /* tarjetas compactas */
       .card{
         border-radius:12px;
         margin:0;
         box-shadow:0 2px 10px rgba(0,0,0,.08);
       }
 
-      /* Inputs + botón apilados */
       .card-header{
         flex-direction:column;
         align-items:stretch;
@@ -236,27 +224,12 @@
 
       .card-header .btn{
         width:100%;
-        margin-top:4px;
       }
 
-      /* botones ver foto/firma 100% ancho */
-      .view-btn{
-        width:100% !important;
-        font-size:16px !important;
-        padding:12px 14px !important;
-      }
-
-      .detail-actions{
-        flex-direction:column !important;
-        gap:8px !important;
-      }
-
-      /* tabla scrollea suavemente */
       table{
         min-width:500px;
       }
 
-      /* header más pequeño */
       header{
         padding:14px 12px 22px;
       }
@@ -270,10 +243,13 @@
         margin-top:6px;
         max-width:260px;
       }
+
     }
+
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
 </head>
 
 <body>
@@ -302,7 +278,7 @@
 
 <main class="container">
 
-  <!-- =============== MARÍTIMO =============== -->
+  <!-- ================= MARÍTIMO ================= -->
   <section class="card">
     <div class="card-title">🚢 Rastreo Marítimo</div>
 
@@ -327,7 +303,7 @@
     </div>
   </section>
 
-  <!-- =============== AÉREO =============== -->
+  <!-- ================= AÉREO ================= -->
   <section class="card">
     <div class="card-title">✈️ Rastreo Aéreo</div>
 
@@ -352,7 +328,7 @@
     </div>
   </section>
 
-  <!-- =============== COMPRAS =============== -->
+  <!-- ================= COMPRAS ================= -->
   <section class="card">
     <div class="card-title">🛍️ Rastreo de compras en línea</div>
 
@@ -377,13 +353,11 @@
     </div>
   </section>
 
-  <div class="footer-btn">
-    <button class="btn-refresh" onclick="location.reload()">🔄 Actualizar</button>
+  <div class="footer-btn" style="text-align:center; margin:26px;">
+    <button class="btn-refresh" onclick="location.reload()" style="background:var(--celesteTxt); color:white; padding:12px 26px; border:none; border-radius:12px; font-weight:800; cursor:pointer;">🔄 Actualizar</button>
   </div>
 
 </main>
-
-<!-- ================= SCRIPTS ================= -->
 
 <script>
 
@@ -403,10 +377,15 @@ const urls = {
 function normalizeImageUrl(url){
   if(!url) return "";
   url=url.trim();
-  let m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+
+  // Extrae el ID de un link de Drive
+  let m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
-  m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)\//);
+
+  // Caso alterno con ?id=
+  m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+
   return url;
 }
 
@@ -428,67 +407,50 @@ function safe(r,keys){
 }
 
 function renderTable(list,type){
-  const thead=document.getElementById(`thead${type}`);
-  const tbody=document.getElementById(`tbody${type}`);
-  const empty=document.getElementById(`empty${type}`);
+  const container = document.getElementById(`results${type}`);
+  const thead = document.getElementById(`thead${type}`);
+  const tbody = document.getElementById(`tbody${type}`);
+  const empty = document.getElementById(`empty${type}`);
 
-  thead.innerHTML="";
-  tbody.innerHTML="";
+  thead.innerHTML = "";
+  tbody.innerHTML = "";
+  container.innerHTML = "";
 
   if(!list.length){
     empty.style.display="block";
     return;
   }
+
   empty.style.display="none";
 
-  const columns = type==="Compra"
-    ? ["Fecha","Tracking #","Nombre","Foto","Agente"]
-    : ["Fecha","Status","Foto","Firma","Agente"];
+  // MOSTRAMOS SOLO EL PRIMER RESULTADO EN FORMATO VERTICAL
+  const r = list[0];
 
-  const thRow=document.createElement("tr");
-  columns.forEach(c=>{
-    const th=document.createElement("th");
-    th.textContent=c;
-    thRow.appendChild(th);
-  });
-  thead.appendChild(thRow);
+  const fecha = safe(r,["Fecha","FECHA"]);
+  const track = safe(r,["Tracking","Tracking #","Orden","ORDEN"]);
+  const nombre = safe(r,["Nombre","Cliente","CLIENTE"]);
+  const status = safe(r,["Status","STATUS"]);
+  const agente = safe(r,["Agente","AGENTE","Usuario"]);
 
-  list.forEach(r=>{
-    const tr=document.createElement("tr");
+  const foto = normalizeImageUrl(safe(r,["Web url","Web URL"]));
+  const firma = normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
 
-    const fecha=safe(r,["Fecha","FECHA"]);
-    const track=safe(r,["Tracking","Tracking #","Orden","ORDEN"]);
-    const nombre=safe(r,["Nombre","Cliente","CLIENTE"]);
-    const status=safe(r,["Status","STATUS"]);
-    const agente=safe(r,["Agente","AGENTE","Usuario"]);
+  container.innerHTML = `
+    <div class="detail-vertical">
 
-    const foto=normalizeImageUrl(safe(r,["Web url","Web URL"]));
-    const firma=normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
+      <p><strong>Fecha:</strong> ${fecha}</p>
+      <p><strong>Tracking:</strong> ${track}</p>
+      ${nombre ? `<p><strong>Nombre:</strong> ${nombre}</p>` : ""}
+      <p><strong>Status:</strong> <span class="status-pill">${status}</span></p>
+      <p><strong>Agente:</strong> ${agente}</p>
 
-    columns.forEach(col=>{
-      const td=document.createElement("td");
+      <div class="detail-actions">
+        ${foto ? `<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>` : ""}
+        ${firma ? `<button class="view-btn" onclick="openWhiteViewer('${firma}')">✍️ Ver firma</button>` : ""}
+      </div>
 
-      if(col==="Fecha") td.textContent=fecha;
-      else if(col==="Tracking #") td.textContent=track;
-      else if(col==="Nombre") td.textContent=nombre;
-      else if(col==="Agente") td.textContent=agente;
-
-      else if(col==="Status")
-        td.innerHTML=status?`<span class="status-pill">${status}</span>`:"";
-
-      else if(col==="Foto")
-        td.innerHTML=foto?`<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>`:"";
-
-      else if(col==="Firma")
-        td.innerHTML=firma
-          ? `<button class="view-btn" onclick="openWhiteViewer('${firma}')">✍️ Ver firma</button>`
-          : "";
-
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
+    </div>
+  `;
 }
 
 async function searchTracking(type){
@@ -528,6 +490,7 @@ async function searchTracking(type){
       if(e.key==="Enter") searchTracking(t);
     });
 });
+
 </script>
 
 </body>
