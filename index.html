@@ -121,7 +121,6 @@
     }
     .btn:hover{ background:var(--amarilloH); }
 
-    /* 🔥 AJUSTE PARA PEGAR LÍNEAS */
     .result-block{
       padding:10px 16px;
       border-bottom:1px solid var(--gris2);
@@ -299,6 +298,24 @@ function safe(r,keys){
   return "";
 }
 
+function parseDate(dateString){
+  // formato: DD/MM/YYYY HH:mm:ss
+  if(!dateString) return 0;
+
+  const [datePart, timePart] = dateString.split(" ");
+  const [day, month, year] = datePart.split("/");
+  const [hour, minute, second] = timePart.split(":");
+
+  return new Date(
+    parseInt(year),
+    parseInt(month)-1,
+    parseInt(day),
+    parseInt(hour),
+    parseInt(minute),
+    parseInt(second)
+  ).getTime();
+}
+
 function renderTable(list,type){
   const container = document.getElementById(`results${type}`);
   const empty = document.getElementById(`empty${type}`);
@@ -311,6 +328,14 @@ function renderTable(list,type){
     return;
   }
 
+  // 🔥 ORDENAR POR FECHA (más reciente primero)
+  list.sort((a,b)=>{
+    const da = parseDate(safe(a,["Fecha","FECHA"]));
+    const db = parseDate(safe(b,["Fecha","FECHA"]));
+    return db - da;
+  });
+
+  // compras → limitar a 40 luego de ordenar
   if(type === "Compra"){
     list = list.slice(0,40);
   }
