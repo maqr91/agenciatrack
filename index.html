@@ -376,29 +376,23 @@ const urls = {
 
 function normalizeImageUrl(url){
   if(!url) return "";
-  url=url.trim();
 
-  // Extrae el ID de un link de Drive
-  let m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  url = url.trim();
+
+  // Normal: /file/d/ID/
+  let m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
 
-  // Caso alterno con ?id=
-  m=url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  // open?id=ID
+  m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
+
+  // googleusercontent → AppSheet direct image
+  if(url.includes("googleusercontent")){
+    return url;
+  }
 
   return url;
-}
-
-function openWhiteViewer(url){
-  const win = window.open("", "_blank");
-  win.document.write(`
-    <html>
-      <body style="margin:0; background:white; display:flex; justify-content:center; align-items:center;">
-        <img src="${url}" style="max-width:100%; height:auto;">
-      </body>
-    </html>
-  `);
-  win.document.close();
 }
 
 function safe(r,keys){
@@ -423,7 +417,7 @@ function renderTable(list,type){
 
   empty.style.display="none";
 
-  // MOSTRAMOS SOLO EL PRIMER RESULTADO EN FORMATO VERTICAL
+  // MOSTRAR SOLO EL PRIMER RESULTADO EN FORMATO VERTICAL
   const r = list[0];
 
   const fecha = safe(r,["Fecha","FECHA"]);
@@ -445,8 +439,8 @@ function renderTable(list,type){
       <p><strong>Agente:</strong> ${agente}</p>
 
       <div class="detail-actions">
-        ${foto ? `<button class="view-btn" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>` : ""}
-        ${firma ? `<button class="view-btn" onclick="openWhiteViewer('${firma}')">✍️ Ver firma</button>` : ""}
+        ${foto ? `<button class="view-btn" onclick="window.open('${foto}', '_blank')">📷 Ver foto</button>` : ""}
+        ${firma ? `<button class="view-btn" onclick="window.open('${firma}', '_blank')">✍️ Ver firma</button>` : ""}
       </div>
 
     </div>
