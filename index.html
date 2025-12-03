@@ -26,7 +26,6 @@
       color:var(--texto);
     }
 
-    /* ========================== HEADER ========================== */
     header{
       background:linear-gradient(90deg,var(--azulClaro),var(--azulOscuro));
       color:white;
@@ -37,9 +36,7 @@
     }
 
     @media(min-width:700px){
-      header{
-        padding:15px 12px 25px;
-      }
+      header{ padding:15px 12px 25px; }
     }
 
     .flag-left, .flag-right{
@@ -49,7 +46,6 @@
       border-radius:10px;
       box-shadow:0 0 6px rgba(0,0,0,.4);
     }
-
     .flag-left{ left:12px; }
     .flag-right{ right:12px; }
 
@@ -60,13 +56,9 @@
     }
 
     @media(min-width:700px){
-      .logo svg{
-        max-width:360px;
-        margin-top:10px;
-      }
+      .logo svg{ max-width:360px; margin-top:10px; }
     }
 
-    /* ========================== CONTENIDO ========================== */
     .container{
       max-width:900px;
       margin:20px auto;
@@ -110,7 +102,6 @@
       display:flex;
       align-items:center;
     }
-
     .input input{
       border:none;
       width:100%;
@@ -128,19 +119,22 @@
       font-size:16px;
       width:auto;
     }
-
     .btn:hover{ background:var(--amarilloH); }
 
+    /* 🔥 AJUSTE PARA PEGAR LÍNEAS */
     .result-block{
-      padding:2px 2px;
+      padding:10px 16px;
       border-bottom:1px solid var(--gris2);
       display:flex;
       flex-direction:column;
-      gap:8px;
+      gap:4px;
     }
-
     .result-block:last-child{
       border-bottom:none;
+    }
+    .result-block p{
+      margin:2px 0;
+      line-height:1.2;
     }
 
     .status-pill{
@@ -161,48 +155,27 @@
       cursor:pointer;
       font-weight:700;
       width:100%;
-      margin-top:4px;
+      margin-top:6px;
     }
 
     .detail-actions{
       display:flex;
       flex-direction:column;
-      gap:10px;
-      margin-top:10px;
+      gap:8px;
+      margin-top:6px;
     }
 
     @media(min-width:620px){
-      .detail-actions{
-        flex-direction:row;
-      }
-      .detail-actions .view-btn{
-        width:auto;
-      }
+      .detail-actions{ flex-direction:row; }
+      .detail-actions .view-btn{ width:auto; }
     }
 
-    /* MOBILE FIX */
     @media(max-width:700px){
-      .container{
-        padding:0 10px;
-        margin-top:10px;
-        gap:14px;
-      }
-
-      header{
-        padding:14px 12px 22px;
-      }
-
-      .flag-left, .flag-right{
-        width:88px;
-        top:6px;
-      }
-
-      .logo svg{
-        margin-top:6px;
-        max-width:260px;
-      }
+      .container{ padding:0 10px; margin-top:10px; gap:14px; }
+      header{ padding:14px 12px 22px; }
+      .flag-left, .flag-right{ width:88px; top:6px; }
+      .logo svg{ margin-top:6px; max-width:260px; }
     }
-
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
@@ -310,15 +283,12 @@ function normalizeImageUrl(url){
   if(!url) return "";
   url = url.trim();
 
-  // Normal: /file/d/ID/
   let m = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
 
-  // open?id=ID
   m = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if(m) return `https://drive.google.com/uc?export=view&id=${m[1]}`;
 
-  // googleusercontent → directo
   if(url.includes("googleusercontent")) return url;
 
   return url;
@@ -341,7 +311,6 @@ function renderTable(list,type){
     return;
   }
 
-  // COMPRAS: limitar a 40
   if(type === "Compra"){
     list = list.slice(0,40);
   }
@@ -356,11 +325,10 @@ function renderTable(list,type){
     const foto = normalizeImageUrl(safe(r,["Web url","Web URL"]));
     const firma = normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
 
-    let html = `
-      <div class="result-block">
-        <p><strong>Fecha:</strong> ${fecha}</p>
-        <p><strong>Tracking:</strong> ${track}</p>
-    `;
+    let html = `<div class="result-block">`;
+
+    html += `<p><strong>Fecha:</strong> ${fecha}</p>`;
+    html += `<p><strong>Tracking:</strong> ${track}</p>`;
 
     if(type === "Compra"){
       html += `<p><strong>Nombre:</strong> ${nombre}</p>`;
