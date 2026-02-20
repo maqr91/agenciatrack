@@ -768,6 +768,8 @@ function renderTable(list,type){
     const status = safe(r,["Status","STATUS"]);
     const agente = safe(r,["Agente","AGENTE","Usuario"]);
     const foto  = normalizeImageUrl(safe(r,["Web url","Web URL"]));
+    const foto2 = normalizeImageUrl(safe(r,["Web url2","Web URL2"]));
+    const foto3 = normalizeImageUrl(safe(r,["Web url3","Web URL3"]));
     const firma = normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
 
     let html = `<div class="result-block">`;
@@ -782,6 +784,8 @@ function renderTable(list,type){
     }
     html += `<div class="detail-actions">`;
     if(foto)  html += `<button class="view-btn" type="button" onclick="window.open('${foto}','_blank')">📷 Ver foto</button>`;
+    if(foto2) html += `<button class="view-btn" type="button" onclick="window.open('${foto2}','_blank')">📷 Ver foto 2</button>`;
+    if(foto3) html += `<button class="view-btn" type="button" onclick="window.open('${foto3}','_blank')">📷 Ver foto 3</button>`;
     if(type !== "Compra" && firma) html += `<button class="view-btn" type="button" onclick="window.open('${firma}','_blank')">✍️ Ver firma</button>`;
     html += `</div></div>`;
     container.insertAdjacentHTML("beforeend", html);
@@ -1007,3 +1011,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 </body>
 </html>
+
