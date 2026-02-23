@@ -962,9 +962,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
   // Marítimo por peso
   function rateMar(lbs){
-    if(lbs > 500) return 1.8;
-    if(lbs > 300) return 1.9;
-    if(lbs > 100) return 2.0;
+    if(lbs > 499) return 1.8;
+    if(lbs > 299) return 1.9;
+    if(lbs > 99) return 2.0;
     return 2.05;
   }
   document.getElementById("calcBtnMarPeso").addEventListener("click", ()=>{
@@ -982,7 +982,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   function getMultiplier(){
     const v = (document.getElementById("calcItemType").value || "");
     if(v === "mueble_10") return { mult: 10, label: "Mueble" };
-    if(v === "ropa_30") return { mult: 30, label: "Caja con ropa y artículos varios" };
+    if(v === "ropa_30") return { mult: 23, label: "Caja con ropa y artículos varios" };
     if(v === "refri_12") return { mult: 12, label: "Electrodoméstico (Refrigeradora)" };
     if(v === "lavadora_20") return { mult: 20, label: "Electrodoméstico (Lavadora / Secadora / Cocina)" };
     return { mult: 10, label: "Mueble" };
