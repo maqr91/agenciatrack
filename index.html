@@ -981,11 +981,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // Marítimo por volumen
   function getMultiplier(){
     const v = (document.getElementById("calcItemType").value || "");
-    if(v === "mueble_10") return { mult: 10, label: "Mueble" };
-    if(v === "ropa_30") return { mult: 23, label: "Caja con ropa y artículos varios" };
-    if(v === "refri_12") return { mult: 12, label: "Electrodoméstico (Refrigeradora)" };
+    if(v === "mueble_10") return { mult: 12, label: "Mueble" };
+    if(v === "ropa_30") return { mult: 25, label: "Caja con ropa y artículos varios" };
+    if(v === "refri_12") return { mult: 15, label: "Electrodoméstico (Refrigeradora)" };
     if(v === "lavadora_20") return { mult: 20, label: "Electrodoméstico (Lavadora / Secadora / Cocina)" };
-    return { mult: 10, label: "Mueble" };
+    return { mult: 12, label: "Mueble" };
   }
 
   document.getElementById("calcBtnMarVol").addEventListener("click", ()=>{
