@@ -137,7 +137,6 @@
       padding:18px 14px 34px;
     }
 
-    /* HERO (DINÁMICO) */
     .hero{
       border-radius: 22px;
       background:
@@ -277,7 +276,6 @@
     }
     .view-btn:hover{ transform: translateY(-1px); filter: brightness(1.06); }
 
-    /* CONTACTO */
     .contactGrid{
       display:grid;
       grid-template-columns: 1fr;
@@ -315,7 +313,6 @@
     .contactBtn.wa{ background: var(--wa); border-color: rgba(0,0,0,.10); color:#fff; }
     .contactBtn.wa:hover{ background: var(--waH); }
 
-    /* COTIZACIÓN */
     .calcWrap{ padding:16px; }
 
     .q{ font-weight:1000; font-size:14px; }
@@ -408,7 +405,6 @@
       font-weight:700;
     }
 
-    /* AGENDA */
     .schedule{ padding:16px; display:grid; gap:12px; }
     .schedule p{ margin:0; color: var(--muted); line-height:1.45; font-size:14px; }
     .bigBtn{
@@ -462,7 +458,6 @@
 </header>
 
 <main>
-  <!-- HERO DINÁMICO (ÚNICO TÍTULO, SIN REPETICIÓN) -->
   <div class="hero" id="hero">
     <div>
       <h1 id="heroTitle">Rastreá tus envíos y/o compras en línea</h1>
@@ -475,7 +470,6 @@
     </div>
   </div>
 
-  <!-- RASTREO -->
   <section class="section active" id="secTrack">
     <div class="card">
       <div class="row">
@@ -504,7 +498,6 @@
     </div>
   </section>
 
-  <!-- CONTACTO -->
   <section class="section" id="secContact">
     <div class="card">
       <div class="contactGrid">
@@ -515,7 +508,7 @@
           <div class="contactActions">
             <a class="contactBtn call" href="tel:+13056310701">📞 Llamar</a>
             <a class="contactBtn wa" target="_blank" rel="noopener"
-              href="https://wa.me/13056310701?text=Hola%2C%20quiero%20que%20recojan%20una%20carga%20en%20la%20direcci%C3%B3n%3A%20___________.%20Mi%20nombre%20es%3A%20__________.%20Y%20mi%20tel%C3%A9fono%20es%3A%20________.">💬 WhatsApp</a>
+              href="https://wa.me/13056310701?text=Hola%2C%20quiero%20que%20recojan%20una%20carga%20en%20la%20direcci%C3%B3n%3A%20">💬 WhatsApp</a>
             <a class="contactBtn map" target="_blank" rel="noopener"
               href="https://www.google.com/maps/search/?api=1&query=2035%20W%20Flagler%20St%20Miami%20FL%2033135">📍 Maps</a>
           </div>
@@ -544,7 +537,6 @@
     </div>
   </section>
 
-  <!-- COTIZACIÓN (SIN TÍTULOS REPETIDOS ADENTRO) -->
   <section class="section" id="secCalc">
     <div class="card">
       <div class="calcWrap">
@@ -559,17 +551,14 @@
         <div id="calcStep2">
           <div class="q" style="margin-bottom:6px;" id="step2Title">Continuá con tu cotización</div>
 
-          <!-- MARÍTIMO -->
           <div id="marBox" style="display:none;">
             <div class="q" style="margin-bottom:6px;">¿Cómo querés cotizar?</div>
 
-            <!-- ✅ ORDEN CAMBIADO: VOLUMEN PRIMERO -->
             <div class="subTabs">
               <button class="subTab active" type="button" id="marVolTab">📦 Por volumen</button>
               <button class="subTab" type="button" id="marPesoTab">⚖️ Por peso</button>
             </div>
 
-            <!-- ✅ DEFAULT: VOLUMEN VISIBLE -->
             <div id="marVolPanel">
               <div class="grid">
                 <div>
@@ -636,7 +625,6 @@
             </div>
           </div>
 
-          <!-- AÉREO -->
           <div id="airBox" style="display:none;">
             <div class="q" style="margin-bottom:6px;">Ingresá el peso para cotizar</div>
 
@@ -659,12 +647,10 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- AGENDAR -->
   <section class="section" id="secSchedule">
     <div class="card">
       <div class="schedule">
@@ -686,14 +672,12 @@
 
 <script>
 /* ========================= Rastreo ========================= */
-<script>
-/* ========================= Rastreo ========================= */
 const urls = {
   Maritimo:[
-    Maritimo:[
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv",
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=0&single=true&output=csv",
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=135469883&single=true&output=csv",
-],
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9GL48x-hRtSgQ9H_G_tpLzZ7xWEW2yT2HaH_qiCs7p8DK66p3VwvndBWKlIeYIFKi_NlT6MzEc2sf/pub?output=csv"
+  ],
   Aereo:[
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1149417296&single=true&output=csv",
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vT2i-JMsQ4G2mXMfdEyihWcNeI8gzXDIWsSxOta60eGa-NgNDOshNojOB6mYxdHPOWkLKwGWZsdnfIL/pub?gid=1429832468&single=true&output=csv"
@@ -715,14 +699,15 @@ function normalizeImageUrl(url){
 
 function safe(r,keys){
   for(const k of keys){
-    if(r && r[k]) return r[k];
+    if(r && r[k] != null && String(r[k]).trim() !== "") return String(r[k]).trim();
   }
   return "";
 }
 
 function parseDate(dateString){
   if(!dateString) return 0;
-  const [datePart, timePart] = (dateString + "").split(" ");
+  const raw = String(dateString).trim();
+  const [datePart, timePart] = raw.split(" ");
   if(!datePart || !timePart) return 0;
   const [day, month, year] = datePart.split("/");
   const [hour, minute, second] = timePart.split(":");
@@ -730,16 +715,15 @@ function parseDate(dateString){
     parseInt(year,10),
     parseInt(month,10)-1,
     parseInt(day,10),
-    parseInt(hour,10),
-    parseInt(minute,10),
-    parseInt(second,10)
+    parseInt(hour || "0",10),
+    parseInt(minute || "0",10),
+    parseInt(second || "0",10)
   ).getTime();
 }
 
 function formatFechaBonita(dateString){
   if(!dateString) return "";
-  const raw = (dateString + "").trim();
-
+  const raw = String(dateString).trim();
   const [datePart, timePart] = raw.split(" ");
   if(!datePart || !timePart) return raw;
 
@@ -757,10 +741,20 @@ function formatFechaBonita(dateString){
   if(hour12 === 0) hour12 = 12;
 
   const mesNombre = meses[m-1] || month;
-  const min2 = String(mm).padStart(2,"0");
+  const min2 = String(mm || "00").padStart(2,"0");
   const sec2 = String(ss || "00").padStart(2,"0");
 
   return `${d} de ${mesNombre}, ${y} ${hour12}:${min2}:${sec2} ${ampm}`;
+}
+
+function cleanRow(row){
+  const clean = {};
+  Object.keys(row || {}).forEach(key=>{
+    const cleanKey = String(key || "").trim();
+    const value = row[key];
+    clean[cleanKey] = typeof value === "string" ? value.trim() : value;
+  });
+  return clean;
 }
 
 function renderTable(list,type){
@@ -775,37 +769,31 @@ function renderTable(list,type){
   }
 
   list.sort((a,b)=>parseDate(safe(b,["Fecha","FECHA"])) - parseDate(safe(a,["Fecha","FECHA"])));
-
   if(type === "Compra") list = list.slice(0,40);
 
   list.forEach(r=>{
-    const fechaRaw   = safe(r,["Fecha","FECHA"]);
-    const fecha      = formatFechaBonita(fechaRaw);
+    const fechaRaw = safe(r,["Fecha","FECHA"]);
+    const fecha = formatFechaBonita(fechaRaw);
 
-    const track      = safe(r,["Tracking","Tracking #","Orden","ORDEN"]);
-    const nombre     = safe(r,["Nombre","Cliente","CLIENTE"]);
-    const status     = safe(r,["Status","STATUS"]);
-    const agente     = safe(r,["Agente","AGENTE","Usuario"]);
-    const id         = safe(r,["ID","Id","id"]);
-    const tipoEnvio  = safe(r,["Tipo de Envío","Tipo de Envio","TIPO DE ENVÍO","TIPO DE ENVIO","Tipo Envio"]);
-
+    const track = safe(r,["Tracking","Tracking #","Orden","ORDEN"]);
+    const nombre = safe(r,["Nombre","Cliente","CLIENTE"]);
+    const status = safe(r,["Status","STATUS"]);
+    const agente = safe(r,["Agente","AGENTE","Usuario"]);
     const foto  = normalizeImageUrl(safe(r,["Web url","Web URL"]));
     const foto2 = normalizeImageUrl(safe(r,["Web url2","Web URL2"]));
     const foto3 = normalizeImageUrl(safe(r,["Web url3","Web URL3"]));
     const firma = normalizeImageUrl(safe(r,["Firma url","Firma URL"]));
 
     let html = `<div class="result-block">`;
-    html += `<p><strong>Fecha:</strong> ${fecha}</p>`;
-    html += `<p><strong>Tracking:</strong> ${track}</p>`;
+    html += `<p><strong>Fecha:</strong> ${fecha || "-"}</p>`;
+    html += `<p><strong>Tracking:</strong> ${track || "-"}</p>`;
 
     if(type === "Compra"){
-      html += `<p><strong>Nombre:</strong> ${nombre}</p>`;
-      if(tipoEnvio) html += `<p><strong>Tipo de Envío:</strong> ${tipoEnvio}</p>`;
-      html += `<p><strong>Agente:</strong> ${agente}</p>`;
+      html += `<p><strong>Nombre:</strong> ${nombre || "-"}</p>`;
+      html += `<p><strong>Agente:</strong> ${agente || "-"}</p>`;
     } else {
-      html += `<p><strong>Status:</strong> <span class="status-pill">${status}</span></p>`;
-      html += `<p><strong>Agente:</strong> ${agente}</p>`;
-      if(id) html += `<p><strong>ID:</strong> ${id}</p>`;
+      html += `<p><strong>Status:</strong> <span class="status-pill">${status || "Sin status"}</span></p>`;
+      html += `<p><strong>Agente:</strong> ${agente || "-"}</p>`;
     }
 
     html += `<div class="detail-actions">`;
@@ -819,38 +807,52 @@ function renderTable(list,type){
   });
 }
 
+async function fetchCsvRows(link){
+  return new Promise(resolve=>{
+    const sep = link.includes("?") ? "&" : "?";
+    Papa.parse(link + sep + "t=" + Date.now(), {
+      download:true,
+      header:true,
+      skipEmptyLines:true,
+      complete:res=>{
+        const rows = Array.isArray(res.data) ? res.data.map(cleanRow) : [];
+        resolve(rows);
+      },
+      error:()=>resolve([])
+    });
+  });
+}
+
 async function searchTracking(type){
   const input = document.getElementById(`search${type}`);
+  const container = document.getElementById(`results${type}`);
+  const empty = document.getElementById(`empty${type}`);
   const code = (input.value || "").trim().toLowerCase();
+
   if(!code) return;
 
-  let data = [];
+  container.innerHTML = `<div class="result-block"><p><strong>Buscando...</strong></p></div>`;
+  empty.style.display = "none";
+
   const links = Array.isArray(urls[type]) ? urls[type] : [urls[type]];
 
-  for(const link of links){
-    await new Promise(resolve=>{
-      Papa.parse(link + "&t=" + Date.now(),{
-        download:true,
-        header:true,
-        skipEmptyLines:true,
-        complete:res=>{
-          data = data.concat(res.data || []);
-          resolve();
-        },
-        error:()=>{
-          resolve();
-        }
-      });
+  try{
+    const results = await Promise.all(links.map(fetchCsvRows));
+    let data = results.flat();
+
+    const filtered = data.filter(r=>{
+      const track = safe(r,["Tracking","Tracking #","Orden","ORDEN"]).toLowerCase();
+      const name  = safe(r,["Nombre","Cliente","CLIENTE"]).toLowerCase();
+      return track.includes(code) || name.includes(code);
     });
+
+    renderTable(filtered, type);
+  }catch(err){
+    console.error("Error buscando en " + type, err);
+    container.innerHTML = "";
+    empty.textContent = "Hubo un error al buscar.";
+    empty.style.display = "block";
   }
-
-  const filtered = data.filter(r=>{
-    const track = safe(r,["Tracking","Tracking #","Orden","ORDEN"]).toLowerCase();
-    const name  = safe(r,["Nombre","Cliente","CLIENTE"]).toLowerCase();
-    return track.includes(code) || name.includes(code);
-  });
-
-  renderTable(filtered, type);
 }
 
 ["Maritimo","Aereo","Compra"].forEach(t=>{
@@ -858,7 +860,6 @@ async function searchTracking(type){
     if(e.key === "Enter") searchTracking(t);
   });
 });
-</script>
 
 /* ========================= HERO DINÁMICO + Tabs ========================= */
 (function(){
@@ -923,12 +924,10 @@ async function searchTracking(type){
   }
 
   tabs.forEach(t=>document.getElementById(t.btn).addEventListener("click", ()=>openTab(t.btn)));
-
-  // default
   setHero("tabTrack");
 })();
 
-/* ========================= Cotización (Scroll Down Real) ========================= */
+/* ========================= Cotización ========================= */
 document.addEventListener("DOMContentLoaded", ()=>{
   const chooseMar = document.getElementById("chooseMar");
   const chooseAir = document.getElementById("chooseAir");
@@ -981,10 +980,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     marVolPanel.style.display  = isVol ? "block" : "none";
     marPesoPanel.style.display = isVol ? "none"  : "block";
   }
+
   marVolTab.addEventListener("click", ()=>setMarMode("vol"));
   marPesoTab.addEventListener("click", ()=>setMarMode("peso"));
 
-  // Aéreo
   document.getElementById("calcBtnAereo").addEventListener("click", ()=>{
     const lbs = num("calcAereoLbs");
     const out = document.getElementById("calcResA");
@@ -992,30 +991,31 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const rate = (lbs > 20) ? 6.5 : 7;
     out.innerHTML = `Total aproximado: <b>$${money(lbs * rate)}</b>`;
   });
+
   document.getElementById("calcBtnAereoClear").addEventListener("click", ()=>{
     document.getElementById("calcAereoLbs").value = "";
     document.getElementById("calcResA").textContent = "";
   });
 
-  // Marítimo por peso
   function rateMar(lbs){
     if(lbs > 499) return 1.8;
     if(lbs > 299) return 1.9;
     if(lbs > 99) return 2.0;
     return 2.05;
   }
+
   document.getElementById("calcBtnMarPeso").addEventListener("click", ()=>{
     const lbs = num("calcMarLbs");
     const out = document.getElementById("calcResM");
     if(lbs <= 0){ out.textContent = "Ingresá un peso válido."; return; }
     out.innerHTML = `Total aproximado: <b>$${money(lbs * rateMar(lbs))}</b>`;
   });
+
   document.getElementById("calcBtnMarPesoClear").addEventListener("click", ()=>{
     document.getElementById("calcMarLbs").value = "";
     document.getElementById("calcResM").textContent = "";
   });
 
-  // Marítimo por volumen
   function getMultiplier(){
     const v = (document.getElementById("calcItemType").value || "");
     if(v === "mueble_10") return { mult: 12, label: "Mueble" };
@@ -1041,17 +1041,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.getElementById("calcItemType").value = "mueble_10";
   });
 
-  // Default: paso 2 oculto hasta elegir
-  setMarMode("vol"); // ✅ Default en Marítimo: Volumen
+  setMarMode("vol");
 });
 </script>
+
 <hr style="margin:40px 0 20px; opacity:.2;">
 
 <div style="max-width:900px; margin:0 auto 40px; padding:0 14px; font-size:13px; line-height:1.5; color:#64748b;">
 </div>
-</body>
-  <footer style="margin-top:60px; padding:30px 20px; text-align:center; border-top:1px solid rgba(0,0,0,.1); font-size:14px; color:#64748b;">
 
+<footer style="margin-top:60px; padding:30px 20px; text-align:center; border-top:1px solid rgba(0,0,0,.1); font-size:14px; color:#64748b;">
   <div style="margin-bottom:10px;">
     <b>Maura International Shipping & Services</b>
   </div>
@@ -1071,7 +1070,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
        Terms & Conditions
     </a>
   </div>
-
 </footer>
-</html>
 
+</body>
+</html>
